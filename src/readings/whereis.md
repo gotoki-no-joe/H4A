@@ -28,3 +28,7 @@ https://qiita.com/H20/items/1a066e242815961cd043
 ## 7.Union-Find
 
 [Union-Find](../ad/misc/unionfind/) を参照。
+
+## 8.クラスカル法
+
+[クラスカル法](../ad/optimize/kruskal/) を参照。
