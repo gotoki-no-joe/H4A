@@ -1,0 +1,11 @@
+input: src
+output: html
+url: https://gotoki-no-joe.github.io/H4A # Add your website address here
+branding:
+  title: Haskell for AtCoder
+  label: (引っ越し作業中)
+# links:
+# - text: Haskell for AtCoder
+#  link: index.html
+footer:
+  copyright: "&copy; Copyright {{ year }}. All rights reserved."

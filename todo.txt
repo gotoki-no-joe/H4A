@@ -1,0 +1,27 @@
+素因数分解、試し割り法
+
+ABC152E (Intの範囲でやろうとするとTLEになってしまう。IntegerとPrelude.lcmなら余裕なのだが)
+
+Vectorによるエラトステネスの篩はまだ不十分
+
+総当たりの関連問題がかなり手つかず
+ABC104Cは泣いて逃げ帰った
+
+mutable vectorを使うとき、computeがIO actionになる。
+その場合のmain templateは必要か？
+
+Wikipediaの「データ構造」カテゴリの分類
+
+https://ja.wikipedia.org/wiki/%E7%B4%A0%E9%9B%86%E5%90%88%E3%83%87%E3%83%BC%E3%82%BF%E6%A7%8B%E9%80%A0
+
+・配列
+・リンク構造
+・検索構造　連想配列 ハッシュテーブルハッシュ配列木ハッシュ関数コンシステントハッシュ法分散ハッシュテーブル連想リスト
+・木構造
+・グラフ構造
+・抽象データ構造　これは、多分「コンテナ」
+・その他
+
+ACLのDSUはUnionFindのこと？
+
+UnionFindの関連問題が多く手つかず。
