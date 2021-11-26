@@ -7,21 +7,21 @@
     <meta name="turbo-cache-control" content="no-cache">
 
     <!-- Primary Meta Tags -->
-    <title>説明</title>
-    <meta name="title" content="説明">
-    <meta name="description" content="競技プログラミングでは、参加者がプログラミング言語を自由に選択できるようにするため、 プログラムが処理するべき入力データはファイルまたは標準入力からテキストで読み込み、 処理結果の出力データもテキストで出力するようになっていることが多い。" />
+    <title>Union-Find</title>
+    <meta name="title" content="Union-Find">
+    <meta name="description" content="集合の要素を、交わりのない部分に分割する。 全ての要素が、自分だけが属する分割にいる状態から始める。「以後、要素aとbは同じ分割に属する」という分割の統合(union)と、「現在、要素aとbは同じ分割に属しているか？」という問い合わせ(find)を" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/snippets/main/desc/">
-    <meta property="og:title" content="説明">
-    <meta property="og:description" content="競技プログラミングでは、参加者がプログラミング言語を自由に選択できるようにするため、 プログラムが処理するべき入力データはファイルまたは標準入力からテキストで読み込み、 処理結果の出力データもテキストで出力するようになっていることが多い。">
+    <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/ad/misc/unionfind/">
+    <meta property="og:title" content="Union-Find">
+    <meta property="og:description" content="集合の要素を、交わりのない部分に分割する。 全ての要素が、自分だけが属する分割にいる状態から始める。「以後、要素aとbは同じ分割に属する」という分割の統合(union)と、「現在、要素aとbは同じ分割に属しているか？」という問い合わせ(find)を">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/snippets/main/desc/">
-    <meta property="twitter:title" content="説明">
-    <meta property="twitter:description" content="競技プログラミングでは、参加者がプログラミング言語を自由に選択できるようにするため、 プログラムが処理するべき入力データはファイルまたは標準入力からテキストで読み込み、 処理結果の出力データもテキストで出力するようになっていることが多い。">
+    <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/ad/misc/unionfind/">
+    <meta property="twitter:title" content="Union-Find">
+    <meta property="twitter:description" content="集合の要素を、交わりのない部分に分割する。 全ての要素が、自分だけが属する分割にいる状態から始める。「以後、要素aとbは同じ分割に属する」という分割の統合(union)と、「現在、要素aとbは同じ分割に属しているか？」という問い合わせ(find)を">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
@@ -164,121 +164,234 @@
                 <div id="docs-sidebar-right-toggle"></div>
                
                 <!-- Page content  -->
-<doc-anchor-target id="説明" class="break-words">
+<doc-anchor-target id="union-find" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#説明">#</doc-anchor-trigger>
-        <span>説明</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#union-find">#</doc-anchor-trigger>
+        <span>Union-Find</span>
     </h1>
 </doc-anchor-target>
-<doc-anchor-target id="基本">
+<p>集合の要素を、交わりのない部分に分割する。
+全ての要素が、自分だけが属する分割にいる状態から始める。
+「以後、要素aとbは同じ分割に属する」という分割の統合(union)と、
+「現在、要素aとbは同じ分割に属しているか？」という問い合わせ(find)を
+効率的に行えるデータ構造およびアルゴリズム。</p>
+<doc-anchor-target id="コード">
     <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#基本">#</doc-anchor-trigger>
-        <span>基本</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#コード">#</doc-anchor-trigger>
+        <span>コード</span>
     </h2>
 </doc-anchor-target>
-<p>競技プログラミングでは、参加者がプログラミング言語を自由に選択できるようにするため、
-プログラムが処理するべき入力データはファイルまたは標準入力からテキストで読み込み、
-処理結果の出力データもテキストで出力するようになっていることが多い。</p>
-<p>Haskellで入出力を扱うには、IOモナドを使う。ざっくり、do ブロックの中の行が、順に実行される。
-最も素朴な方法としては、以下のコードをテンプレートとし、問題の入力形式に合わせて使用できる。
-コピペして、問題の形式に合わせて読み込み部をトリミングし、出力部を選ぶ。
-<code v-pre>compute</code>の型シグネチャで<code v-pre>read</code>の型を固定する。
-AtCoderでときどきある、&quot;Yes&quot;か&quot;No&quot;を出力するタイプの問題は、Boolで返して16行めを使う。</p>
-<div class="codeblock-wrapper"><doc-codeblock line-numbers>
-<pre class="language-haskell"><code v-pre class="language-haskell">main = do
--- 標準入力から1行読み、String型の値をl1に束縛する
-  l1 &lt;- getLine
-  l2 &lt;- getLine
--- 標準入力から（残り）全てを読み込み、String型の値をcoに束縛する
-  co &lt;- getContents
--- l1をRead型クラスの型の値として解釈する。純粋な計算はletで行う
-  let n = read l1
-  let [a,b,c] = map read $ words l2
-  let xys = map (map read . words) $ lines co
--- 各引数の型はcomputeのシグネチャで指定すると見通しがよい
-  let ans = compute n a b c xys
--- Show型クラスの値を標準出力にテキストで出力する
-  print ans
--- Yes/Noで答える問題は、Boolで返してこれで出力する
-  putStrLn $ if ans then &quot;Yes&quot; else &quot;No&quot;
--- String型は、ダブルクオートがつかないようにこちらで出力する
-  putStrLn ans
--- 同じ型の値を複数、空白を挟んで一行に表示する
-  putStrLn $ unwords $ map show ans
--- 同じ型の値を複数、１行に一つずつ表示する
-  mapM_ print ans
-
--- AtCoderでよくある型に編集しやすくしている
-compute :: Int -&gt; [Int] -&gt; [[Int]] -&gt; [Int Bool]
-compute n a b c xys =</code></pre>
-</doc-codeblock></div>
-<p>「二つの値が書かれた行がn行続く」のような場合、この二つの値をリストでなくタプルで扱いたくなるが、そこは割り切った方がよい。その変換は単純なタイムロスになる。</p>
-<doc-anchor-target id="applicative">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#applicative">#</doc-anchor-trigger>
-        <span>Applicative</span>
-    </h2>
-</doc-anchor-target>
-<p>ここで、Control.Applicativeの機能を使うと、モナドの結果にさらに純粋な関数を適用できる。これにより、上のコードの読み込み部分がコンパクトにできる。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">import Control.Applicative
+<pre class="language-haskell"><code v-pre class="language-haskell">import qualified Data.Vector.Unboxed.Mutable as MUV
+import Control.Monad
 
-main = do
--- 値が1つのとき
-  n &lt;- readLn -- read &lt;$&gt; getLine
--- 複数の値のとき
-  [a,b,c] &lt;- map read . words &lt;$&gt; getLine
--- 文字列のまま読むとき
-  s &lt;- getLine
--- (残り)全部読んで行の内容のリストのリストに一度に読み込む
-  xys = map (map read . words) . lines &lt;$&gt; getContents
--- 本体
-  let ans = compute n a b c xys
--- 出力
-  print ans
-  putStrLn ans
-  putStrLn $ if ans then &quot;Yes&quot; else &quot;No&quot;
-  putStrLn $ unwords $ map show ans
-  putStrLn $ foldr ($) &quot;&quot; $ intersperse (' ' :) $ map shows ans
-  mapM_ print ans
+-- @gotoki_no_joe
+type UnionFind = MUV.IOVector Int
 
-compute :: Int -&gt; [Int] -&gt; [[Int]] -&gt; [Int Bool]
-compute n a b c xys =</code></pre>
+newUF :: Int -&gt; IO UnionFind
+newUF ub = MUV.replicate (succ ub) (-1)
+
+getRoot :: UnionFind -&gt; Int -&gt; IO Int
+getRoot vec i = loop i []
+  where
+    loop :: Int -&gt; [Int] -&gt; IO Int
+    loop i ks =
+      do
+        k &lt;- MUV.read vec i
+        if k &lt; 0 then
+          do
+            forM_ ks (\k -&gt; do MUV.write vec k i)
+            return i
+          else
+            loop k (i:ks)
+
+findUF :: UnionFind -&gt; Int -&gt; Int -&gt; IO Bool
+findUF vec i j =
+ do
+    a &lt;- getRoot vec i
+    b &lt;- getRoot vec j
+    return (a == b)
+
+uniteUF :: UnionFind -&gt; Int -&gt; Int -&gt; IO ()
+uniteUF vec i j =
+  do
+    a &lt;- getRoot vec i
+    b &lt;- getRoot vec j
+    if a == b then return () else
+      do
+        r &lt;- MUV.read vec a
+        s &lt;- MUV.read vec b
+        if r &lt; s then
+          do
+            MUV.write vec a b
+            MUV.write vec b (r+s)
+          else do
+            MUV.write vec b a
+            MUV.write vec a (r+s)</code></pre>
 </doc-codeblock></div>
-<doc-anchor-target id="bytestring">
+<doc-anchor-target id="説明">
     <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#bytestring">#</doc-anchor-trigger>
-        <span>ByteString</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#説明">#</doc-anchor-trigger>
+        <span>説明</span>
     </h2>
 </doc-anchor-target>
-<p>Haskellにおいて、文字列を文字のリストとして扱うやり方は、Preludeの関数で処理できるためとっつきやすいが、処理効率の観点からは絶望的である。 <span class="math">2 \times 10^5</span> 個のデータの組を読み込む、というような場面でString版のテンプレートを用いると、読み込みでかなりの時間を消費する。</p>
-<p>Data.ByteStringライブラリを利用すると、この問題に対処できる。出力側が問題になることはあまりないのでそのままにしている。</p>
+<p>参考</p>
+<ul>
+<li><a href="https://ja.wikipedia.org/wiki/%E7%B4%A0%E9%9B%86%E5%90%88%E3%83%87%E3%83%BC%E3%82%BF%E6%A7%8B%E9%80%A0">Wikipedia 素集合データ構造</a></li>
+<li><a href="https://note.nkmk.me/python-union-find/">PythonでのUnion-Find（素集合データ構造）の実装と使い方</a></li>
+</ul>
+<p>集合の要素を添え字とする配列を用意し、
+内容には、自分と同じ分割に属する（成り行き上の）代表元に至る木をなすような、親へのリンクを保持する。</p>
+<p>命令型配列の、 <span class="math">O(1)</span> の高速なランダムアクセス、特にリンクの書き換えがアルゴリズムの要であるため、
+<code v-pre>Data.Array.(//)</code> や <code v-pre>Data.Vector.(//)</code> での模倣は性能が得られないが、
+はじめは説明のために Array で作ってみよう。</p>
+<doc-anchor-target id="素朴な実装">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#素朴な実装">#</doc-anchor-trigger>
+        <span>素朴な実装</span>
+    </h3>
+</doc-anchor-target>
+<p>集合の要素を上限ubまでの0以上の整数と仮定する。
+配列の添え字は0からubまで、内容は同じ分割に属する他の要素の番号、
+ただし自分が代表元（木の根）であるとき自分自身とする。
+（これを代数的データ型のタグで見分けてもよいが、そこまで行儀よく作ることもない。）</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">import Control.Applicative
-import qualified Data.ByteString.Char8 as BS
-import Data.Char
-import Data.List
+<pre class="language-haskell"><code v-pre class="language-haskell">import Data.Array
 
-main = do
-  Just (n,_) &lt;- BS.readInt li &lt;$&gt; BS.getLine
-  [a,b,c] &lt;- unfoldr (BS.readInt . BS.dropWhile isSpace) &lt;$&gt; BS.getLine
-  xys &lt;- map (unfoldr (BS.readInt . BS.dropWhile isSpace)) . BS.lines &lt;$&gt; BS.getContents
--- 本体
-  let ans = compute n a b c xys
--- 結果が数ひとつのとき
-  print ans
--- 結果が文字列のとき
-  putStrLn ans
--- 結果がYes/Noのとき
-  putStrLn $ if ans then &quot;Yes&quot; else &quot;No&quot;
--- 1行に空白区切りで出力するとき
-  putStrLn $ foldr ($) &quot;&quot; $ intersperse (' ' :) $ map shows ans
--- 1つ1行で出力するとき
-  mapM_ print ans
-
-compute :: Int -&gt; [Int] -&gt; [[Int]] -&gt; [Int Bool]
-compute n as xys = ...</code></pre>
+type UnionFind = Array Int Int</code></pre>
 </doc-codeblock></div>
+<p>配列の初期値は、全て自分自身の値を持つことになる。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">newUF :: Int -&gt; UnionFind
+newUF ub = listArray (0,ub) [0..ub]</code></pre>
+</doc-codeblock></div>
+<p>指定の番号の要素から、その要素が属する分割の代表元の番号を得る操作が普通に欲しいだろう。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">getRoot :: UnionFind -&gt; Int -&gt; Int
+getRoot uf i = let k = uf ! i in if i == k then i else getRoot uf k</code></pre>
+</doc-codeblock></div>
+<p>ふたつの要素を指定してのfindは、リンクを辿ることでそれぞれの代表元を求め、等しければ同じ分割にある。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">findUF :: UnionFind -&gt; Int -&gt; Int -&gt; Bool
+findUF uf a b = getRoot uf a == getRoot uf b</code></pre>
+</doc-codeblock></div>
+<p>ふたつの要素を指定してのunionは、やはりまずそれぞれの代表元を求め、
+（それらが異なるとき）いずれかの親をもう一方に更新して、根に接ぎ木する。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">uniteUF :: UnionFind -&gt; Int -&gt; Int -&gt; UnionFind
+uniteUF uf i j = let a = getRoot uf i
+                     b = getRoot uf j
+                 in if a == b then uf else uf // [(a,b)]</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="木の高さを考慮した効率化">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#木の高さを考慮した効率化">#</doc-anchor-trigger>
+        <span>木の高さを考慮した効率化</span>
+    </h3>
+</doc-anchor-target>
+<p>上の素朴な実装では、union操作の順により、木が一本道になりうる。
+このときgetRootに <span class="math">O(n)</span> かかり、効率が稼げない。
+木を極力低く保つ必要がある。
+その対処は二通り知られており、両方を組み合わせることもできるが、片方だけでもそれなりに動作するらしい。</p>
+<p>ひとつは経路圧縮という。
+getRootの際に通過した要素全てについて、それらを代表元の直接の子になるようにリンクをつなぎ直す。
+これはimmutableなgetRootに配列の（意味を変更しないが）mutableな変更を副作用として持ち込むもので、
+Haskellとは相性が非常によくない。</p>
+<p>もうひとつは、union操作における接ぎ木をする際に木の高さを意識して、
+高い方を根にし、低い方の木をその子にすることである。
+両方の木の高さを <span class="math">h_1 &gt; h_2</span> とすると、結果の木の高さは <span class="math">\max(h_1, h_2+1) = h_1</span> となる。
+<span class="math">h_1 = h_2</span> のとき、（どちらを根にしても）結果の木の高さは <span class="math">h_1+1</span> となる。
+unionは元々UnionFind配列に対する更新操作なので、これは導入するべきである。
+この場合木の高さが <span class="math">O(\log n)</span> で抑えられるらしい。</p>
+<p>木の高さを参照する必要があるのは、根（代表元）に関してのみである。
+分割の全ての要素が自分の木の高さを知っている必要はない。
+ここで、配列の要素を <code v-pre>Either (木の高さ) (親の番号)</code> とする代わりに、
+符号をタグ代わりに「0以上の数ならば親の番号、負の数ならば木の高さにマイナスをつけたもの」と
+横着をすることができる。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">newUF :: Int -&gt; UnionFind
+newUF ub = listArray (0,ub) $ replicate (succ ub) (-1)
+
+getRoot :: UnionFind -&gt; Int -&gt; Int
+getRoot uf i = let k = uf ! i in if 0 &gt; k then i else getRoot uf k
+
+uniteUF :: UnionFind -&gt; Int -&gt; Int -&gt; UnionFind
+uniteUF uf i j
+  | a == b = uf
+  | True   = case compare r s of
+               GT -&gt; uf // [(a,b)]
+               LT -&gt; uf // [(b,a)]
+               EQ -&gt; uf // [(b,a), (a, pred r))]
+  where
+    a = getRoot uf i
+    r = uf ! a
+    b = getRoot uf k
+    s = uf ! b</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="mutable-vector化と経路圧縮">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#mutable-vector化と経路圧縮">#</doc-anchor-trigger>
+        <span>mutable vector化と経路圧縮</span>
+    </h3>
+</doc-anchor-target>
+<p>上の <code v-pre>(//)</code> を使うコードは、説明としては見通しがよいが、効率の点で劣る。
+このため、 <code v-pre>Data.Vector.Mutable</code> を用いる形に直す。
+mutable vectorは読みだすだけでアクションになるため、
+同時に <code v-pre>getRoot</code> で経路圧縮も行う。
+そうするとき、均すために木の高さを追跡しても、経路圧縮により実際にはそれより木が低くなっていることも多い。
+そこで、木の高さと相関のありそうな値として大きさ、要素数を追跡し、unionで接ぎ木をする際には、大きい方を根にする。</p>
+<p>結果がページトップに示したコードである。</p>
+<doc-anchor-target id="全ての分割">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#全ての分割">#</doc-anchor-trigger>
+        <span>全ての分割</span>
+    </h3>
+</doc-anchor-target>
+<p>全ての要素について、同じ分割に属するものを集めたリストを得たい場合は、
+getRootをキーとするMapに集めるとよい。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">allDivisions :: UnionFind -&gt; IO [[Int]]
+allDivisions uf =
+  do
+    ri &lt;- forM [0..ub] (\i -&gt; do
+      r &lt;- getRoot uf i
+      return (r, i)
+      )
+    return $ IM.elems $ IM.fromListWith (++) [(r,[i]) | (r,i) &lt;- ris]</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="dsu">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#dsu">#</doc-anchor-trigger>
+        <span>DSU</span>
+    </h3>
+</doc-anchor-target>
+<p>AtCoder Class Library の <a href="https://atcoder.github.io/ac-library/production/document_ja/dsu.html">DSU</a> は同一の機能を提供する。裏にあるデータ構造が何かは不明。</p>
+<doc-anchor-target id="関連問題">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
+        <span>関連問題</span>
+    </h2>
+</doc-anchor-target>
+<ul>
+<li><a href="https://atcoder.jp/contests/abc177/tasks/abc177_d">ABC177 D Friends</a> - <a href="https://atcoder.jp/contests/abc177/submissions/22742331">ACコード</a> 旧タイプ</li>
+<li><a href="https://atcoder.jp/contests/abl/tasks/abl_c">ACL Beginner Contest C</a> - <a href="https://atcoder.jp/contests/abl/submissions/27497827">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/arc106/tasks/arc106_b">ARC106 B Values</a> - 【ACコード】</li>
+<li><a href="https://atcoder.jp/contests/arc114/tasks/arc114_b">ARC114 B Special Subsets</a> - 【ACコード】</li>
+<li><a href="https://atcoder.jp/contests/abc157/tasks/abc157_d">ABC157 D Friend Suggestions</a> - 【ACコード】</li>
+<li><a href="https://atcoder.jp/contests/abc120/tasks/abc120_d">ABC120 D Decayed Bridges</a> - 【ACコード】</li>
+<li><a href="https://atcoder.jp/contests/arc111/tasks/arc111_b">ARC111 B Reversible Cards</a> - 【ACコード】</li>
+<li><a href="https://atcoder.jp/contests/abc183/tasks/abc183_f">ABC183 F Confluence</a> - 【ACコード】</li>
+</ul>
+<p>その他</p>
+<ul>
+<li><a href="https://yukicoder.me/problems/no/1390">yukicoder No.1390 Get together</a> - 【ACコード】</li>
+<li><a href="https://mojacoder.app/users/magurofly/problems/bonsai">MojaCoder Bonsai</a> - 【ACコード】</li>
+</ul>
+<p>nkmk.meより</p>
+<ul>
+<li><a href="https://atcoder.jp/contests/atc001/tasks/unionfind_a">AtCoder Typical Contest 001 B - Union Find</a></li>
+<li><a href="http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_A&amp;lang=jp">互いに素な集合 Union Find| データ構造ライブラリ | Aizu Online Judge</a></li>
+</ul>
 
 
 
@@ -290,20 +403,20 @@ compute n as xys = ...</code></pre>
             
 <nav class="flex mt-14">
     <div class="w-1/2">
-        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/snippets/main/bytestring/">
+        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/snippets/search/exhaustive/">
             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
             <span>
                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                <span class="block mt-1">ByteStringテンプレート</span>
+                <span class="block mt-1">総当たり</span>
             </span>
         </a>
     </div>
 
     <div class="w-1/2">
-        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/snippets/main/strict/">
+        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/library/control.monad/">
             <span>
                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                <span class="block mt-1">正格評価ディレクティブ</span>
+                <span class="block mt-1">Control.Monad</span>
             </span>
             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
         </a>
@@ -351,6 +464,6 @@ compute n as xys = ...</code></pre>
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "説明", icon: "file", hasPrism: true, hasMermaid: false, hasMath: true }</script>
+        <script>window.__DOCS__ = { "title": "Union-Find", icon: "file", hasPrism: true, hasMermaid: false, hasMath: true }</script>
     </body>
 </html>

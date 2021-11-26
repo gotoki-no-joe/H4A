@@ -1,4 +1,4 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://./sitemap.xml.gz
+Sitemap: https://gotoki-no-joe.github.io/H4A/sitemap.xml.gz
