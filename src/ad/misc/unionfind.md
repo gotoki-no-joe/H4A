@@ -18,7 +18,7 @@ import Control.Monad
 type UnionFind = MUV.IOVector Int
 
 newUF :: Int -> IO UnionFind
-newUF ub = MUV.replicate (succ ub) (-1)
+newUF n = MUV.replicate n (-1)
 
 getRoot :: UnionFind -> Int -> IO Int
 getRoot vec i = loop i []
@@ -74,8 +74,8 @@ uniteUF vec i j =
 
 ### 素朴な実装
 
-集合の要素を上限ubまでの0以上の整数と仮定する。
-配列の添え字は0からubまで、内容は同じ分割に属する他の要素の番号、
+集合の要素を上限n-1までの0以上の整数と仮定する。
+配列の添え字は0からn-1まで、内容は同じ分割に属する他の要素の番号、
 ただし自分が代表元（木の根）であるとき自分自身とする。
 （これを代数的データ型のタグで見分けてもよいが、そこまで行儀よく作ることもない。）
 
@@ -89,7 +89,7 @@ type UnionFind = Array Int Int
 
 ```haskell
 newUF :: Int -> UnionFind
-newUF ub = listArray (0,ub) [0..ub]
+newUF n = listArray (0,pred ub) [0..ub]
 ```
 
 指定の番号の要素から、その要素が属する分割の代表元の番号を得る操作が普通に欲しいだろう。
@@ -143,7 +143,7 @@ unionは元々UnionFind配列に対する更新操作なので、これは導入
 
 ```haskell
 newUF :: Int -> UnionFind
-newUF ub = listArray (0,ub) $ replicate (succ ub) (-1)
+newUF n = listArray (0,pred n) $ replicate n (-1)
 
 getRoot :: UnionFind -> Int -> Int
 getRoot uf i = let k = uf ! i in if 0 > k then i else getRoot uf k
