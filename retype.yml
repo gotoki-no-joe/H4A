@@ -1,5 +1,5 @@
 input: src
-output: html
+output: docs
 url: https://gotoki-no-joe.github.io/H4A # Add your website address here
 branding:
   title: Haskell for AtCoder
