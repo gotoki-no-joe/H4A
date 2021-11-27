@@ -1,0 +1,85 @@
+---
+order: -04000
+---
+# 数える
+
+あのアルゴリズムはどこ？の12より。
+どんなものを数えるのかでやり方が変わる。
+
+## ある特定の要素だけ数えたい
+
+```haskell
+count :: Eq a => a -> [a] -> Int
+count x xs = length $ filter (x ==) xs
+```
+
+## 全ての種類について数える
+
+### Data.Map：高い汎用性
+
+汎用性の高いのは`Data.Map`を用いる方法。  
+対象が飛び飛びの整数なら、特化した`Data.IntMap`が使える。
+
+```haskell
+import qualified Data.Map as M
+import qualified Data.IntMap as IM
+
+counts :: Ord a => [a] -> M.Map a Int
+counts xs = M.fromListWith (+) $ zip xs $ repeat 1
+
+countsi :: [Int] -> IM.IntMap Int
+countsi xs = IM.fromListWith (+) $ zip xs $ repeat 1
+```
+
+### Data.Array : 連続する範囲の集団
+
+狭い既知の範囲で連続する要素が対象なら、`Data.Array`でもできる。  
+この方法は、数える対象が配列の添字になる型(Ix)なら使えるので、整数に限定されない。
+
+```haskell
+import Data.Array
+
+counts :: Ix a => a -> a -> [a] -> Array a Int
+counts lb ub xs = accumArray (+) 0 (lb,ub) $ zip xs $ repeat 1
+```
+
+### Data.Vector : 0始まりの自然数の範囲
+
+0始まりの自然数範囲ならば、`Data.Vector`でもできる。
+
+```haskell
+import qualified Data.Vector as V
+
+counts :: Int -> [Int] -> V.Vector Int
+counts ub xs = V.accum (+) v0 $ zip xs $ repeat 1
+  where
+    v0 = V.replicate (succ ub) 0
+```
+
+## リストに出現する要素の種類数を数えたい
+
+`Data.Set`（または整数特化の `Data.IntSet`）で重複を無視して異なるものの個数を数えることができる。
+
+```haskell
+import qualified Data.Set as S
+import qualified Data.IntSet as IS
+
+count :: Ord a => [a] -> Int
+count = S.size . S.fromList
+```
+
+## 関連問題
+
+- [ABC118 B Foods Loved by Everyone](https://atcoder.jp/contests/abc118/tasks/abc118_b) - [ACコード](https://atcoder.jp/contests/abc118/submissions/22775025) Vector
+- [ABC082 C Good Sequence](https://atcoder.jp/contests/abc082/tasks/arc087_a) - [ACコード](https://atcoder.jp/contests/abc082/submissions/22780844) IntMap
+- [ABC163 C management](https://atcoder.jp/contests/abc163/tasks/abc163_c) - [ACコード](https://atcoder.jp/contests/abc163/submissions/12154023) Array 1始まりの整数が対象
+- [ABC171 D Replacing](https://atcoder.jp/contests/abc171/tasks/abc171_d) - 【[ACコード](https://atcoder.jp/contests/abc171/submissions/22781940) IntMap 加えて、同じような計算を繰り返さない精神も重要
+- [AGC031 A Colorful Subsequence](https://atcoder.jp/contests/agc031/tasks/agc031_a) - 【ACコード】
+- [ABC181 D Hachi](https://atcoder.jp/contests/abc181/tasks/abc181_d) - [ACコード](https://atcoder.jp/contests/abc181/submissions/17799249) Array
+- [ABC111 C /\\/\\/\\/](https://atcoder.jp/contests/abc111/tasks/arc103_a) - [ACコード](https://atcoder.jp/contests/abc111/submissions/22789263) IntMap
+- [ABC052 C Factors of Factorial](https://atcoder.jp/contests/abc052/tasks/arc067_a) - 【ACコード】
+
+> ABC052 Cについては、前述の素因数分解も参照のこと挑んでください。
+
+他サイト
+- [yukicoder No.1468 Colourful Pastel](https://yukicoder.me/problems/no/1468) - 【ACコード】 Data.Setを使うタイプ？
