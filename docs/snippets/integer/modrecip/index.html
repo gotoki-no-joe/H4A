@@ -7,21 +7,21 @@
     <meta name="turbo-cache-control" content="no-cache">
 
     <!-- Primary Meta Tags -->
-    <title>素因数分解（試し割り法）</title>
-    <meta name="title" content="素因数分解（試し割り法）">
-    <meta name="description" content="素数リスト primes が手元にある場合" />
+    <title>モジュラ逆数</title>
+    <meta name="title" content="モジュラ逆数">
+    <meta name="description" content="フェルマーの小定理による方法。 べき乗 を用いている。 また、おそらく他のモジュラ演算も同時に使うため、mul の定義はグローバルに置けるだろう。" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/primefactors/">
-    <meta property="og:title" content="素因数分解（試し割り法）">
-    <meta property="og:description" content="素数リスト primes が手元にある場合">
+    <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/modrecip/">
+    <meta property="og:title" content="モジュラ逆数">
+    <meta property="og:description" content="フェルマーの小定理による方法。 べき乗 を用いている。 また、おそらく他のモジュラ演算も同時に使うため、mul の定義はグローバルに置けるだろう。">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/primefactors/">
-    <meta property="twitter:title" content="素因数分解（試し割り法）">
-    <meta property="twitter:description" content="素数リスト primes が手元にある場合">
+    <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/modrecip/">
+    <meta property="twitter:title" content="モジュラ逆数">
+    <meta property="twitter:description" content="フェルマーの小定理による方法。 べき乗 を用いている。 また、おそらく他のモジュラ演算も同時に使うため、mul の定義はグローバルに置けるだろう。">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
@@ -30,6 +30,8 @@
     <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.691339220316" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
     <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.691339220316" defer></script>
+    <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
+    <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -162,69 +164,80 @@
                 <div id="docs-sidebar-right-toggle"></div>
                
                 <!-- Page content  -->
-<doc-anchor-target id="素因数分解試し割り法" class="break-words">
+<doc-anchor-target id="モジュラ逆数" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#素因数分解試し割り法">#</doc-anchor-trigger>
-        <span>素因数分解（試し割り法）</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#モジュラ逆数">#</doc-anchor-trigger>
+        <span>モジュラ逆数</span>
     </h1>
 </doc-anchor-target>
+<p>フェルマーの小定理による方法。
+<a href="../powerish/">べき乗</a>を用いている。
+また、おそらく他のモジュラ演算も同時に使うため、<code v-pre>mul</code>の定義はグローバルに置けるだろう。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
-primeFactors :: Int -&gt; [Int]
-primeFactors n = loop1 n
+inv p a = powerish mul 1 a (p-2)
   where
-    loop1 n
-      | even n = 2 : loop1 (div n 2)
-      | otherwise = loop2 n 3
-    loop2 n f
-      | n &lt; f * f = [n | n /= 1]
-      | otherwise =
-          case divMod n f of
-            (q, 0) -&gt; f : loop2 q f
-            _      -&gt;     loop2 n (f+2)</code></pre>
+    mul x y = mod (x*y) p</code></pre>
 </doc-codeblock></div>
-<p>素数リスト <code v-pre>primes</code> が手元にある場合</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
-primeFactors :: Int -&gt; [Int]
-primeFactors n = loop n primes
-  where
-    loop 1 _ = []
-    loop n pps@(p:ps)
-      | n &lt; p * p = [n]
-      | otherwise =
-          case divMod n p of
-            (q, 0) -&gt; p : loop q pps
-            _      -&gt;     loop n  ps</code></pre>
-</doc-codeblock></div>
+<p>拡張ユークリッドの互除法を使う方法もある。</p>
+<p>(追記予定...)</p>
 <doc-anchor-target id="説明">
     <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#説明">#</doc-anchor-trigger>
         <span>説明</span>
     </h2>
 </doc-anchor-target>
-<p>あのアルゴリズムはどこ？の4より。</p>
-<p>素朴には、対象nと素因数候補f=2から始めて、割りきれる限り、
-nを商に置き換え、fを素因数として記録することを繰り返す。
-割り切れなくなったらfを1増やして、n &gt; f となるまで続ける。</p>
-<p>2以外の素数は奇数なので、p=2の場合だけ特別扱いすることで、
-3以上についてfを1増やす代わりに2増やす、としている。</p>
-<p>素数リストが手元にある場合は、素因数の候補はそこから選択するだけで済む。</p>
+<p>あのアルゴリズムはどこ？の14、およびアルゴリズムロジックより。</p>
+<p><a href="https://ja.wikipedia.org/wiki/%E3%83%A2%E3%82%B8%E3%83%A5%E3%83%A9%E9%80%86%E6%95%B0">Wikipedia</a></p>
+<p>難しい話は置いておいて、互いに素な <span class="math">a</span> と <span class="math">m</span> に対して、  <br />
+<span class="math">ax \equiv 1 \mod m</span>  <br />
+を満たすような  <br />
+<span class="math">x \equiv a^{-1} \mod m</span>  <br />
+を求める方法。</p>
+<p>(追記予定...)</p>
 <doc-anchor-target id="関連問題">
-    <h3>
+    <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
         <span>関連問題</span>
-    </h3>
+    </h2>
 </doc-anchor-target>
 <ul>
-<li><a href="https://atcoder.jp/contests/abc169/tasks/abc169_d">ABC169 D Div Game</a> - <a href="https://atcoder.jp/contests/abc169/submissions/22775113">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc177/tasks/abc177_e">ABC177 E Coprime</a> - <a href="https://atcoder.jp/contests/abc177/submissions/22737449">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc152/tasks/abc152_e">ABC152 F Flatten</a> - --ACコード--</li>
+<li><a href="https://atcoder.jp/contests/abc177/tasks/abc177_c">ABC177 C Sum of product of pairs</a></li>
 </ul>
-<p>他サイト</p>
-<ul>
-<li><a href="https://mojacoder.app/users/H20/problems/sphenic-number">MojaCoder 楔数（くさびすう）</a></li>
-</ul>
+<p>「紹介した問題は、別に逆元とる必要なかった問題でしたが一応記載します。」とは？</p>
+<p>ということで以下ネタバレ</p>
+<p>求める値を <span class="math">X</span> とおく。
+<span class="math">S = A_1 + A_2 + \dots + A_N</span> とおいて、  <br />
+<span class="math">S^2 = (A_1 + A_2 + \dots + A_N) \times S = A_1 \times S + A_2 \times S + \dots + A_N \times S</span> を展開すると</p>
+<div class="math"><pre>\begin{array}{cccccccc}
+A_1 \times A_1 &amp; + &amp; A_1 \times A_2 &amp; + &amp; \dots &amp; + &amp; A_1 \times A_N &amp; + \\
+A_2 \times A_1 &amp; + &amp; A_2 \times A_2 &amp; + &amp; \dots &amp; + &amp; A_2 \times A_N &amp; + \\
+\vdots \\
+A_N \times A_1 &amp; + &amp; A_N \times A_2 &amp; + &amp; \dots &amp; + &amp; A_N \times A_N \\
+\end{array}</pre></div>
+<p>これは、対角線に <span class="math">A_i \times A_i</span> が並び、その上と下に <span class="math">X</span> が2度現れている。
+つまり <span class="math">S^2 = \sum_{i=1}^N A_i^2 + 2X</span>
+変形すると <span class="math">X = (S^2 + \sum_{i=1}^N A_i^2) / 2</span> で、
+$A_i$の総和の2乗から$A_i$の2乗の総和を引き、さらに2で割れば答えが得られる。</p>
+<p>しかしそれをまともに計算すると桁あふれするので、合同算術で計算すると、普通に2で割ることができない。
+そこで2のモジュラ逆数を求めて乗じることで解決する、ということ。</p>
+<p>逆元を使わない答え <a href="https://atcoder.jp/contests/abc177/submissions/16440784">ACコード</a></p>
+<p><span class="math">X = A_1 \times (A_2 + A_3 + \dots + A_N) + A_2 \times (A_3 + \dots + A_N) + \dots + A_{N-1} \times A_N</span>  <br />
+とまとめると、乗算の左辺は <span class="math">A_i</span> が順に現れ、右辺は <span class="math">A_i</span> を後ろから足しこんでいった値になっている。
+つまり</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">compute as = sum $ zipWith (*) as $ tail $ scanr1 (+) as</code></pre>
+</doc-codeblock></div>
+<p>で求められる。除算は現れない。</p>
+<p>あるいは、前から  <br />
+<span class="math">X = A_1 \times A_2 + (A_1 + A_2) \times A_3 + \dots + (A_1 + \dots + A_{N-1}) \times A_N</span>  <br />
+の向きにまとめて、</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">compute as = snd $ foldl step (0, 0) as
+  where
+    step (sum, acc) ai = (sum + ai, acc + sum * ai)</code></pre>
+</doc-codeblock></div>
+<p>としてもよい。こちらの方が命令型のループに直しやすそう。</p>
 
 
 
@@ -236,20 +249,20 @@ nを商に置き換え、fを素因数として記録することを繰り返す
             
 <nav class="flex mt-14">
     <div class="w-1/2">
-        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/snippets/integer/factors/">
+        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/snippets/integer/modint/">
             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
             <span>
                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                <span class="block mt-1">約数列挙</span>
+                <span class="block mt-1">合同算術</span>
             </span>
         </a>
     </div>
 
     <div class="w-1/2">
-        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/snippets/integer/primes/">
+        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/snippets/integer/powerish/">
             <span>
                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                <span class="block mt-1">素数（エラトステネスの篩）</span>
+                <span class="block mt-1">べき乗</span>
             </span>
             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
         </a>
@@ -297,6 +310,6 @@ nを商に置き換え、fを素因数として記録することを繰り返す
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "素因数分解（試し割り法）", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
+        <script>window.__DOCS__ = { "title": "モジュラ逆数", icon: "file", hasPrism: true, hasMermaid: false, hasMath: true }</script>
     </body>
 </html>

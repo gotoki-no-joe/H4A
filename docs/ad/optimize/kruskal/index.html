@@ -7,21 +7,21 @@
     <meta name="turbo-cache-control" content="no-cache">
 
     <!-- Primary Meta Tags -->
-    <title>素因数分解（試し割り法）</title>
-    <meta name="title" content="素因数分解（試し割り法）">
-    <meta name="description" content="素数リスト primes が手元にある場合" />
+    <title>クラスカル法</title>
+    <meta name="title" content="クラスカル法">
+    <meta name="description" content="Wikipedia" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/primefactors/">
-    <meta property="og:title" content="素因数分解（試し割り法）">
-    <meta property="og:description" content="素数リスト primes が手元にある場合">
+    <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/ad/optimize/kruskal/">
+    <meta property="og:title" content="クラスカル法">
+    <meta property="og:description" content="Wikipedia">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/primefactors/">
-    <meta property="twitter:title" content="素因数分解（試し割り法）">
-    <meta property="twitter:description" content="素数リスト primes が手元にある場合">
+    <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/ad/optimize/kruskal/">
+    <meta property="twitter:title" content="クラスカル法">
+    <meta property="twitter:description" content="Wikipedia">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
@@ -30,6 +30,8 @@
     <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.691339220316" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
     <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.691339220316" defer></script>
+    <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
+    <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -162,69 +164,61 @@
                 <div id="docs-sidebar-right-toggle"></div>
                
                 <!-- Page content  -->
-<doc-anchor-target id="素因数分解試し割り法" class="break-words">
+<doc-anchor-target id="クラスカル法" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#素因数分解試し割り法">#</doc-anchor-trigger>
-        <span>素因数分解（試し割り法）</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#クラスカル法">#</doc-anchor-trigger>
+        <span>クラスカル法</span>
     </h1>
 </doc-anchor-target>
+<ul>
+<li><a href="https://ja.wikipedia.org/wiki/%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%AB%E3%83%AB%E6%B3%95">Wikipedia</a></li>
+</ul>
+<p>連結な無向グラフの全域木で、辺の重み合計が最小の最小全域木を得るアルゴリズムのひとつ。もうひとつはPrim法。</p>
+<p>「無向グラフ、連結、辺に重みがある」という条件の元で、「グラフの全ての頂点を含む部分グラフで、木で、そのようなものの中で重みの合計が最小」である最小全域木を得る。</p>
+<p>Prim法は、任意の1頂点だけからなる木を初期値とし、まだ木に含まれない頂点と木を結ぶ辺で重みが最小のものを貪欲に追加する。</p>
+<p>Kruskal法は、重みの小さい順に辺を調べ、閉路や多重辺がなければ木の辺として採用することを繰り返す。
+つまり、Union-Findで、無駄足にならない辺だけを追加して全て連結になるまで繰り返す。
+計算量は <span class="math">O(|E|\log|V|)</span> となるらしい。</p>
+<p>ノードが0からn-1、i=0～について辺iがノードaiとbiを結び重みciという情報が与えられるとする。
+合計コストと、最小全域木に使った辺の番号のリスト（重い順）を返却する。
+内部的に<a href="../../misc/unionfind/">Union-Find</a>を使用する。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
-primeFactors :: Int -&gt; [Int]
-primeFactors n = loop1 n
+kruskal :: Int -&gt; [(Int,Int,Int)] -&gt; IO (Int,[Int])
+kruskal n abcs =
+  do
+    v &lt;- newUF n
+    loop 0 [] v (pred n) cabis
   where
-    loop1 n
-      | even n = 2 : loop1 (div n 2)
-      | otherwise = loop2 n 3
-    loop2 n f
-      | n &lt; f * f = [n | n /= 1]
-      | otherwise =
-          case divMod n f of
-            (q, 0) -&gt; f : loop2 q f
-            _      -&gt;     loop2 n (f+2)</code></pre>
+    cabis = sort [(c,a,b,i) | (i,(a,b,c)) &lt;- zip [0..] abcs]
+    loop cost res _ 0 _ = return (cost, res)
+    loop cost res v k ((c,a,b,i):abis) =
+      do
+        e &lt;- findUF v a b
+        if e then loop cost res v k abis
+             else do
+               uniteUF v a b
+               loop (cost+c) (i:res) v (pred k) abis</code></pre>
 </doc-codeblock></div>
-<p>素数リスト <code v-pre>primes</code> が手元にある場合</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
-primeFactors :: Int -&gt; [Int]
-primeFactors n = loop n primes
-  where
-    loop 1 _ = []
-    loop n pps@(p:ps)
-      | n &lt; p * p = [n]
-      | otherwise =
-          case divMod n p of
-            (q, 0) -&gt; p : loop q pps
-            _      -&gt;     loop n  ps</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="説明">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#説明">#</doc-anchor-trigger>
-        <span>説明</span>
-    </h2>
-</doc-anchor-target>
-<p>あのアルゴリズムはどこ？の4より。</p>
-<p>素朴には、対象nと素因数候補f=2から始めて、割りきれる限り、
-nを商に置き換え、fを素因数として記録することを繰り返す。
-割り切れなくなったらfを1増やして、n &gt; f となるまで続ける。</p>
-<p>2以外の素数は奇数なので、p=2の場合だけ特別扱いすることで、
-3以上についてfを1増やす代わりに2増やす、としている。</p>
-<p>素数リストが手元にある場合は、素因数の候補はそこから選択するだけで済む。</p>
+<p>n頂点を持つ木は辺をn-1本だけ持つので、それで終了にしている。</p>
 <doc-anchor-target id="関連問題">
-    <h3>
+    <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
         <span>関連問題</span>
-    </h3>
+    </h2>
 </doc-anchor-target>
 <ul>
-<li><a href="https://atcoder.jp/contests/abc169/tasks/abc169_d">ABC169 D Div Game</a> - <a href="https://atcoder.jp/contests/abc169/submissions/22775113">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc177/tasks/abc177_e">ABC177 E Coprime</a> - <a href="https://atcoder.jp/contests/abc177/submissions/22737449">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc152/tasks/abc152_e">ABC152 F Flatten</a> - --ACコード--</li>
+<li><a href="https://atcoder.jp/contests/iroha2019-day2/tasks/iroha2019_day2_d">いろはちゃんコンテスト Day2 D</a> - <a href="https://atcoder.jp/contests/iroha2019-day2/submissions/22745993">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/abc218/tasks/abc218_e">ABC218 E Destruction</a> - <a href="https://atcoder.jp/contests/abc218/submissions/27503010">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/abc065/tasks/arc076_b">ABC065 D Built?</a> - 【ACコード】</li>
 </ul>
-<p>他サイト</p>
-<ul>
-<li><a href="https://mojacoder.app/users/H20/problems/sphenic-number">MojaCoder 楔数（くさびすう）</a></li>
-</ul>
+<doc-anchor-target id="関連">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#関連">#</doc-anchor-trigger>
+        <span>関連</span>
+    </h2>
+</doc-anchor-target>
+<p>多次元配列のソート、も参照せよとのこと。</p>
 
 
 
@@ -236,20 +230,20 @@ nを商に置き換え、fを素因数として記録することを繰り返す
             
 <nav class="flex mt-14">
     <div class="w-1/2">
-        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/snippets/integer/factors/">
+        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/snippets/search/exhaustive/">
             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
             <span>
                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                <span class="block mt-1">約数列挙</span>
+                <span class="block mt-1">総当たり</span>
             </span>
         </a>
     </div>
 
     <div class="w-1/2">
-        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/snippets/integer/primes/">
+        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/ad/misc/unionfind/">
             <span>
                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                <span class="block mt-1">素数（エラトステネスの篩）</span>
+                <span class="block mt-1">Union-Find</span>
             </span>
             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
         </a>
@@ -297,6 +291,6 @@ nを商に置き換え、fを素因数として記録することを繰り返す
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "素因数分解（試し割り法）", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
+        <script>window.__DOCS__ = { "title": "クラスカル法", icon: "file", hasPrism: true, hasMermaid: false, hasMath: true }</script>
     </body>
 </html>

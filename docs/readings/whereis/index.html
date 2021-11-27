@@ -25,10 +25,13 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.691242928125" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.691339220316" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.691242928125" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.691339220316" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.691339220316" defer></script>
+    <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
+    <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -210,6 +213,140 @@
     </h2>
 </doc-anchor-target>
 <p><a href="../../ad/misc/unionfind/">Union-Find</a> を参照。</p>
+<doc-anchor-target id="8クラスカル法">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#8クラスカル法">#</doc-anchor-trigger>
+        <span>8.クラスカル法</span>
+    </h2>
+</doc-anchor-target>
+<p><a href="../../ad/optimize/kruskal/">クラスカル法</a> を参照。</p>
+<doc-anchor-target id="9リストの中身を連結結合して文字列に">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#9リストの中身を連結結合して文字列に">#</doc-anchor-trigger>
+        <span>9.リストの中身を連結・結合して文字列に</span>
+    </h2>
+</doc-anchor-target>
+<p>Python特有の事情によるものか？</p>
+<p>Haskellでは <code v-pre>show</code> と <code v-pre>unwords</code> あたりのことを知っていればいい話だろうか、何が言いたいのかよくわからない。</p>
+<doc-anchor-target id="関連問題">
+    <h4>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
+        <span>関連問題</span>
+    </h4>
+</doc-anchor-target>
+<ul>
+<li><a href="https://atcoder.jp/contests/tenka1-2012-quala/tasks/tenka1_2012_qualA_2">天下一プログラマーコンテスト2012 予選A B</a></li>
+<li><a href="https://atcoder.jp/contests/arc039/tasks/arc039_a">ARC039 A A - B problem</a></li>
+<li><a href="https://atcoder.jp/contests/abc192/tasks/abc192_c">ABC192 Kaprekar Number</a> - <a href="https://atcoder.jp/contests/abc192/submissions/20409087">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/abc137/tasks/abc137_c">ABC137 C Green Bin</a> - <a href="https://atcoder.jp/contests/abc137/submissions/22746507">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/abc199/tasks/abc199_c">ABC199 C IPFL</a> - <a href="https://atcoder.jp/contests/abc199/submissions/22747708">ACコード</a> 何というimperative Haskell...</li>
+</ul>
+<p>「ABC137 Cについて、順番前後しますが、カウンターの章も参照のことお願いします。」とのこと。</p>
+<doc-anchor-target id="10ソートの大小関係を操る多次元配列のソート">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#10ソートの大小関係を操る多次元配列のソート">#</doc-anchor-trigger>
+        <span>10.ソートの大小関係を操る（多次元配列のソート）</span>
+    </h2>
+</doc-anchor-target>
+<p>特に「多次元配列の」とか狭めることなく一般化して、任意の大小関係でのソートが</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">Data.List.sortBy :: (a -&gt; a -&gt; Ordering) -&gt; [a] -&gt; [a]</code></pre>
+</doc-codeblock></div>
+<p>でできる。例えば降順のソートは <code v-pre>sortBy (flip compare)</code> でよい。  <br />
+また、中置演算子の両辺に前処理を挿入する</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">Data.Function.on :: (b -&gt; b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; a -&gt; c</code></pre>
+</doc-codeblock></div>
+<p>も組み合わせると、</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">sortBy (compare `on` fst) -- 対の左側だけを比較
+sortBy (compare `on` (!! 1)) -- リストのリストを1番目の要素で比較</code></pre>
+</doc-codeblock></div>
+<p>などとできる。</p>
+<doc-anchor-target id="関連問題-1">
+    <h4>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題-1">#</doc-anchor-trigger>
+        <span>関連問題</span>
+    </h4>
+</doc-anchor-target>
+<ul>
+<li><a href="https://atcoder.jp/contests/abc128/tasks/abc128_b">ABC128 B Guidebook</a> - <a href="https://atcoder.jp/contests/abc128/submissions/22763098">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/keyence2020/tasks/keyence2020_b">キーエンス プログラミング コンテスト 2020 B Robot Arms</a> - 【ACコード】</li>
+<li><a href="https://atcoder.jp/contests/abc113/tasks/abc113_c">ABC113 C ID</a> - <a href="https://atcoder.jp/contests/abc113/submissions/22769268">ACコード</a> 別アプローチの、Pごとに選り分けてからyで整列することを出題者は意図していそうな。</li>
+</ul>
+<doc-anchor-target id="11辞書">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#11辞書">#</doc-anchor-trigger>
+        <span>11.辞書</span>
+    </h2>
+</doc-anchor-target>
+<p>Python特有の事情で、辞書が存在しないキーへの代入を許さないものより許すものの方が使いやすいよ？という話かと。</p>
+<p>Haskellでimmutableなコードを書いている分には関係してこないことかと思われる。
+位置づけ的には、 <code v-pre>Data.Array.accumArray</code> のDP的な使い方を代わりにするべき文脈かもしれない。</p>
+<doc-anchor-target id="関連問題-2">
+    <h4>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題-2">#</doc-anchor-trigger>
+        <span>関連問題</span>
+    </h4>
+</doc-anchor-target>
+<ul>
+<li><a href="https://atcoder.jp/contests/abc127/tasks/abc127_d">ABC127 D Integer Cards</a> - <a href="https://atcoder.jp/contests/abc127/submissions/12944460">ACコード</a> Data.IntMapを使用</li>
+<li><a href="https://atcoder.jp/contests/abc188/tasks/abc188_f">ABC188 F +1-1x2</a> - 【ACコード】</li>
+</ul>
+<p>他サイト</p>
+<ul>
+<li><a href="https://yukicoder.me/problems/no/1338">yukicoder No.1338 Giant Class</a> - 【ACコード】</li>
+</ul>
+<doc-anchor-target id="12カウンター">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#12カウンター">#</doc-anchor-trigger>
+        <span>12.カウンター</span>
+    </h2>
+</doc-anchor-target>
+<p><a href="../../snippets/integer/counter/">数える</a> を参照。</p>
+<doc-anchor-target id="13modint">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#13modint">#</doc-anchor-trigger>
+        <span>13.ModInt</span>
+    </h2>
+</doc-anchor-target>
+<p>モジュロな数をPythonのクラスにしたものが便利だよ、という話らしい。
+Haskellにはうまくfitさせられない感じなので、<a href="../modint/">考え中</a>ということで。</p>
+<doc-anchor-target id="14逆元">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#14逆元">#</doc-anchor-trigger>
+        <span>14.逆元</span>
+    </h2>
+</doc-anchor-target>
+<p><a href="../../snippets/integer/modrecip/">モジュラ逆数</a> を参照。</p>
+<doc-anchor-target id="15モジュロの階乗">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#15モジュロの階乗">#</doc-anchor-trigger>
+        <span>15.（モジュロの）階乗</span>
+    </h2>
+</doc-anchor-target>
+<p>（アルゴリズムロジックの方が、 <span class="math">_nC_r</span> にからめた話が書いてあってよい。）</p>
+<p>要約すると、
+大きな数の階乗とモジュロを要求される場合に、バカ正直に多倍長整数で計算していては間に合わないので、
+乗算のたびにモジュロをとることで小さい整数に収めよう、ということと、
+広い範囲に渡って階乗が必要な場合に、
+それぞれの値に対して階乗関数を毎回呼び出さず、
+<span class="math">(n-1)!</span> の結果に <span class="math">n</span> を乗じて <span class="math">n!</span> を求めなさい、ということ。</p>
+<doc-anchor-target id="関連問題-3">
+    <h4>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題-3">#</doc-anchor-trigger>
+        <span>関連問題</span>
+    </h4>
+</doc-anchor-target>
+<ul>
+<li><a href="https://atcoder.jp/contests/abc055/tasks/abc055_b">ABC 055 B Training Camp</a> - <a href="https://atcoder.jp/contests/abc055/submissions/6332597">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/abc065/tasks/arc076_a">ABC 065 C Reconciled?</a> - <a href="https://atcoder.jp/contests/abc065/submissions/27526633">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/abc185/tasks/abc185_c">ABC 185 C Duodecim Ferra</a> - <a href="https://atcoder.jp/contests/abc185/submissions/18771391">ACコード</a> Integer / <a href="https://atcoder.jp/contests/abc185/submissions/27551599">Intに収めた別解</a></li>
+</ul>
+<p>他サイト</p>
+<ul>
+<li><a href="https://mojacoder.app/users/bachoppi/problems/oneinput">MojaCoder 入力1個数え上げ</a> - 【ACコード】良問です。だそうです。</li>
+</ul>
 
 
 
@@ -231,10 +368,10 @@
     </div>
 
     <div class="w-1/2">
-        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/readings/typical90/">
+        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/readings/modint/">
             <span>
                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                <span class="block mt-1">競プロ典型 90 問</span>
+                <span class="block mt-1">modint</span>
             </span>
             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
         </a>
@@ -282,6 +419,6 @@
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "あのアルゴリズムはどこ？", icon: "file", hasPrism: false, hasMermaid: false, hasMath: false }</script>
+        <script>window.__DOCS__ = { "title": "あのアルゴリズムはどこ？", icon: "file", hasPrism: true, hasMermaid: false, hasMath: true }</script>
     </body>
 </html>
