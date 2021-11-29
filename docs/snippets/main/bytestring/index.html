@@ -22,11 +22,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.691339220316" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.691544296631" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.691339220316" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.691544296631" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.691339220316" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.691544296631" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -167,15 +167,16 @@
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">import Control.Applicative
+import Control.Monad
 import qualified Data.ByteString.Char8 as BS
 import Data.Char
 import Data.List
 
 main = do
 -- 読み込み
-  Just (n,_) &lt;- BS.readInt li &lt;$&gt; BS.getLine
-  [a,b,c] &lt;- unfoldr (BS.readInt . BS.dropWhile isSpace) &lt;$&gt; BS.getLine
-  xys &lt;- map (unfoldr (BS.readInt . BS.dropWhile isSpace)) . BS.lines &lt;$&gt; BS.getContents
+  [n] &lt;- bsGetLnInts
+  [a,b,c] &lt;- bsGetLnInts
+  xys &lt;- replicateM n bsGetLnInts
 -- 本体
   let ans = compute n a b c xys
 -- 出力
@@ -184,6 +185,9 @@ main = do
   putStrLn $ if ans then &quot;Yes&quot; else &quot;No&quot;
   putStrLn $ foldr ($) &quot;&quot; $ intersperse (' ' :) $ map shows ans
   mapM_ print ans
+
+bsGetLnInts :: IO [Int]
+bsGetLnInts = unfoldr (BS.readInt . BS.dropWhile isSpace) &lt;$&gt; BS.getLine
 
 compute :: Int -&gt; [Int] -&gt; [[Int]] -&gt; [Int Bool]
 compute n a b c xys = ...</code></pre>
