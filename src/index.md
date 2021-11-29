@@ -14,6 +14,7 @@ order: 00000
 - [AtCoder Library](https://atcoder.jp/posts/517)
   - [ドキュメント](https://atcoder.github.io/ac-library/production/document_ja/)
 - [アルゴリズムロジック](https://algo-logic.info/)
+- [The Algorithms/Haskell](https://github.com/TheAlgorithms/Haskell)
 
 #### テストケース
 
