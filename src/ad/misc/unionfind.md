@@ -1,4 +1,5 @@
 ---
+order: -01000
 ---
 # Union-Find
 
@@ -89,7 +90,7 @@ type UnionFind = Array Int Int
 
 ```haskell
 newUF :: Int -> UnionFind
-newUF n = listArray (0,pred ub) [0..ub]
+newUF n = listArray (0, pred n) [0..pred n]
 ```
 
 指定の番号の要素から、その要素が属する分割の代表元の番号を得る操作が普通に欲しいだろう。
@@ -143,7 +144,7 @@ unionは元々UnionFind配列に対する更新操作なので、これは導入
 
 ```haskell
 newUF :: Int -> UnionFind
-newUF n = listArray (0,pred n) $ replicate n (-1)
+newUF n = listArray (0, pred n) $ replicate n (-1)
 
 getRoot :: UnionFind -> Int -> Int
 getRoot uf i = let k = uf ! i in if 0 > k then i else getRoot uf k
@@ -156,10 +157,8 @@ uniteUF uf i j
                LT -> uf // [(b,a)]
                EQ -> uf // [(b,a), (a, pred r))]
   where
-    a = getRoot uf i
-    r = uf ! a
-    b = getRoot uf k
-    s = uf ! b
+    (a, r) = (getRoot uf i, uf ! a)
+    (b, s) = (getRoot uf j, uf ! b)
 ```
 
 ### mutable vector化と経路圧縮
