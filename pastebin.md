@@ -54,3 +54,28 @@ powerish mul init a b =
     bs = takeWhile (0 /=) $ iterate (flip div 2) b
     ps = iterate (\x -> mul x x) a
 ```
+
+# ベクタに読み込む
+
+まず、ByteString 1行をリストに読み込む断片を名前つける
+
+```haskell
+readIntsBSLine = unfoldr (BS.readInt . BS.dropWhile isSpace) <$> BS.getLine
+```
+
+そして、これなどをn回使った結果をn要素のmutable vectorに読み込むアクション
+
+```haskell
+-- アクション使ってn行読んでn要素のVectorに入れて返す
+readIntsMV :: Int -> IO a -> IO (MV.IOVector a)
+readIntsMV n action = do
+  v <- MV.new n
+  forM_ [0..pred n] (\i -> do
+    x <- action
+    MV.write v i x
+    )
+  return v
+-- readIntsMV action n = MV.generateM n (\_ -> action) AtCoder Sucks!
+```
+
+AtCoderのVectorが古くてgenerateMが使えないとか。
