@@ -126,3 +126,7 @@ $(n-1)!$ の結果に $n$ を乗じて $n!$ を求めなさい、ということ
 
 他サイト
 - [MojaCoder 入力1個数え上げ](https://mojacoder.app/users/bachoppi/problems/oneinput) - 【ACコード】良問です。だそうです。
+
+## 16.コンビネーション
+
+[二項係数](../ad/math/combination/) を参照。
