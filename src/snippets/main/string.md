@@ -5,12 +5,13 @@ order: 99000
 
 ```haskell
 import Control.Applicative
+import Control.Monad
 
 main = do
 -- 読み込み
-  x <- read <$> getLine
+  n <- read <$> getLine
   [a,b,c] <- map read . words <$> getLine
-  xys <- map (map read . words) . lines <$> getContents
+  xys <- replicateM n (map read . words <$> getLine)
 -- 本体
   let ans = compute n a b c xys
 -- 出力

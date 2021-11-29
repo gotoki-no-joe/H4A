@@ -76,35 +76,57 @@ compute :: Int -> [Int] -> [[Int]] -> [Int Bool]
 compute n a b c xys =
 ```
 
+## 個数をちゃんと数える
+
+「残り全部を読む」でAtCoderについてたいていの場合は用が足りるが、
+指定された行数をちゃんと読む方がいいような気がしてきたのでもう少し直すと次のようになる。
+
+```haskell
+import Control.Monad
+
+main = do
+  n <- readLn
+  xys <- replicateM n (map read . words <$> getLine)
+  ...
+```
+
 ## ByteString
 
 Haskellにおいて、文字列を文字のリストとして扱うやり方は、Preludeの関数で処理できるためとっつきやすいが、処理効率の観点からは絶望的である。 $2 \times 10^5$ 個のデータの組を読み込む、というような場面でString版のテンプレートを用いると、読み込みでかなりの時間を消費する。
+
+行に数が1つだけの場合、
+
+```haskell
+  Just (n,_) <- BS.readInt li <$> BS.getLine
+```
+
+のようにして読み込めるが、複数の数を読み込むアクション `bsGetLnInts` で全て統一的に扱うようにしてみた。
 
 Data.ByteStringライブラリを利用すると、この問題に対処できる。出力側が問題になることはあまりないのでそのままにしている。
 
 ```haskell
 import Control.Applicative
+import Control.Monad
 import qualified Data.ByteString.Char8 as BS
 import Data.Char
 import Data.List
 
 main = do
-  Just (n,_) <- BS.readInt li <$> BS.getLine
-  [a,b,c] <- unfoldr (BS.readInt . BS.dropWhile isSpace) <$> BS.getLine
-  xys <- map (unfoldr (BS.readInt . BS.dropWhile isSpace)) . BS.lines <$> BS.getContents
+  [n] <- bsGetLnInts
+  [a,b,c] <- bsGetLnInts
+  xys <- replicateM n bsGetLnInts
 -- 本体
   let ans = compute n a b c xys
--- 結果が数ひとつのとき
+-- 出力
   print ans
--- 結果が文字列のとき
   putStrLn ans
--- 結果がYes/Noのとき
   putStrLn $ if ans then "Yes" else "No"
--- 1行に空白区切りで出力するとき
   putStrLn $ foldr ($) "" $ intersperse (' ' :) $ map shows ans
--- 1つ1行で出力するとき
   mapM_ print ans
 
+bsGetLnInts :: IO [Int]
+bsGetLnInts = unfoldr (BS.readInt . BS.dropWhile isSpace) <$> BS.getLine
+
 compute :: Int -> [Int] -> [[Int]] -> [Int Bool]
-compute n as xys = ...
+compute n a b c xys = ...
 ```
