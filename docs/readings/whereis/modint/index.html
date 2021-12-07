@@ -7,21 +7,21 @@
     <meta name="turbo-cache-control" content="no-cache">
 
     <!-- Primary Meta Tags -->
-    <title>Data.Map, Data.IntMap (part)</title>
-    <meta name="title" content="Data.Map, Data.IntMap (part)">
-    <meta name="description" content="description: 数学の写像、いわゆる連想配列（ただしimmutable）" />
+    <title>modint</title>
+    <meta name="title" content="modint">
+    <meta name="description" content="普通の整数型などと同じ感覚で扱うだけで自動的に mod を取ってくれるというもの" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/library/data.map/">
-    <meta property="og:title" content="Data.Map, Data.IntMap (part)">
-    <meta property="og:description" content="description: 数学の写像、いわゆる連想配列（ただしimmutable）">
+    <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/readings/whereis/modint/">
+    <meta property="og:title" content="modint">
+    <meta property="og:description" content="普通の整数型などと同じ感覚で扱うだけで自動的に mod を取ってくれるというもの">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/library/data.map/">
-    <meta property="twitter:title" content="Data.Map, Data.IntMap (part)">
-    <meta property="twitter:description" content="description: 数学の写像、いわゆる連想配列（ただしimmutable）">
+    <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/readings/whereis/modint/">
+    <meta property="twitter:title" content="modint">
+    <meta property="twitter:description" content="普通の整数型などと同じ感覚で扱うだけで自動的に mod を取ってくれるというもの">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
@@ -162,117 +162,122 @@
                 <div id="docs-sidebar-right-toggle"></div>
                
                 <!-- Page content  -->
-<doc-anchor-target id="datamap-dataintmap-part" class="break-words">
+<doc-anchor-target id="modint" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#datamap-dataintmap-part">#</doc-anchor-trigger>
-        <span>Data.Map, Data.IntMap (part)</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#modint">#</doc-anchor-trigger>
+        <span>modint</span>
     </h1>
 </doc-anchor-target>
-<p>description: 数学の写像、いわゆる連想配列（ただしimmutable）</p>
+<p>普通の整数型などと同じ感覚で扱うだけで自動的に mod を取ってくれるというもの</p>
+<ul>
+<li><a href="https://noshi91.hatenablog.com/entry/2019/03/31/174006">modint 構造体を使ってみませんか？ (C++)</a></li>
+<li><a href="https://qiita.com/wotsushi/items/c936838df992b706084c">Pythonでmodintを実装してみた</a></li>
+</ul>
+<p>オブジェクトにカプセル化するなら、法はコンストラクタの引数にするなり、
+ファクトリを作るときに指定したりすれば自由に指定できる。
+MLのモジュールなら、ロード時に法を引数として指定できそう。</p>
+<p>Haskellでは、AtCoderにコピペして使うだけなら、大域変数で与える形でもどうにかなる。
+それよりもHaskellでは、それをNum型クラスの仲間に入れたい、というところでややこしくなる。</p>
+<p>以下、考え中</p>
+<p>とりあえずEqとOrdはderiveできる。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">import qualified Data.Map as M
-import qualified Data.IntMap as IM</code></pre>
+<pre class="language-haskell"><code v-pre class="language-haskell">modBase = 1000000007 -- Prime Number
+
+newtype ModInt = ModInt Int
+  deriving (Eq, Ord)</code></pre>
+</doc-codeblock></div>
+<p>表示に関しては、そのまま他の整数と見分けのつかない形にするか、独自の表示形式を持っておき、そうしたくなければ自分でIntに変換するべきか、どちらも理はある。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">instance Show ModInt
+  where
+    show (ModInt x) = show x
+    show (ModInt x) = '(' : unwords [show x, &quot;mod&quot;, show modBase] ++ &quot;)&quot;</code></pre>
+</doc-codeblock></div>
+<p>兎にも角にも数なのでNumクラスに入れるには、(+), (*), abs, signum, fromInteger, negate または (-)を少なくとも定義する必要がある。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">instance Num ModInt
+  where
+    ModInt a + ModInt b = ModInt $ (a + b) `mod` modBase
+    ModInt a * ModInt b = ModInt $ (a * b) `mod` modBase
+    abs (ModInt a) = ModInt (abs a)
+    signum (ModInt a) = ModInt (signum a)
+    negate (ModInt a) = ModInt (negate a)
+    fromInteger x = ModInt (fromInteger x `mod` modBase)</code></pre>
+</doc-codeblock></div>
+<p>ここまでではまだ、ModIntからIntに戻す手段が（パターンマッチ以外に）ないことに注意。</p>
+<p>さて、モジュロでの割り算 a ÷ b は、モジュロでの逆元 1/b を求めることに帰着し、それは拡張ユークリッドの互除法で求められる。除算はIntegral型クラスのdivか、Fractionalクラスのrecipのどちらにするべきか。基本的に整数なのでIntegralっぽいが、剰余はない。recipは逆元そのものだが、Fractionalではない。</p>
+<p>Integralにするためには、その前にEnumにしないといけないらしい。ここでIntとの相互変換が手に入る。特に<code v-pre>toEnum</code>はスマートコンストラクタとして機能する。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">instance Enum ModInt
+  where
+    toEnum a = ModInt (a `mod` modBase)
+    fromEnum (ModInt a) = a</code></pre>
+</doc-codeblock></div>
+<p>そしてIntegralはquotRem, toIntegerを必要とするが、quotRemをどうしていいかわからない。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">instance Integral ModInt
+  where
+    toInteger (ModInt a) = toInteger a
+    quotRem = undefined
+    div (ModInt a) (ModInt b) = a * modRecip b</code></pre>
+</doc-codeblock></div>
+<p>一方、FractionalはNumであればよくて、最低限のメソッドはfromRationalとrecipまたは(/)である。recipがまさに提供したいものだが、fromRationalが途方に暮れる。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">instance Fractional ModInt
+  where
+    fromRational = undefined
+    recip = modRecip</code></pre>
+</doc-codeblock></div>
+<p>肝心のmodRecipは、  <br />
+<a href="https://qiita.com/drken/items/3b4fdf0a78e7a138cd9a#3-2-mod-p-%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E9%80%86%E5%85%83">https://qiita.com/drken/items/3b4fdf0a78e7a138cd9a#3-2-mod-p-%E3%81%AB%E3%81%8A%E3%81%91%E3%82%8B%E9%80%86%E5%85%83</a>  <br />
+を直接移植してみた。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">modRecip (ModInt a) =
+   toEnum $ you $ head $ dropWhile cond $ iterate step (a, modBase, 1, 0)
+  where
+    step (a,b,u,v) =
+      let t = a `div` b
+      in  (b, a - t * b, v, u - t * v)
+    cond (_,b,_,_) = b /= 0
+    you (_,_,u,_) = u</code></pre>
+</doc-codeblock></div>
+<p>冒頭に示したページを見ると、べき乗の結果が大きな数になってからmodを取り直すと大変だが、Python組み込みのpow関数はオプショナルな第３引数にmodを指定できるという技があるらしい。</p>
+<p>なおHaskellにはべき乗の演算子が3つもある。  <br />
+<a href="https://wiki.haskell.org/Power_function">https://wiki.haskell.org/Power_function</a></p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">-- typically for integers
+(^) :: (Num a, Integral b) =&gt; a -&gt; b -&gt; a
+
+-- typically for rationals
+(^^) :: (Fractional a, Integral b) =&gt; a -&gt; b -&gt; a
+
+-- typically for floating-point numbers
+(**) :: Floating a =&gt; a -&gt; a -&gt; a</code></pre>
+</doc-codeblock></div>
+<p>どれを上書きして、どう（実装ではなく、型情報の与え方について）書けばいいのやら。</p>
+<p>欲張らずに、moduloでのrecipだけをIntの上に定義する方が使いやすいかもしれない。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">enMod :: Int -&gt; Int -&gt; Int
+enMod = flip mod
+
+recipMod :: Int -&gt; Int -&gt; Int
+recipMod b a = (flip mod b) $ you $ head $
+               dropWhile cond $ iterate step (a, b, 1, 0)
+  where
+    step (a,b,u,v) =
+      let t = a `div` b
+      in  (b, a - t * b, v, u - t * v)
+    cond (_,b,_,_) = b /= 0
+    you (_,_,u,_) = u</code></pre>
 </doc-codeblock></div>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">data Map k a                -- k キーの型, a 値の型 → 写像の型
-data IntMap a</code></pre>
+<pre class="language-none"><code v-pre class="language-none">&gt; let en = enMod modBase
+&gt; let re = recipMod modBase
+&gt; en $ en 12345678900000 * re (en 100000)
+123456789</code></pre>
 </doc-codeblock></div>
-<doc-anchor-target id="写像を作る">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#写像を作る">#</doc-anchor-trigger>
-        <span>写像を作る</span>
-    </h2>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- 空の写像
-M.empty :: Map k a
-IM.empty :: IntMap a
-
--- 単一要素
-M.singleton :: k -&gt; a -&gt; Map k a
-M.singleton :: Int -&gt; a -&gt; IntMap a
-
--- リストから
-M.fromList :: Ord k =&gt; [(k,a)] -&gt; Map k a
-IM.fromList :: [(Int,a)] -&gt; IntMap a
-
--- リストから積み上げて
-M.fromListWith :: Ord k =&gt; (a -&gt; a -&gt; a) -&gt; [(k,a)] -&gt; Map k a
-IM.fromListWith :: (a -&gt; a -&gt; a) -&gt; [(Int,a)] -&gt; IntMap a
-
--- リストから積み上げて、添字も使って
-M.fromListWithKey :: Ord k =&gt; (k -&gt; a -&gt; a -&gt; a) -&gt; [(k,a)] -&gt; Map k a
-IM.fromListWithKey :: (Int -&gt; a -&gt; a -&gt; a) -&gt; [(Int,a)] -&gt; IntMap a</code></pre>
-</doc-codeblock></div>
-<p>対応づく要素全てをリストで持つとき：</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- 正しい
-M.fromListWith (++) [(key,[val]) | (key,val) &lt;- kvs]
--- まちがい（とても遅くなる）
-M.fromListWith (flip (++)) ...</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="写像の変更">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#写像の変更">#</doc-anchor-trigger>
-        <span>写像の変更</span>
-    </h2>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- 上書き、なければ挿入
-M.insert :: Ord k =&gt; k -&gt; a -&gt; Map k a -&gt; Map k a
-IM.insert :: Int -&gt; a -&gt; IntMap a -&gt; IntMap a
-
--- 継ぎ足し、なければ挿入
-M.insertWith :: Ord k =&gt; (a -&gt; a -&gt; a) -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a
-IM.insertWith :: (a -&gt; a -&gt; a) -&gt; Key -&gt; a -&gt; IntMap a -&gt; IntMap a
-
--- 添字付き
-M.insertWithKey :: Ord k =&gt; (k -&gt; a -&gt; a -&gt; a) -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a
-IM.insertWithKey :: (Int -&gt; a -&gt; a -&gt; a) -&gt; Int -&gt; a -&gt; IntMap a -&gt; IntMap a
-
--- 削除
-M.delete :: Ord k =&gt; k -&gt; Map k a -&gt; Map k a
-IM.delete :: Int -&gt; IntMap a -&gt; IntMap a</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="アクセス">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#アクセス">#</doc-anchor-trigger>
-        <span>アクセス</span>
-    </h2>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- 対応を含む、含まない
-M.member,   M.notMember :: Ord k =&gt; k -&gt; Map k a -&gt; Bool
-IM.member, IM.notMember :: Int -&gt; IntMap a -&gt; Bool
-
--- 直接アクセス
-(M.!) :: Ord k =&gt; Map k a -&gt; k -&gt; a
-(IM.!) :: IntMap a -&gt; Int -&gt; a
-
--- Maybeつき
-(M.!?) :: Ord k =&gt; Map k a -&gt; k -&gt; Maybe a
-(IM.!?) :: IntMap a -&gt; Int -&gt; Maybe a
-
--- デフォルト値つき
-M.findWithDefault :: Ord k =&gt; a -&gt; k -&gt; Map k a -&gt; a
-IM.findWithDefault :: a -&gt; Int -&gt; IntMap a -&gt; a</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="検査">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#検査">#</doc-anchor-trigger>
-        <span>検査</span>
-    </h2>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- 空か
-M.null :: Map k a -&gt; Bool
-IM.null :: IntMap a -&gt; Bool
-
--- 要素数
-M.size :: Map k a -&gt; Int
-IM.size :: IntMap a -&gt; Int</code></pre>
-</doc-codeblock></div>
-<p>これ以上は使った実績があったら追加することにしよう。toList くらいは必須か。</p>
+<p>逆元を求めるこちらの方法は何だろう。  <br />
+<a href="https://blog.satoooh.com/entry/5195/">https://blog.satoooh.com/entry/5195/</a></p>
 
 
 
@@ -284,20 +289,20 @@ IM.size :: IntMap a -&gt; Int</code></pre>
             
 <nav class="flex mt-14">
     <div class="w-1/2">
-        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/library/data.list.split/">
+        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/readings/whereis/">
             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
             <span>
                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                <span class="block mt-1">Data.List.Split</span>
+                <span class="block mt-1">あのアルゴリズムはどこ？</span>
             </span>
         </a>
     </div>
 
     <div class="w-1/2">
-        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/library/data.numbers.primes/">
+        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/readings/typical90/">
             <span>
                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                <span class="block mt-1">Data.Numbers.Primes</span>
+                <span class="block mt-1">競プロ典型 90 問</span>
             </span>
             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
         </a>
@@ -345,6 +350,6 @@ IM.size :: IntMap a -&gt; Int</code></pre>
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "Data.Map, Data.IntMap (part)", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
+        <script>window.__DOCS__ = { "title": "modint", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
     </body>
 </html>

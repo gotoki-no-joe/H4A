@@ -7,21 +7,21 @@
     <meta name="turbo-cache-control" content="no-cache">
 
     <!-- Primary Meta Tags -->
-    <title>Data.Map, Data.IntMap (part)</title>
-    <meta name="title" content="Data.Map, Data.IntMap (part)">
-    <meta name="description" content="description: 数学の写像、いわゆる連想配列（ただしimmutable）" />
+    <title>メインルーチン</title>
+    <meta name="title" content="メインルーチン">
+    <meta name="description" content="競技プログラミングでは、参加者がプログラミング言語を自由に選択できるようにするため、 プログラムが処理するべき入力データはファイルまたは標準入力からテキストで読み込み、 処理結果の出力データもテキストで出力するようになっていることが多い。" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/library/data.map/">
-    <meta property="og:title" content="Data.Map, Data.IntMap (part)">
-    <meta property="og:description" content="description: 数学の写像、いわゆる連想配列（ただしimmutable）">
+    <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/snippets/main/">
+    <meta property="og:title" content="メインルーチン">
+    <meta property="og:description" content="競技プログラミングでは、参加者がプログラミング言語を自由に選択できるようにするため、 プログラムが処理するべき入力データはファイルまたは標準入力からテキストで読み込み、 処理結果の出力データもテキストで出力するようになっていることが多い。">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/library/data.map/">
-    <meta property="twitter:title" content="Data.Map, Data.IntMap (part)">
-    <meta property="twitter:description" content="description: 数学の写像、いわゆる連想配列（ただしimmutable）">
+    <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/snippets/main/">
+    <meta property="twitter:title" content="メインルーチン">
+    <meta property="twitter:description" content="競技プログラミングでは、参加者がプログラミング言語を自由に選択できるようにするため、 プログラムが処理するべき入力データはファイルまたは標準入力からテキストで読み込み、 処理結果の出力データもテキストで出力するようになっていることが多い。">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
@@ -30,6 +30,8 @@
     <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.692162444931" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
     <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.692162444931" defer></script>
+    <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
+    <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -162,117 +164,208 @@
                 <div id="docs-sidebar-right-toggle"></div>
                
                 <!-- Page content  -->
-<doc-anchor-target id="datamap-dataintmap-part" class="break-words">
+<doc-anchor-target id="メインルーチン" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#datamap-dataintmap-part">#</doc-anchor-trigger>
-        <span>Data.Map, Data.IntMap (part)</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#メインルーチン">#</doc-anchor-trigger>
+        <span>メインルーチン</span>
     </h1>
 </doc-anchor-target>
-<p>description: 数学の写像、いわゆる連想配列（ただしimmutable）</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">import qualified Data.Map as M
-import qualified Data.IntMap as IM</code></pre>
-</doc-codeblock></div>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">data Map k a                -- k キーの型, a 値の型 → 写像の型
-data IntMap a</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="写像を作る">
+<doc-anchor-target id="コード">
     <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#写像を作る">#</doc-anchor-trigger>
-        <span>写像を作る</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#コード">#</doc-anchor-trigger>
+        <span>コード</span>
+    </h2>
+</doc-anchor-target>
+<doc-anchor-target id="string版">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#string版">#</doc-anchor-trigger>
+        <span>String版</span>
+    </h3>
+</doc-anchor-target>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import Control.Applicative
+import Control.Monad
+
+main = do
+-- 読み込み
+  n &lt;- readLn
+  [a,b,c] &lt;- getLnInts
+  xys &lt;- replicateM n getLnInts
+-- 本体
+  let ans = compute n a b c xys
+-- 出力
+  print ans
+  putStrLn $ if ans then &quot;Yes&quot; else &quot;No&quot;
+  putStrLn ans
+  putStrLn $ unwords $ map show ans
+  putStrLn $ foldr ($) &quot;&quot; $ intersperse (' ' :) $ map shows ans
+  mapM_ print ans
+
+getLnInts :: IO [Int]
+getLnInts = map read . words &lt;$&gt; getLine
+
+compute :: Int -&gt; [Int] -&gt; [[Int]] -&gt; [Int Bool]
+compute n a b c xys =</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="bytestring版">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#bytestring版">#</doc-anchor-trigger>
+        <span>ByteString版</span>
+    </h3>
+</doc-anchor-target>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import Control.Applicative
+import Control.Monad
+import qualified Data.ByteString.Char8 as BS
+import Data.Char
+import Data.List
+
+main = do
+-- 読み込み
+  [n] &lt;- bsGetLnInts
+  [a,b,c] &lt;- bsGetLnInts
+  xys &lt;- replicateM n bsGetLnInts
+-- 本体
+  let ans = compute n a b c xys
+-- 出力
+  print ans
+  putStrLn ans
+  putStrLn $ if ans then &quot;Yes&quot; else &quot;No&quot;
+  putStrLn $ foldr ($) &quot;&quot; $ intersperse (' ' :) $ map shows ans
+  mapM_ print ans
+
+bsGetLnInts :: IO [Int]
+bsGetLnInts = unfoldr (BS.readInt . BS.dropWhile isSpace) &lt;$&gt; BS.getLine
+
+compute :: Int -&gt; [Int] -&gt; [[Int]] -&gt; [Int Bool]
+compute n a b c xys = ...</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="説明">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#説明">#</doc-anchor-trigger>
+        <span>説明</span>
+    </h2>
+</doc-anchor-target>
+<doc-anchor-target id="基本">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#基本">#</doc-anchor-trigger>
+        <span>基本</span>
+    </h3>
+</doc-anchor-target>
+<p>競技プログラミングでは、参加者がプログラミング言語を自由に選択できるようにするため、
+プログラムが処理するべき入力データはファイルまたは標準入力からテキストで読み込み、
+処理結果の出力データもテキストで出力するようになっていることが多い。</p>
+<p>Haskellで入出力を扱うには、IOモナドを使う。ざっくり、do ブロックの中の行が、順に実行される。
+最も素朴な方法としては、以下のコードをテンプレートとし、問題の入力形式に合わせて使用できる。
+コピペして、問題の形式に合わせて読み込み部をトリミングし、出力部を選ぶ。
+<code v-pre>compute</code>の型シグネチャで<code v-pre>read</code>の型を固定する。
+AtCoderでときどきある、&quot;Yes&quot;か&quot;No&quot;を出力するタイプの問題は、Boolで返して16行めを使う。</p>
+<div class="codeblock-wrapper"><doc-codeblock line-numbers>
+<pre class="language-haskell"><code v-pre class="language-haskell">main = do
+-- 標準入力から1行読み、String型の値をl1に束縛する
+  l1 &lt;- getLine
+  l2 &lt;- getLine
+-- 標準入力から（残り）全てを読み込み、String型の値をcoに束縛する
+  co &lt;- getContents
+-- l1をRead型クラスの型の値として解釈する。純粋な計算はletで行う
+  let n = read l1
+  let [a,b,c] = map read $ words l2
+  let xys = map (map read . words) $ lines co
+-- 各引数の型はcomputeのシグネチャで指定すると見通しがよい
+  let ans = compute n a b c xys
+-- Show型クラスの値を標準出力にテキストで出力する
+  print ans
+-- Yes/Noで答える問題は、Boolで返してこれで出力する
+  putStrLn $ if ans then &quot;Yes&quot; else &quot;No&quot;
+-- String型は、ダブルクオートがつかないようにこちらで出力する
+  putStrLn ans
+-- 同じ型の値を複数、空白を挟んで一行に表示する
+  putStrLn $ unwords $ map show ans
+-- 同じ型の値を複数、１行に一つずつ表示する
+  mapM_ print ans
+
+-- AtCoderでよくある型に編集しやすくしている
+compute :: Int -&gt; [Int] -&gt; [[Int]] -&gt; [Int Bool]
+compute n a b c xys =</code></pre>
+</doc-codeblock></div>
+<p>「二つの値が書かれた行がn行続く」のような場合、この二つの値をリストでなくタプルで扱いたくなるが、そこは割り切った方がよい。その変換は単純なタイムロスになる。</p>
+<doc-anchor-target id="applicative">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#applicative">#</doc-anchor-trigger>
+        <span>Applicative</span>
+    </h3>
+</doc-anchor-target>
+<p>ここで、Control.Applicativeの機能を使うと、モナドの結果にさらに純粋な関数を適用できる。これにより、上のコードの読み込み部分がコンパクトにできる。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import Control.Applicative
+
+main = do
+-- 値が1つのとき
+  n &lt;- readLn -- read &lt;$&gt; getLine
+-- 複数の値のとき
+  [a,b,c] &lt;- map read . words &lt;$&gt; getLine
+-- 文字列のまま読むとき
+  s &lt;- getLine
+-- (残り)全部読んで行の内容のリストのリストに一度に読み込む
+  xys = map (map read . words) . lines &lt;$&gt; getContents
+-- 本体
+  let ans = compute n a b c xys
+-- 出力
+  print ans
+  putStrLn ans
+  putStrLn $ if ans then &quot;Yes&quot; else &quot;No&quot;
+  putStrLn $ unwords $ map show ans
+  putStrLn $ foldr ($) &quot;&quot; $ intersperse (' ' :) $ map shows ans
+  mapM_ print ans
+
+compute :: Int -&gt; [Int] -&gt; [[Int]] -&gt; [Int Bool]
+compute n a b c xys =</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="個数をちゃんと数える">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#個数をちゃんと数える">#</doc-anchor-trigger>
+        <span>個数をちゃんと数える</span>
+    </h3>
+</doc-anchor-target>
+<p>「残り全部を読む」でAtCoderについてたいていの場合は用が足りるが、
+指定された行数をちゃんと読む方がいいような気がしてきたのでもう少し直すと次のようになる。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import Control.Monad
+
+main = do
+  n &lt;- readLn
+  xys &lt;- replicateM n (map read . words &lt;$&gt; getLine)
+  ...</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="bytestring">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#bytestring">#</doc-anchor-trigger>
+        <span>ByteString</span>
+    </h3>
+</doc-anchor-target>
+<p>Haskellのしている、文字列を文字のリストとして扱うやり方は、Preludeの関数で処理できるためとっつきやすいが、処理効率の観点からは絶望的である。
+<span class="math">2 \times 10^5</span> 個のデータの組を読み込む、というような場面でString版のテンプレートを用いると、読み込みでかなりの時間を消費する。
+Data.ByteStringライブラリを利用すると、この問題に対処できる。</p>
+<p>行に数が1つだけの場合、</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">  Just (n,_) &lt;- BS.readInt li &lt;$&gt; BS.getLine</code></pre>
+</doc-codeblock></div>
+<p>のようにして読み込めるが、任意個の数からなる１行を読み込むアクション <code v-pre>bsGetLnInts</code> で全て統一的に扱うようにしてみた。</p>
+<p>出力側が問題になることはあまりないのでこちらはString版から変更はない。
+コードは上に示した。</p>
+<doc-anchor-target id="正格評価ディレクティブ">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#正格評価ディレクティブ">#</doc-anchor-trigger>
+        <span>正格評価ディレクティブ</span>
     </h2>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- 空の写像
-M.empty :: Map k a
-IM.empty :: IntMap a
-
--- 単一要素
-M.singleton :: k -&gt; a -&gt; Map k a
-M.singleton :: Int -&gt; a -&gt; IntMap a
-
--- リストから
-M.fromList :: Ord k =&gt; [(k,a)] -&gt; Map k a
-IM.fromList :: [(Int,a)] -&gt; IntMap a
-
--- リストから積み上げて
-M.fromListWith :: Ord k =&gt; (a -&gt; a -&gt; a) -&gt; [(k,a)] -&gt; Map k a
-IM.fromListWith :: (a -&gt; a -&gt; a) -&gt; [(Int,a)] -&gt; IntMap a
-
--- リストから積み上げて、添字も使って
-M.fromListWithKey :: Ord k =&gt; (k -&gt; a -&gt; a -&gt; a) -&gt; [(k,a)] -&gt; Map k a
-IM.fromListWithKey :: (Int -&gt; a -&gt; a -&gt; a) -&gt; [(Int,a)] -&gt; IntMap a</code></pre>
+<pre class="language-haskell"><code v-pre class="language-haskell">{-# LANGUAGE Strict #-}
+{-# LANGUAGE StrictData #-}</code></pre>
 </doc-codeblock></div>
-<p>対応づく要素全てをリストで持つとき：</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- 正しい
-M.fromListWith (++) [(key,[val]) | (key,val) &lt;- kvs]
--- まちがい（とても遅くなる）
-M.fromListWith (flip (++)) ...</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="写像の変更">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#写像の変更">#</doc-anchor-trigger>
-        <span>写像の変更</span>
-    </h2>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- 上書き、なければ挿入
-M.insert :: Ord k =&gt; k -&gt; a -&gt; Map k a -&gt; Map k a
-IM.insert :: Int -&gt; a -&gt; IntMap a -&gt; IntMap a
-
--- 継ぎ足し、なければ挿入
-M.insertWith :: Ord k =&gt; (a -&gt; a -&gt; a) -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a
-IM.insertWith :: (a -&gt; a -&gt; a) -&gt; Key -&gt; a -&gt; IntMap a -&gt; IntMap a
-
--- 添字付き
-M.insertWithKey :: Ord k =&gt; (k -&gt; a -&gt; a -&gt; a) -&gt; k -&gt; a -&gt; Map k a -&gt; Map k a
-IM.insertWithKey :: (Int -&gt; a -&gt; a -&gt; a) -&gt; Int -&gt; a -&gt; IntMap a -&gt; IntMap a
-
--- 削除
-M.delete :: Ord k =&gt; k -&gt; Map k a -&gt; Map k a
-IM.delete :: Int -&gt; IntMap a -&gt; IntMap a</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="アクセス">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#アクセス">#</doc-anchor-trigger>
-        <span>アクセス</span>
-    </h2>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- 対応を含む、含まない
-M.member,   M.notMember :: Ord k =&gt; k -&gt; Map k a -&gt; Bool
-IM.member, IM.notMember :: Int -&gt; IntMap a -&gt; Bool
-
--- 直接アクセス
-(M.!) :: Ord k =&gt; Map k a -&gt; k -&gt; a
-(IM.!) :: IntMap a -&gt; Int -&gt; a
-
--- Maybeつき
-(M.!?) :: Ord k =&gt; Map k a -&gt; k -&gt; Maybe a
-(IM.!?) :: IntMap a -&gt; Int -&gt; Maybe a
-
--- デフォルト値つき
-M.findWithDefault :: Ord k =&gt; a -&gt; k -&gt; Map k a -&gt; a
-IM.findWithDefault :: a -&gt; Int -&gt; IntMap a -&gt; a</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="検査">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#検査">#</doc-anchor-trigger>
-        <span>検査</span>
-    </h2>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- 空か
-M.null :: Map k a -&gt; Bool
-IM.null :: IntMap a -&gt; Bool
-
--- 要素数
-M.size :: Map k a -&gt; Int
-IM.size :: IntMap a -&gt; Int</code></pre>
-</doc-codeblock></div>
-<p>これ以上は使った実績があったら追加することにしよう。toList くらいは必須か。</p>
+<p>遅延評価のためにサンクが溜まって無駄に重いような気がする場合、コンパイラディレクティブの指定で、可能な箇所を先行評価するように指示できる。</p>
+<p>しかし、大抵の場合は単なる思いすごしで、それほどの効果は得られない。
+GHCは充分に速い。</p>
 
 
 
@@ -284,20 +377,20 @@ IM.size :: IntMap a -&gt; Int</code></pre>
             
 <nav class="flex mt-14">
     <div class="w-1/2">
-        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/library/data.list.split/">
+        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/">
             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
             <span>
                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                <span class="block mt-1">Data.List.Split</span>
+                <span class="block mt-1">はじめに</span>
             </span>
         </a>
     </div>
 
     <div class="w-1/2">
-        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/library/data.numbers.primes/">
+        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/snippets/main/tovec/">
             <span>
                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                <span class="block mt-1">Data.Numbers.Primes</span>
+                <span class="block mt-1">はじめからVectorに読み込む</span>
             </span>
             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
         </a>
@@ -345,6 +438,6 @@ IM.size :: IntMap a -&gt; Int</code></pre>
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "Data.Map, Data.IntMap (part)", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
+        <script>window.__DOCS__ = { "title": "メインルーチン", icon: "file", hasPrism: true, hasMermaid: false, hasMath: true }</script>
     </body>
 </html>

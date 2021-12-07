@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.691544296631" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.692162444931" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.691544296631" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.692162444931" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.691544296631" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.692162444931" defer></script>
     <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
     <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
@@ -390,6 +390,48 @@ allDivisions uf =
 <li><a href="https://atcoder.jp/contests/atc001/tasks/unionfind_a">AtCoder Typical Contest 001 B - Union Find</a></li>
 <li><a href="http://judge.u-aizu.ac.jp/onlinejudge/description.jsp?id=DSL_1_A&amp;lang=jp">互いに素な集合 Union Find| データ構造ライブラリ | Aizu Online Judge</a></li>
 </ul>
+<doc-anchor-target id="the-algorithms版">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#the-algorithms版">#</doc-anchor-trigger>
+        <span>The Algorithms版</span>
+    </h2>
+</doc-anchor-target>
+<p>要素を整数に限定しない、最も素直な実装が<a href="https://github.com/TheAlgorithms/Haskell/blob/master/src/SpecializedStructure/MergeFindSet.hs">The Algorithms/Haskell/MergeFindSet</a>にあった。</p>
+<p>本書の言葉遣いに直した版を示す。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import qualified Data.Map as M
+import qualified Data.Set as S
+
+type UnionFind a = (M.Map a a, M.Map a Int)
+
+newUF :: Ord a =&gt; [a] -&gt; UnionFind a
+newUF xs = (fathers, ranks)
+  where
+    fathers = M.fromList [(x, x) | x &lt;- xs]
+    ranks   = M.fromList [(x, 0) | x &lt;- xs]
+
+getRoot :: Ord a =&gt; a -&gt; UnionFind a -&gt; a
+getRoot x uf = let father = (fst uf) M.! x
+               in  if father == x then x else getRoot father uf
+
+findUF x y uf :: Ord a =&gt; a -&gt; a -&gt; UnionFind a -&gt; Bool
+findUF x y uf = getRoot x uf == getRoot y uf
+
+uniteUF :: Ord a =&gt; a -&gt; a -&gt; UnionFind a -&gt; UnionFind a
+uniteUF x y uf@(fathers, ranks)
+  | p == q = uf
+  | True = case comapre a b of
+      LT -&gt; (p `connectTo` q, ranks)
+      GT -&gt; (q `connectTo` p, ranks)
+      EQ -&gt; (p `connectTo` q, M.adjust succ q ranks) -- M.insert q (succ b) ranks
+  where
+    (p, a) = (getRoot x uf, ranks M.! p)
+    (q, b) = (getRoot y uf, ranks M.! q)
+    connectTo a b = M.adjust (const b) a fathers -- M.insert a b fathers</code></pre>
+</doc-codeblock></div>
+<p><code v-pre>adjust</code> を意図的に使っているけれど、<code v-pre>insert</code>を使うのと何が違うのかしら...</p>
+<p>経路圧縮もしていないし、性能は期待しない方がよさそう。
+<code v-pre>connectTo</code> を関数に抽出しているところは美しいので見習いたい。</p>
 
 
 
@@ -411,10 +453,10 @@ allDivisions uf =
     </div>
 
     <div class="w-1/2">
-        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/ad/misc/unionfind-ta/">
+        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/library/control.monad/">
             <span>
                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                <span class="block mt-1">Union-Find in "The Algorithms"</span>
+                <span class="block mt-1">Control.Monad</span>
             </span>
             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
         </a>
