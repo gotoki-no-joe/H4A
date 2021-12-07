@@ -1,4 +1,4 @@
-# Data.List.Split (empty)
+# Data.List.Split
 
 Haskell Platformには含まれないが、時々便利。
 
