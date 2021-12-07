@@ -44,3 +44,9 @@ https://ja.wikipedia.org/wiki/%E5%89%B0%E4%BD%99%E6%BC%94%E7%AE%97
 モジュラ逆数
 https://ja.wikipedia.org/wiki/%E3%83%A2%E3%82%B8%E3%83%A5%E3%83%A9%E9%80%86%E6%95%B0
 
+典型90問
+https://atcoder.jp/contests/typical90/tasks
+画像
+https://github.com/E869120/kyopro_educational_90
+スプレッドシート
+https://docs.google.com/spreadsheets/d/1GG4Higis4n4GJBViVltjcbuNfyr31PzUY_ZY1zh2GuI/edit#gid=1593175261

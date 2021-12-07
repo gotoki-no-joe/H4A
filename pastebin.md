@@ -1,3 +1,13 @@
+折り畳みの実現 divの後１行空けるのが必須
+
+<details><summary>すごく長い文章とかプログラムとか</summary><div>
+
+```python
+print('Hello world!')
+```　
+</div></details>
+
+
 # 切り上げ除算の話
 
 (この辺の解説は多分リンク先にある。どこかで、除算が4種類あるという話を読んだし。)
@@ -79,3 +89,66 @@ readIntsMV n action = do
 ```
 
 AtCoderのVectorが古くてgenerateMが使えないとか。
+
+# アルゴ式のスニペット
+
+module Main where
+
+import Control.Applicative
+
+main = do
+  s <- getLine
+  [a,b] <- map read . words <$> getLine
+  print $ compute a b
+  putStrLn $ if compute a b then "Yes" else "No"
+
+compute :: Int -> Int -> Int
+compute a b =
+
+---
+
+module Main where
+
+import Control.Applicative
+import Control.Monad
+import Data.Array
+import Data.List
+
+main = do
+  [n,m] <- getIntsLine
+  abL <- replicateM m getIntsLine
+  let ans = compute n m abL
+  forM ans (putStrLn . unwords . map show)
+
+getIntsLine = map read . words <$> getLine
+
+compute :: Int -> Int -> [[Int]] -> [[Int]]
+compute n m abL =
+  map sort $ elems $
+  accumArray (flip (:)) [] (0,pred n) [(a,b) | (a:b:_) <- abL]
+
+
+
+module Main where
+
+import Control.Applicative
+import Control.Monad
+import Data.Array
+import Data.List
+import qualified Data.IntSet as IS
+
+main = do
+  [n,m,x] <- map read . words <$> getLine
+  abL <- replicateM m (map read . words <$> getLine)
+  print $ compute n m x abL
+
+compute :: Int -> Int -> Int -> [[Int]] -> Int
+compute n m x abL = length foff
+  where
+    fa = accumArray (flip (:)) [] (0,pred n) $
+         [p | (a:b:_) <- abL, p <- [(a,b),(b,a)]]
+    friends = IS.fromList (x : fa ! x)
+    foff = [ i
+           | i <- [0..pred n]
+           , IS.notMember i friends
+           , any (flip IS.member friends) (fa ! i)]
