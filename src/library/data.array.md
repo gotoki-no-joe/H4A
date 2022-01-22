@@ -21,7 +21,7 @@ listArray  :: Ix i => (i,i) ->    [e]  -> Array i e
 accumArray :: Ix i => (e -> a -> e) -> e -> (i,i) -> [(i,a)] -> Array i e
 ```
 
-例えば ```accumArray (flip (:)) [] (0, 2) [(i, i `mod` 3) | i <- [1..9]]``` などとできる。
+例えば ```accumArray (flip (:)) [] (0, 2) [(i `mod` 3, i) | i <- [1..9]]``` などとできる。
 
 ## アクセス
 
@@ -53,14 +53,39 @@ accum :: Ix i => (e -> a -> e) -> Array i e -> [(i,a)] -> Array i e
 古くから標準で入っているので安心して使える、Immutable, Non-Strictな配列っぽい何か。
 
 ある種の動的プログラミングを実現するのにも使える。
-配列の要素を関数で生成し、その関数に今作っている配列の要素を適宜参照させる。
-フィボナッチ数列の例を示す。
+いわゆる「集めるDP」と呼ばれるもので、
+再帰において引数が必ず「小さく」なるような再帰関数により定義される関数の計算を高速化する。
+必要な関数の値を全て配列に格納するが、関数定義では再帰呼び出しを行わず、
+該当する値の格納された配列要素を参照する形に書き換える。
+
+例えば、フィボナッチ数列
+$$
+\textit{fib}(n) = \left \{
+\begin{array}{ll}
+1 & \textrm{if} \; 0 \leq n \leq 1\\
+\textit{fib}(n-2) + \textit{fib}(n-1) & \textrm{otherwise}
+\end{array}
+\right .
+$$
+に対する素朴な定義
 
 ```haskell
-fibs = listArray (1,ub) $ map fibfunc [1..ub]
+fib n
+  | n <= 1 = 1
+  | otherwise = fib (n-2) + fib (n-1)
+```
+
+を書き換えると、
+
+```haskell
+fibArr = listArray (0,ub) $ map fibFunc [1..ub] -- 配列fibArrの要素は全てfibFuncの値
   where
     ub = 10000
-    fibfunc 1 = 1
-    fibfunc 2 = 1
-    fibfunc n = fibs ! (n-2) + fibs ! (n-1)
+    fibFunc n
+      | n <= 1 = 1
+      | otherwise = fibArr ! (n-2) + fibArr ! (n-1) -- 関数fibFuncの計算はfibArrを参照する
 ```
+
+となる。この書き換えは明示的なメモ化とも解釈できる。
+
+もう一方の「配るDP」と呼ばれるスタイルの動的プログラミングの手続きをHaskellで実現するのはもう少し工夫を要する。

@@ -17,7 +17,7 @@ readIntV1N n bs = do
     loop v i bs =
       case BS.readInt (BS.dropWhile isSpace bs) of
         Just (x,bs1) -> do { MV.write v i x; loop v (succ i) bs1 }
-        Nothing -> return ()```
+        Nothing -> return ()
 ```
 
 MV.createを使う版

@@ -3,7 +3,7 @@
 覚えていて当たり前な関数は省略し、時々必要になる便利な関数の覚え書き。
 
 ```haskell
--- 間に挟み込む ex) unwords = intersperse ' '
+-- 間に挟み込む ex) unwords = intercalate " "
 intersperse ::  a  ->  [a]  -> [a]
 intercalate :: [a] -> [[a]] -> [a]
 
@@ -39,13 +39,8 @@ mapAccumL f s (x:xs) = (u, y:ys)
 ```
 
 状態sと入力列[x]から状態遷移を繰り返し、同時に出力列[y]も生成する、状態遷移機械の一般化。
-今までこれを知らずに下のようにしていた。
 
-```haskell
-map snd $ tail $ scanl (step . fst) (s,(unused value)) xs
-```
-
-LがあるならRもある。が、こちらはどう解釈したものか。
+LがあるならRもある。
 
 ```haskell
 mapAccumR :: (a -> b -> (a, c)) -> a -> [b] -> (a, [c])
@@ -54,3 +49,9 @@ mapAccumR f s (x:xs) = (u, y:ys)
   where (t, ys) = mapAccumR f s xs
         (u, y ) = f t x
 ```
+
+fold, scan, accumの関係を図にしてみた。
+
+![](/static/foldl.svg)
+
+![](/static/foldr.svg)

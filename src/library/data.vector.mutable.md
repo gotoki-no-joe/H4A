@@ -92,7 +92,7 @@ MV.generateM :: PrimMonad m => Int -> (Int -> m a) -> m (MVector (PrimState m) a
 MV.mapM_  :: (PrimMonad m, Unbox a) => (       a -> m b) -> MVector (PrimState m) a -> m ()
 MV.imapM_ :: (PrimMonad m, Unbox a) => (Int -> a -> m b) -> MVector (PrimState m) a -> m ()
 MV.forM_  :: (PrimMonad m, Unbox a) => MVector (PrimState m) a -> (       a -> m b) -> m ()
-MV.iforM_ :: (PrimMonad m, Unbox a) => MVector (PrimState m) a -> (Int -> a -> m b) -> m (
+MV.iforM_ :: (PrimMonad m, Unbox a) => MVector (PrimState m) a -> (Int -> a -> m b) -> m ()
 -- fold系色々
 ```
 

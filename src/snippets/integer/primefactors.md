@@ -47,12 +47,14 @@ nを商に置き換え、fを素因数として記録することを繰り返す
 3以上についてfを1増やす代わりに2増やす、としている。
 
 素数リストが手元にある場合は、素因数の候補はそこから選択するだけで済む。
+[`Data.Numbers.Primes`](/library/data.numbers.primes/)モジュールが使えるなら、そちらを使えばよい。
 
 ### 関連問題
 
 - [ABC169 D Div Game](https://atcoder.jp/contests/abc169/tasks/abc169_d) - [ACコード](https://atcoder.jp/contests/abc169/submissions/22775113)
 - [ABC177 E Coprime](https://atcoder.jp/contests/abc177/tasks/abc177_e) - [ACコード](https://atcoder.jp/contests/abc177/submissions/22737449)
-- [ABC152 F Flatten](https://atcoder.jp/contests/abc152/tasks/abc152_e) - --ACコード--
+- [ABC152 E Flatten](https://atcoder.jp/contests/abc152/tasks/abc152_e) - [ACコード](https://atcoder.jp/contests/abc152/submissions/28668915) mod逆元も参照  
+ちなみにInteger使えば何の障害もなく[AC](https://atcoder.jp/contests/abc152/submissions/9830048)できる。
 
 他サイト
 

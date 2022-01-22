@@ -3,6 +3,8 @@ order: 00000
 ---
 # はじめに
 
+副題: Algorithm (for competitive programming) Design in Haskell
+
 快適なコーディングのできるHaskellを使ってAtCoder Beginners Contestでスコアを得るためのスニペットをまとめていく本。
 
 記述スタイルとして、まずすぐコピペできるように完成品のコード、そのあとに使い方の説明、さらに後に解説を置くので、勉強のために読むときは解説の方から見るとよい。

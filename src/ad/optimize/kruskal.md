@@ -41,7 +41,7 @@ n頂点を持つ木は辺をn-1本だけ持つので、それで終了にして�
 
 - [いろはちゃんコンテスト Day2 D](https://atcoder.jp/contests/iroha2019-day2/tasks/iroha2019_day2_d) - [ACコード](https://atcoder.jp/contests/iroha2019-day2/submissions/22745993)
 - [ABC218 E Destruction](https://atcoder.jp/contests/abc218/tasks/abc218_e) - [ACコード](https://atcoder.jp/contests/abc218/submissions/27503010)
-- [ABC065 D Built?](https://atcoder.jp/contests/abc065/tasks/arc076_b) - 【ACコード】
+- [ABC065 D Built?](https://atcoder.jp/contests/abc065/tasks/arc076_b) - [ACコード](https://atcoder.jp/contests/abc065/submissions/28647975)
 
 ## 関連
 

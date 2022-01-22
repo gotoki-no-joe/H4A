@@ -21,7 +21,7 @@ primes = 2 : 3 : sieve q0 [5,7..]
       where
         H.Entry np p = H.minimum queue
         queue1 = H.insert (H.Entry (np+p) p) $ H.deleteMin queue
-        queue2 = H.insert (H.Entry (x * 3) (x * 2)) queue
+        queue2 = H.insert (H.Entry (x * x) (x * 2)) queue
 ```
 
 上限が設定できるとき、フラグの配列を舐めることで素数を見つける、
@@ -37,7 +37,7 @@ primev = V.create (do
   v <- MV.replicate (ub+1) True
   forM_ (takeWhile ((ub >=).(^ 2)) [2..]) (\i -> do -- 上限が定数なら手計算で [2..√ub]
     f <- MV.read v i
-    when f (forM_ [i*2,i*3..ub] (\j -> MV.write v j False)))
+    when f (forM_ [i*i,i*succ i..ub] (\j -> MV.write v j False)))
   return v
   )
 
@@ -86,11 +86,13 @@ primes0 = 2 : sieve [3,5..] =
 そこで、「素数pの奇数倍npが次に除去できる候補」という情報を、npの小さい順に優先度付きキューに保存する。
 無限に供給される奇数 `[3,5..]` 値 x に対して、このキューの先頭の np の値と比較し、
 
-- np < x の場合、np は既に他の素数の倍数として除去されたので、次は (n+2)p を候補に加える。xはまだ素数かどうか確定していないので保留する。
-- np == x の場合、x はまさに p の倍数なので除去する。次は (n+2)p を候補に加える。
-- np > x の場合、x は除去できない。これは新たな素数である。npは以降の数と比べるためにそのまま残し、3x をキューにさらに追加する。
+- np < x の場合、np は既に他の素数の倍数として除去されたので、np は役目を終えていて、代わりに (n+2)p を除去候補に加える。
+xはまだ素数かどうか確定していないので保留する。
+- np == x の場合、x はまさに p の倍数なので除去する。np と交代で (n+2)p を除去候補に加える。
+- np > x の場合、x は除去できない。これは新たな素数である。npは以降の数と比べるためにそのまま残す。
+x の倍数を今後は除去するためにキューに追加する。x未満の素数とxの倍数は既に除去されているので、np = x*x から始める。
 
-とすることで、サンクの肥大を避けることができる。
+とすることで、サンクを肥大させずに、キューを管理する一つの関数で計算を続ける形にできる。
 このアルゴリズムを `Data.List.insert` で手抜き実装すると次のようになる。
 見つけた素数pに対して、タプルの左側は奇数倍np、右側は2pを格納している。
 
@@ -103,7 +105,7 @@ primes1 = 2 : sieve [] [3,5..]
       case compare np x of
         LT ->     sieve (insert (np + 2 * p, p) nps) xxs
         EQ ->     sieve (insert (np + 2 * p, p) nps)  xs
-        GT -> x : sieve (insert (3 * x, x) npnps) xs
+        GT -> x : sieve (insert (x * x, x) npnps) xs
 ```
 
 リストへの `insert` は重いので、より効率的な Heap を用いて、
@@ -114,7 +116,9 @@ filter modだけ2,000個、他は10,000個の素数を求めている。
 
 |方式|時間 (μ秒)|
 |----|----:|
-|filter mod (2000個)|2,312,500|
-|List.insert|2,671,875|
-|Heap|484,375|
-|Vector|109,375|
+|filter mod (2000個)|2,421,875|
+|List.insert|187,500|
+|Heap|328,125|
+|Vector|125,000|
+
+- 2021/12/28 除去候補の初期値は3xでなくx^2でよいことに気づいた。ら、List版がHeap版を追い抜いた。

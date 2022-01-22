@@ -11,6 +11,21 @@ order: -01000
 
 ## コード
 
+0からn-1までのn個の整数を対象としたUnion-Findの、mutable vectorによる実装。
+
+```haskell
+-- Union-Find構造体を作る
+newUF :: Int -> IO UnionFind
+-- 同じ分割に属するときTrue
+findUF :: UnionFind -> Int -> Int -> IO Bool
+-- 統合する。元々同じ分割に属していたらFalseを返す
+uniteUF :: UnionFind -> Int -> Int -> IO Bool
+-- 分割の要素数
+sizeUF :: UnionFind -> Int -> IO Int
+-- 代表元を得る補助関数
+getRoot :: UnionFind -> Int -> IO Int
+```
+
 ```haskell
 import qualified Data.Vector.Unboxed.Mutable as MUV
 import Control.Monad
@@ -42,12 +57,12 @@ findUF vec i j =
     b <- getRoot vec j
     return (a == b)
 
-uniteUF :: UnionFind -> Int -> Int -> IO ()
+uniteUF :: UnionFind -> Int -> Int -> IO Bool
 uniteUF vec i j =
   do
     a <- getRoot vec i
     b <- getRoot vec j
-    if a == b then return () else
+    if a == b then return False else
       do
         r <- MUV.read vec a
         s <- MUV.read vec b
@@ -58,6 +73,13 @@ uniteUF vec i j =
           else do
             MUV.write vec b a
             MUV.write vec a (r+s)
+        return True
+
+sizeUF :: UnionFind -> Int -> IO Int
+sizeUF vec i = do
+  j <- getRoot vec i
+  s <- MUV.read vec j
+  return (-s)
 ```
 
 ## 説明
@@ -170,6 +192,10 @@ mutable vectorは読みだすだけでアクションになるため、
 そうするとき、均すために木の高さを追跡しても、経路圧縮により実際にはそれより木が低くなっていることも多い。
 そこで、木の高さと相関のありそうな値として大きさ、要素数を追跡し、unionで接ぎ木をする際には、大きい方を根にする。
 
+また、データ構造への操作は副作用になるため、 `uniteUF` は値を返す必要がなくなる。
+そこで、与えられた2要素が初めから同じ分割に属していたか、
+異なる分割だったものを統合したかを `Bool` で（後者のとき `True` ）返すように修正を加えた。
+
 結果がページトップに示したコードである。
 
 ### 全ての分割
@@ -192,20 +218,24 @@ allDivisions uf =
 
 AtCoder Class Library の [DSU](https://atcoder.github.io/ac-library/production/document_ja/dsu.html) は同一の機能を提供する。裏にあるデータ構造が何かは不明。
 
+### 応用
+
+グラフの最小全域木を作るクラスカル法、二値画像の連結成分の抽出などに使うことができる。
+
 ## 関連問題
 
 - [ABC177 D Friends](https://atcoder.jp/contests/abc177/tasks/abc177_d) - [ACコード](https://atcoder.jp/contests/abc177/submissions/22742331) 旧タイプ
 - [ACL Beginner Contest C](https://atcoder.jp/contests/abl/tasks/abl_c) - [ACコード](https://atcoder.jp/contests/abl/submissions/27497827)
 - [ARC106 B Values](https://atcoder.jp/contests/arc106/tasks/arc106_b) - 【ACコード】
 - [ARC114 B Special Subsets](https://atcoder.jp/contests/arc114/tasks/arc114_b) - 【ACコード】
-- [ABC157 D Friend Suggestions](https://atcoder.jp/contests/abc157/tasks/abc157_d) - 【ACコード】
-- [ABC120 D Decayed Bridges](https://atcoder.jp/contests/abc120/tasks/abc120_d) - 【ACコード】
+- [ABC157 D Friend Suggestions](https://atcoder.jp/contests/abc157/tasks/abc157_d) - [ACコード](https://atcoder.jp/contests/abc157/submissions/28673652)
+- [ABC120 D Decayed Bridges](https://atcoder.jp/contests/abc120/tasks/abc120_d) - [ACコード](https://atcoder.jp/contests/abc120/submissions/28669145)
 - [ARC111 B Reversible Cards](https://atcoder.jp/contests/arc111/tasks/arc111_b) - 【ACコード】
 - [ABC183 F Confluence](https://atcoder.jp/contests/abc183/tasks/abc183_f) - 【ACコード】
 
 その他
-- [yukicoder No.1390 Get together](https://yukicoder.me/problems/no/1390) - 【ACコード】
-- [MojaCoder Bonsai](https://mojacoder.app/users/magurofly/problems/bonsai) - 【ACコード】
+- [yukicoder No.1390 Get together](https://yukicoder.me/problems/no/1390)
+- [MojaCoder Bonsai](https://mojacoder.app/users/magurofly/problems/bonsai)
 
 nkmk.meより
 - [AtCoder Typical Contest 001 B - Union Find](https://atcoder.jp/contests/atc001/tasks/unionfind_a)

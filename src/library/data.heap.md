@@ -17,7 +17,7 @@ data Heap a
 
 instance Foldable (Heap a) -- not Traversable
 
--- 要素のOrdでない優先順位を使うための要素型
+-- 要素aのOrdと異なる優先順位pを使うための要素型
 data Entry p a = Entry { priority :: p, payload :: a }
 ```
 

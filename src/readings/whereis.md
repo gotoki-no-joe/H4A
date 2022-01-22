@@ -35,14 +35,14 @@ https://qiita.com/H20/items/1a066e242815961cd043
 
 ## 9.リストの中身を連結・結合して文字列に
 
-Python特有の事情によるものか？
-
-Haskellでは `show` と `unwords` あたりのことを知っていればいい話だろうか、何が言いたいのかよくわからない。
+Python特有の事情で、
+文字列を操作する関数よりも、リストを操作する関数の方が豊富なので、
+一度文字のリストに変えてから処理して、後で戻すと扱いやすい、という話のようだ。
 
 #### 関連問題
 
-- [天下一プログラマーコンテスト2012 予選A B](https://atcoder.jp/contests/tenka1-2012-quala/tasks/tenka1_2012_qualA_2)
-- [ARC039 A A - B problem](https://atcoder.jp/contests/arc039/tasks/arc039_a)
+- [天下一プログラマーコンテスト2012 予選A B](https://atcoder.jp/contests/tenka1-2012-quala/tasks/tenka1_2012_qualA_2) - [ACコード](https://atcoder.jp/contests/tenka1-2012-quala/submissions/28656558)
+- [ARC039 A A - B problem](https://atcoder.jp/contests/arc039/tasks/arc039_a) - [ACコード](https://atcoder.jp/contests/arc039/submissions/28656789)
 - [ABC192 Kaprekar Number](https://atcoder.jp/contests/abc192/tasks/abc192_c) - [ACコード](https://atcoder.jp/contests/abc192/submissions/20409087)
 - [ABC137 C Green Bin](https://atcoder.jp/contests/abc137/tasks/abc137_c) - [ACコード](https://atcoder.jp/contests/abc137/submissions/22746507)
 - [ABC199 C IPFL](https://atcoder.jp/contests/abc199/tasks/abc199_c) - [ACコード](https://atcoder.jp/contests/abc199/submissions/22747708) 何というimperative Haskell...
@@ -57,18 +57,25 @@ Haskellでは `show` と `unwords` あたりのことを知っていればいい
 Data.List.sortBy :: (a -> a -> Ordering) -> [a] -> [a]
 ```
 
-でできる。例えば降順のソートは `sortBy (flip compare)` でよい。  
-また、中置演算子の両辺に前処理を挿入する
+でできる。例えば降順のソートは `sortBy (flip compare)` でよい。
+
+また、比較の前に処理を挿入する変種もある。
+
+```haskell
+Data.list.sortOn :: Ord b => (a -> b) [a] -> [a]
+```
+
+中置演算子の両辺に前処理を挿入する
 
 ```haskell
 Data.Function.on :: (b -> b -> c) -> (a -> b) -> a -> a -> c
 ```
 
-も組み合わせると、
+も同時に使うことがある。
 
 ```haskell
-sortBy (compare `on` fst) -- 対の左側だけを比較
-sortBy (compare `on` (!! 1)) -- リストのリストを1番目の要素で比較
+sortOn show                       -- 整数リストを辞書順で比較
+sortBy (flip compare `on` (!! 1)) -- リストのリストを1番目の要素で比較して逆順に
 ```
 
 などとできる。
