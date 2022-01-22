@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.692162444931" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.696151000409" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.692162444931" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696151000409" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.692162444931" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696151000409" defer></script>
     <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
     <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
@@ -181,6 +181,19 @@
         <span>コード</span>
     </h2>
 </doc-anchor-target>
+<p>0からn-1までのn個の整数を対象としたUnion-Findの、mutable vectorによる実装。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">-- Union-Find構造体を作る
+newUF :: Int -&gt; IO UnionFind
+-- 同じ分割に属するときTrue
+findUF :: UnionFind -&gt; Int -&gt; Int -&gt; IO Bool
+-- 統合する。元々同じ分割に属していたらFalseを返す
+uniteUF :: UnionFind -&gt; Int -&gt; Int -&gt; IO Bool
+-- 分割の要素数
+sizeUF :: UnionFind -&gt; Int -&gt; IO Int
+-- 代表元を得る補助関数
+getRoot :: UnionFind -&gt; Int -&gt; IO Int</code></pre>
+</doc-codeblock></div>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">import qualified Data.Vector.Unboxed.Mutable as MUV
 import Control.Monad
@@ -212,12 +225,12 @@ findUF vec i j =
     b &lt;- getRoot vec j
     return (a == b)
 
-uniteUF :: UnionFind -&gt; Int -&gt; Int -&gt; IO ()
+uniteUF :: UnionFind -&gt; Int -&gt; Int -&gt; IO Bool
 uniteUF vec i j =
   do
     a &lt;- getRoot vec i
     b &lt;- getRoot vec j
-    if a == b then return () else
+    if a == b then return False else
       do
         r &lt;- MUV.read vec a
         s &lt;- MUV.read vec b
@@ -227,7 +240,14 @@ uniteUF vec i j =
             MUV.write vec b (r+s)
           else do
             MUV.write vec b a
-            MUV.write vec a (r+s)</code></pre>
+            MUV.write vec a (r+s)
+        return True
+
+sizeUF :: UnionFind -&gt; Int -&gt; IO Int
+sizeUF vec i = do
+  j &lt;- getRoot vec i
+  s &lt;- MUV.read vec j
+  return (-s)</code></pre>
 </doc-codeblock></div>
 <doc-anchor-target id="説明">
     <h2>
@@ -338,6 +358,9 @@ mutable vectorは読みだすだけでアクションになるため、
 同時に <code v-pre>getRoot</code> で経路圧縮も行う。
 そうするとき、均すために木の高さを追跡しても、経路圧縮により実際にはそれより木が低くなっていることも多い。
 そこで、木の高さと相関のありそうな値として大きさ、要素数を追跡し、unionで接ぎ木をする際には、大きい方を根にする。</p>
+<p>また、データ構造への操作は副作用になるため、 <code v-pre>uniteUF</code> は値を返す必要がなくなる。
+そこで、与えられた2要素が初めから同じ分割に属していたか、
+異なる分割だったものを統合したかを <code v-pre>Bool</code> で（後者のとき <code v-pre>True</code> ）返すように修正を加えた。</p>
 <p>結果がページトップに示したコードである。</p>
 <doc-anchor-target id="全ての分割">
     <h3>
@@ -364,6 +387,13 @@ allDivisions uf =
     </h3>
 </doc-anchor-target>
 <p>AtCoder Class Library の <a href="https://atcoder.github.io/ac-library/production/document_ja/dsu.html">DSU</a> は同一の機能を提供する。裏にあるデータ構造が何かは不明。</p>
+<doc-anchor-target id="応用">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#応用">#</doc-anchor-trigger>
+        <span>応用</span>
+    </h3>
+</doc-anchor-target>
+<p>グラフの最小全域木を作るクラスカル法、二値画像の連結成分の抽出などに使うことができる。</p>
 <doc-anchor-target id="関連問題">
     <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
@@ -375,15 +405,15 @@ allDivisions uf =
 <li><a href="https://atcoder.jp/contests/abl/tasks/abl_c">ACL Beginner Contest C</a> - <a href="https://atcoder.jp/contests/abl/submissions/27497827">ACコード</a></li>
 <li><a href="https://atcoder.jp/contests/arc106/tasks/arc106_b">ARC106 B Values</a> - 【ACコード】</li>
 <li><a href="https://atcoder.jp/contests/arc114/tasks/arc114_b">ARC114 B Special Subsets</a> - 【ACコード】</li>
-<li><a href="https://atcoder.jp/contests/abc157/tasks/abc157_d">ABC157 D Friend Suggestions</a> - 【ACコード】</li>
-<li><a href="https://atcoder.jp/contests/abc120/tasks/abc120_d">ABC120 D Decayed Bridges</a> - 【ACコード】</li>
+<li><a href="https://atcoder.jp/contests/abc157/tasks/abc157_d">ABC157 D Friend Suggestions</a> - <a href="https://atcoder.jp/contests/abc157/submissions/28673652">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/abc120/tasks/abc120_d">ABC120 D Decayed Bridges</a> - <a href="https://atcoder.jp/contests/abc120/submissions/28669145">ACコード</a></li>
 <li><a href="https://atcoder.jp/contests/arc111/tasks/arc111_b">ARC111 B Reversible Cards</a> - 【ACコード】</li>
 <li><a href="https://atcoder.jp/contests/abc183/tasks/abc183_f">ABC183 F Confluence</a> - 【ACコード】</li>
 </ul>
 <p>その他</p>
 <ul>
-<li><a href="https://yukicoder.me/problems/no/1390">yukicoder No.1390 Get together</a> - 【ACコード】</li>
-<li><a href="https://mojacoder.app/users/magurofly/problems/bonsai">MojaCoder Bonsai</a> - 【ACコード】</li>
+<li><a href="https://yukicoder.me/problems/no/1390">yukicoder No.1390 Get together</a></li>
+<li><a href="https://mojacoder.app/users/magurofly/problems/bonsai">MojaCoder Bonsai</a></li>
 </ul>
 <p>nkmk.meより</p>
 <ul>
@@ -473,7 +503,7 @@ uniteUF x y uf@(fathers, ranks)
 </ul>
 
     </div>
-    <div class="docs-copyright py-2 text-gray-500 dark:text-dark-350 text-sm leading-relaxed"><p>© Copyright 2021. All rights reserved.</p>
+    <div class="docs-copyright py-2 text-gray-500 dark:text-dark-350 text-sm leading-relaxed"><p>© Copyright 2022. All rights reserved.</p>
 </div>
 </footer>
 

@@ -16,20 +16,22 @@
     <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/library/data.list/">
     <meta property="og:title" content="Data.List">
     <meta property="og:description" content="覚えていて当たり前な関数は省略し、時々必要になる便利な関数の覚え書き。">
+    <meta property="og:image" content="https://gotoki-no-joe.github.io/H4A/H4A/static/foldl.svg">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/library/data.list/">
     <meta property="twitter:title" content="Data.List">
     <meta property="twitter:description" content="覚えていて当たり前な関数は省略し、時々必要になる便利な関数の覚え書き。">
+    <meta property="twitter:image" content="https://gotoki-no-joe.github.io/H4A/H4A/static/foldl.svg">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.692162444931" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.696151000409" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.692162444931" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696151000409" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.692162444931" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696151000409" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -170,7 +172,7 @@
 </doc-anchor-target>
 <p>覚えていて当たり前な関数は省略し、時々必要になる便利な関数の覚え書き。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- 間に挟み込む ex) unwords = intersperse ' '
+<pre class="language-haskell"><code v-pre class="language-haskell">-- 間に挟み込む ex) unwords = intercalate &quot; &quot;
 intersperse ::  a  -&gt;  [a]  -&gt; [a]
 intercalate :: [a] -&gt; [[a]] -&gt; [a]
 
@@ -202,12 +204,8 @@ mapAccumL f s (x:xs) = (u, y:ys)
   where (t, y ) = f s x
         (u, ys) = mapAccumL f t xs</code></pre>
 </doc-codeblock></div>
-<p>状態sと入力列[x]から状態遷移を繰り返し、同時に出力列[y]も生成する、状態遷移機械の一般化。
-今までこれを知らずに下のようにしていた。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">map snd $ tail $ scanl (step . fst) (s,(unused value)) xs</code></pre>
-</doc-codeblock></div>
-<p>LがあるならRもある。が、こちらはどう解釈したものか。</p>
+<p>状態sと入力列[x]から状態遷移を繰り返し、同時に出力列[y]も生成する、状態遷移機械の一般化。</p>
+<p>LがあるならRもある。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">mapAccumR :: (a -&gt; b -&gt; (a, c)) -&gt; a -&gt; [b] -&gt; (a, [c])
 mapAccumR f s []     = (s, [])
@@ -215,6 +213,17 @@ mapAccumR f s (x:xs) = (u, y:ys)
   where (t, ys) = mapAccumR f s xs
         (u, y ) = f t x</code></pre>
 </doc-codeblock></div>
+<p>fold, scan, accumの関係を図にしてみた。</p>
+<p><figure class="content-center">
+    <img src="/H4A/static/foldl.svg" alt="" />
+    <figcaption class="caption"></figcaption>
+</figure>
+</p>
+<p><figure class="content-center">
+    <img src="/H4A/static/foldr.svg" alt="" />
+    <figcaption class="caption"></figcaption>
+</figure>
+</p>
 
 
 
@@ -256,7 +265,7 @@ mapAccumR f s (x:xs) = (u, y:ys)
 </ul>
 
     </div>
-    <div class="docs-copyright py-2 text-gray-500 dark:text-dark-350 text-sm leading-relaxed"><p>© Copyright 2021. All rights reserved.</p>
+    <div class="docs-copyright py-2 text-gray-500 dark:text-dark-350 text-sm leading-relaxed"><p>© Copyright 2022. All rights reserved.</p>
 </div>
 </footer>
 

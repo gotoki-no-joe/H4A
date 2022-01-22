@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.692162444931" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.696151000409" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.692162444931" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696151000409" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.692162444931" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696151000409" defer></script>
     <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
     <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
@@ -226,8 +226,9 @@
         <span>9.リストの中身を連結・結合して文字列に</span>
     </h2>
 </doc-anchor-target>
-<p>Python特有の事情によるものか？</p>
-<p>Haskellでは <code v-pre>show</code> と <code v-pre>unwords</code> あたりのことを知っていればいい話だろうか、何が言いたいのかよくわからない。</p>
+<p>Python特有の事情で、
+文字列を操作する関数よりも、リストを操作する関数の方が豊富なので、
+一度文字のリストに変えてから処理して、後で戻すと扱いやすい、という話のようだ。</p>
 <doc-anchor-target id="関連問題">
     <h4>
         <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
@@ -235,8 +236,8 @@
     </h4>
 </doc-anchor-target>
 <ul>
-<li><a href="https://atcoder.jp/contests/tenka1-2012-quala/tasks/tenka1_2012_qualA_2">天下一プログラマーコンテスト2012 予選A B</a></li>
-<li><a href="https://atcoder.jp/contests/arc039/tasks/arc039_a">ARC039 A A - B problem</a></li>
+<li><a href="https://atcoder.jp/contests/tenka1-2012-quala/tasks/tenka1_2012_qualA_2">天下一プログラマーコンテスト2012 予選A B</a> - <a href="https://atcoder.jp/contests/tenka1-2012-quala/submissions/28656558">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/arc039/tasks/arc039_a">ARC039 A A - B problem</a> - <a href="https://atcoder.jp/contests/arc039/submissions/28656789">ACコード</a></li>
 <li><a href="https://atcoder.jp/contests/abc192/tasks/abc192_c">ABC192 Kaprekar Number</a> - <a href="https://atcoder.jp/contests/abc192/submissions/20409087">ACコード</a></li>
 <li><a href="https://atcoder.jp/contests/abc137/tasks/abc137_c">ABC137 C Green Bin</a> - <a href="https://atcoder.jp/contests/abc137/submissions/22746507">ACコード</a></li>
 <li><a href="https://atcoder.jp/contests/abc199/tasks/abc199_c">ABC199 C IPFL</a> - <a href="https://atcoder.jp/contests/abc199/submissions/22747708">ACコード</a> 何というimperative Haskell...</li>
@@ -252,15 +253,19 @@
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">Data.List.sortBy :: (a -&gt; a -&gt; Ordering) -&gt; [a] -&gt; [a]</code></pre>
 </doc-codeblock></div>
-<p>でできる。例えば降順のソートは <code v-pre>sortBy (flip compare)</code> でよい。  <br />
-また、中置演算子の両辺に前処理を挿入する</p>
+<p>でできる。例えば降順のソートは <code v-pre>sortBy (flip compare)</code> でよい。</p>
+<p>また、比較の前に処理を挿入する変種もある。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">Data.list.sortOn :: Ord b =&gt; (a -&gt; b) [a] -&gt; [a]</code></pre>
+</doc-codeblock></div>
+<p>中置演算子の両辺に前処理を挿入する</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">Data.Function.on :: (b -&gt; b -&gt; c) -&gt; (a -&gt; b) -&gt; a -&gt; a -&gt; c</code></pre>
 </doc-codeblock></div>
-<p>も組み合わせると、</p>
+<p>も同時に使うことがある。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">sortBy (compare `on` fst) -- 対の左側だけを比較
-sortBy (compare `on` (!! 1)) -- リストのリストを1番目の要素で比較</code></pre>
+<pre class="language-haskell"><code v-pre class="language-haskell">sortOn show                       -- 整数リストを辞書順で比較
+sortBy (flip compare `on` (!! 1)) -- リストのリストを1番目の要素で比較して逆順に</code></pre>
 </doc-codeblock></div>
 <p>などとできる。</p>
 <doc-anchor-target id="関連問題-1">
@@ -395,7 +400,7 @@ Haskellにはうまくfitさせられない感じなので、<a href="./modint/"
 </ul>
 
     </div>
-    <div class="docs-copyright py-2 text-gray-500 dark:text-dark-350 text-sm leading-relaxed"><p>© Copyright 2021. All rights reserved.</p>
+    <div class="docs-copyright py-2 text-gray-500 dark:text-dark-350 text-sm leading-relaxed"><p>© Copyright 2022. All rights reserved.</p>
 </div>
 </footer>
 

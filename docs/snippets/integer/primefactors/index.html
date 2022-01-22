@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.692162444931" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.696151000409" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.692162444931" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696151000409" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.692162444931" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696151000409" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -209,7 +209,8 @@ nを商に置き換え、fを素因数として記録することを繰り返す
 割り切れなくなったらfを1増やして、n &gt; f となるまで続ける。</p>
 <p>2以外の素数は奇数なので、p=2の場合だけ特別扱いすることで、
 3以上についてfを1増やす代わりに2増やす、としている。</p>
-<p>素数リストが手元にある場合は、素因数の候補はそこから選択するだけで済む。</p>
+<p>素数リストが手元にある場合は、素因数の候補はそこから選択するだけで済む。
+<a href="/H4A/library/data.numbers.primes/"><code v-pre>Data.Numbers.Primes</code></a>モジュールが使えるなら、そちらを使えばよい。</p>
 <doc-anchor-target id="関連問題">
     <h3>
         <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
@@ -219,7 +220,8 @@ nを商に置き換え、fを素因数として記録することを繰り返す
 <ul>
 <li><a href="https://atcoder.jp/contests/abc169/tasks/abc169_d">ABC169 D Div Game</a> - <a href="https://atcoder.jp/contests/abc169/submissions/22775113">ACコード</a></li>
 <li><a href="https://atcoder.jp/contests/abc177/tasks/abc177_e">ABC177 E Coprime</a> - <a href="https://atcoder.jp/contests/abc177/submissions/22737449">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc152/tasks/abc152_e">ABC152 F Flatten</a> - --ACコード--</li>
+<li><a href="https://atcoder.jp/contests/abc152/tasks/abc152_e">ABC152 E Flatten</a> - <a href="https://atcoder.jp/contests/abc152/submissions/28668915">ACコード</a> mod逆元も参照  <br />
+ちなみにInteger使えば何の障害もなく<a href="https://atcoder.jp/contests/abc152/submissions/9830048">AC</a>できる。</li>
 </ul>
 <p>他サイト</p>
 <ul>
@@ -266,7 +268,7 @@ nを商に置き換え、fを素因数として記録することを繰り返す
 </ul>
 
     </div>
-    <div class="docs-copyright py-2 text-gray-500 dark:text-dark-350 text-sm leading-relaxed"><p>© Copyright 2021. All rights reserved.</p>
+    <div class="docs-copyright py-2 text-gray-500 dark:text-dark-350 text-sm leading-relaxed"><p>© Copyright 2022. All rights reserved.</p>
 </div>
 </footer>
 

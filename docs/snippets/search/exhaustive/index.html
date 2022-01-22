@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.692162444931" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.696151000409" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.692162444931" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696151000409" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.692162444931" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696151000409" defer></script>
     <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
     <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
@@ -189,7 +189,7 @@ BIT全探索と呼ぶ界隈もあるようだが、多分専門用語ではな�
 </doc-anchor-target>
 <p><span class="math">n</span> 通りの選択肢から一つを選ぶ選択を、全部で <span class="math">k</span> 回行う必要があるとする。
 選択を <span class="math">m</span> 回行った結果の中間状態を <code v-pre>s</code> とする。
-もう一度選択を行うと、 <span class="math">m+1</span> 選択を行った結果の状態は <span class="math">n</span> 個存在する。
+もう一度選択を行うと、結果の状態は <span class="math">n</span> 個派生する。
 この <span class="math">m+1</span> 回めの選択による状態変化を求める情報を <code v-pre>a</code> とする。
 <code v-pre>s</code> と <code v-pre>a</code> から、 <span class="math">n</span> 個の状態を生成してリストで返す関数を <code v-pre>step :: a -&gt; s -&gt; [s]</code> とし、
 一度も選択を行っていない初期状態を <code v-pre>ini</code> とすると、
@@ -210,7 +210,8 @@ exhaustiveSearch step ini = foldl (\ss a -&gt; concatMap (step a) ss) [ini]</cod
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">bitSearch f = exhaustiveSearch (\a s -&gt; [s, f a s])</code></pre>
 </doc-codeblock></div>
-<p>状態が変化しない側の状態リストは元のままなので、次のように専用の関数にもできる。</p>
+<p>状態が変化しない側の状態リストは元のままなので、次のように専用の関数にもできる。  <br />
+（上の定義とは結果の並び順が異なる。）</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">bitSearch :: (a -&gt; s -&gt; s) -&gt; s -&gt; [a] -&gt; [s]
 bitSearch f ini = foldl (\ss a -&gt; map (f a) ss ++ ss) [ini]</code></pre>
@@ -278,7 +279,7 @@ bitSearch f ini = foldl (\ss a -&gt; map (f a) ss ++ ss) [ini]</code></pre>
 </ul>
 
     </div>
-    <div class="docs-copyright py-2 text-gray-500 dark:text-dark-350 text-sm leading-relaxed"><p>© Copyright 2021. All rights reserved.</p>
+    <div class="docs-copyright py-2 text-gray-500 dark:text-dark-350 text-sm leading-relaxed"><p>© Copyright 2022. All rights reserved.</p>
 </div>
 </footer>
 
