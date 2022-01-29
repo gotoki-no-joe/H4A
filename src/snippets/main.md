@@ -8,7 +8,6 @@ order: -10000
 ### String版
 
 ```haskell
-import Control.Applicative
 import Control.Monad
 
 main = do
@@ -27,7 +26,7 @@ main = do
   mapM_ print ans
 
 getLnInts :: IO [Int]
-getLnInts = map read . words <$> getLine
+getLnInts = getLine >>= return . map read . words
 
 compute :: Int -> [Int] -> [[Int]] -> [Int Bool]
 compute n a b c xys =
@@ -36,7 +35,6 @@ compute n a b c xys =
 ### ByteString版
 
 ```haskell
-import Control.Applicative
 import Control.Monad
 import qualified Data.ByteString.Char8 as BS
 import Data.Char
@@ -57,7 +55,7 @@ main = do
   mapM_ print ans
 
 bsGetLnInts :: IO [Int]
-bsGetLnInts = unfoldr (BS.readInt . BS.dropWhile isSpace) <$> BS.getLine
+bsGetLnInts = BS.getLine >>= return . unfoldr (BS.readInt . BS.dropWhile isSpace)
 
 compute :: Int -> [Int] -> [[Int]] -> [Int Bool]
 compute n a b c xys = ...

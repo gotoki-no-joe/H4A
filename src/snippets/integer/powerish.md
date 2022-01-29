@@ -12,8 +12,8 @@ $$i \times a^b = i \, \overbrace{\times a \times a \times \dots \times a}^{b回}
 
 ```haskell
 -- @gotoki_no_joe
-powerish mul init a b =
-    foldl' mul init [p | (b,p) <- zip bs ps, odd b]
+powerish mul i a b =
+    foldl' {-'-} mul i [p | (b,p) <- zip bs ps, odd b]
   where
     bs = takeWhile (0 /=) $ iterate (flip div 2) b
     ps = iterate (\x -> mul x x) a

@@ -3,137 +3,100 @@ order: -01000
 ---
 # あのアルゴリズムはどこ？
 
-https://qiita.com/H20/items/1a066e242815961cd043
+[あのアルゴリズムはどこ？　Pythonを使用してAtCoderの緑色や水色を目指す方に、30以上のアルゴリズムスニペットと100問以上の問題（ACコード付き）を紹介！](https://qiita.com/H20/items/1a066e242815961cd043)
+をなぞる。
 
-## 2.整数除算の端数
+<hr/>
 
-[切り上げ除算](../snippets/integer/divrup/) を参照。
-
-## 3.約数列挙
-
-[約数列挙](../snippets/integer/factors/) を参照。
-
-## 4.素因数分解
-
-[素因数分解](../snippets/integer/primefactors/) を参照。
-
-## 5.素数（エラトステネスの篩）
-
-[素数（エラトステネスの篩）](../snippets/integer/primes/) を参照。
-
-## 6.BIT全探索
-
-[総当たり](../snippets/search/exhaustive/) を参照。
-
-## 7.Union-Find
-
-[Union-Find](../ad/misc/unionfind/) を参照。
-
-## 8.クラスカル法
-
-[クラスカル法](../ad/optimize/kruskal/) を参照。
-
-## 9.リストの中身を連結・結合して文字列に
-
-Python特有の事情で、
-文字列を操作する関数よりも、リストを操作する関数の方が豊富なので、
-一度文字のリストに変えてから処理して、後で戻すと扱いやすい、という話のようだ。
-
-#### 関連問題
-
-- [天下一プログラマーコンテスト2012 予選A B](https://atcoder.jp/contests/tenka1-2012-quala/tasks/tenka1_2012_qualA_2) - [ACコード](https://atcoder.jp/contests/tenka1-2012-quala/submissions/28656558)
-- [ARC039 A A - B problem](https://atcoder.jp/contests/arc039/tasks/arc039_a) - [ACコード](https://atcoder.jp/contests/arc039/submissions/28656789)
-- [ABC192 Kaprekar Number](https://atcoder.jp/contests/abc192/tasks/abc192_c) - [ACコード](https://atcoder.jp/contests/abc192/submissions/20409087)
-- [ABC137 C Green Bin](https://atcoder.jp/contests/abc137/tasks/abc137_c) - [ACコード](https://atcoder.jp/contests/abc137/submissions/22746507)
-- [ABC199 C IPFL](https://atcoder.jp/contests/abc199/tasks/abc199_c) - [ACコード](https://atcoder.jp/contests/abc199/submissions/22747708) 何というimperative Haskell...
-
-「ABC137 Cについて、順番前後しますが、カウンターの章も参照のことお願いします。」とのこと。
-
-## 10.ソートの大小関係を操る（多次元配列のソート）
-
-特に「多次元配列の」とか狭めることなく一般化して、任意の大小関係でのソートが
-
-```haskell
-Data.List.sortBy :: (a -> a -> Ordering) -> [a] -> [a]
-```
-
-でできる。例えば降順のソートは `sortBy (flip compare)` でよい。
-
-また、比較の前に処理を挿入する変種もある。
-
-```haskell
-Data.list.sortOn :: Ord b => (a -> b) [a] -> [a]
-```
-
-中置演算子の両辺に前処理を挿入する
-
-```haskell
-Data.Function.on :: (b -> b -> c) -> (a -> b) -> a -> a -> c
-```
-
-も同時に使うことがある。
-
-```haskell
-sortOn show                       -- 整数リストを辞書順で比較
-sortBy (flip compare `on` (!! 1)) -- リストのリストを1番目の要素で比較して逆順に
-```
-
-などとできる。
-
-#### 関連問題
-
-- [ABC128 B Guidebook](https://atcoder.jp/contests/abc128/tasks/abc128_b) - [ACコード](https://atcoder.jp/contests/abc128/submissions/22763098)
-- [キーエンス プログラミング コンテスト 2020 B Robot Arms](https://atcoder.jp/contests/keyence2020/tasks/keyence2020_b) - 【ACコード】
-- [ABC113 C ID](https://atcoder.jp/contests/abc113/tasks/abc113_c) - [ACコード](https://atcoder.jp/contests/abc113/submissions/22769268) 別アプローチの、Pごとに選り分けてからyで整列することを出題者は意図していそうな。
-
-## 11.辞書
-
-Python特有の事情で、辞書が存在しないキーへの代入を許さないものより許すものの方が使いやすいよ？という話かと。
-
-Haskellでimmutableなコードを書いている分には関係してこないことかと思われる。
-位置づけ的には、 `Data.Array.accumArray` のDP的な使い方を代わりにするべき文脈かもしれない。
-
-#### 関連問題
-
-- [ABC127 D Integer Cards](https://atcoder.jp/contests/abc127/tasks/abc127_d) - [ACコード](https://atcoder.jp/contests/abc127/submissions/12944460) Data.IntMapを使用
-- [ABC188 F +1-1x2](https://atcoder.jp/contests/abc188/tasks/abc188_f) - 【ACコード】
-
-他サイト
-- [yukicoder No.1338 Giant Class](https://yukicoder.me/problems/no/1338) - 【ACコード】
-
-## 12.カウンター
-
-[数える](../snippets/integer/counter/) を参照。
-
-## 13.ModInt
-
-モジュロな数をPythonのクラスにしたものが便利だよ、という話らしい。
-Haskellにはうまくfitさせられない感じなので、[考え中](./modint/)ということで。
-
-## 14.逆元
-
-[モジュラ逆数](../snippets/integer/modrecip) を参照。
-
-## 15.（モジュロの）階乗
-
-（アルゴリズムロジックの方が、 $_nC_r$ にからめた話が書いてあってよい。）
-
-要約すると、
-大きな数の階乗とモジュロを要求される場合に、バカ正直に多倍長整数で計算していては間に合わないので、
-乗算のたびにモジュロをとることで小さい整数に収めよう、ということと、
-広い範囲に渡って階乗が必要な場合に、
-それぞれの値に対して階乗関数を毎回呼び出さず、
-$(n-1)!$ の結果に $n$ を乗じて $n!$ を求めなさい、ということ。
-
-#### 関連問題
-
-- [ABC 055 B Training Camp](https://atcoder.jp/contests/abc055/tasks/abc055_b) - [ACコード](https://atcoder.jp/contests/abc055/submissions/6332597)
-- [ABC 065 C Reconciled?](https://atcoder.jp/contests/abc065/tasks/arc076_a) - [ACコード](https://atcoder.jp/contests/abc065/submissions/27526633)
-- [ABC 185 C Duodecim Ferra](https://atcoder.jp/contests/abc185/tasks/abc185_c) - [ACコード](https://atcoder.jp/contests/abc185/submissions/18771391) Integer / [Intに収めた別解](https://atcoder.jp/contests/abc185/submissions/27551599)
-
-他サイト
-- [MojaCoder 入力1個数え上げ](https://mojacoder.app/users/bachoppi/problems/oneinput) - 【ACコード】良問です。だそうです。
 
 ## 16.コンビネーション
 
 [二項係数](../ad/math/combination/) を参照。
+
+## 17. べき乗
+
+modで特定の値のいろいろなべき乗を、上限ありで求める場合、事前計算しておいてもお釣りが出るという話。
+
+```haskell
+import qualified Data.Vector as V
+
+-- a^b を 0<=b<=num の範囲で先に求める
+-- a^b = powerVec a V.! b
+
+num = 1000
+modBase = 1000000007
+
+powerVec a = V.iterateN num (mul base) 1
+
+mul a b = mod (a * b) modBase
+```
+
+#### 関連問題
+
+[HHKB プログラミングコンテスト 2020 E Lamps](https://atcoder.jp/contests/hhkb2020/tasks/hhkb2020_e)  
+この問題の事前問題  
+[ABC129 D Lamp](https://atcoder.jp/contests/abc129/tasks/abc129_d)は解けたが、想定解と違ったので上の問題に結びつかなかった。
+TODO: 想定解でやりなおし
+
+## 18.最大公約数、最小公倍数
+
+Haskellでは`Prelude`に`gcd`と`lcm`がある。
+
+3つ以上の値のそれも、繰り返し適用すれば求められる。
+
+```haskell
+gcdList, lcmList :: [Int] -> Int
+gcdList = foldl1' gcd
+lcmList = foldl1' lcm
+```
+
+#### 関連問題
+
+- [ABC102 A Multiple of 2 and N](https://atcoder.jp/contests/abc102/tasks/abc102_a) - [ACコード](https://atcoder.jp/contests/abc102/submissions/22946229)
+- [ARC105 B MAX-=min](https://atcoder.jp/contests/arc105/tasks/arc105_b) - [ACコード](https://atcoder.jp/contests/arc105/submissions/22946285)
+- [ABC131 C Anti-Division](https://atcoder.jp/contests/abc131/tasks/abc131_c) - [ACコード](https://atcoder.jp/contests/abc131/submissions/22946480)
+- [ARC110 A Redundant Redundancy](https://atcoder.jp/contests/arc110/tasks/arc110_a) - [ACコード](https://atcoder.jp/contests/arc110/submissions/22946589)
+
+他サイト
+- [yukicoder No.1464 Number Conversion](https://yukicoder.me/problems/no/1464)
+
+## 19.中国剰余定理
+
+[中国剰余定理](../ad/math/crt/)を参照。
+
+## 20.DFS
+
+[探索](../snippets/search/search/)および[木を扱う](../snippets/search/tree/)を参照。
+
+## 21.二分探索 (bisect)
+
+数値群の中で、ある値未満、以下、以上、より大きい、要素がいくつあるかを数える問題を考える。
+
+Pythonには、整列された配列に対して、整列を保って新たな値を挿入するときの挿入位置を得る`bisect`関数があるようだ。
+これは二分探索で効率的に挿入位置を求めるので、求められたその位置の添え字が、
+その値より小さい値の個数となり、上の問題を解くために利用できる。
+
+値に対して昇順に背番号を付け、値をキー、背番号を値とする `Data.Map` や `IntMap` を作る。
+このMapに対して `lookupLT/LE/GE/GT` 系でアクセスすると、
+問題の要素数を導く材料となる背番号が効率的に取り出せる。
+Mapは内部的に、二分検索木をキーに対して構築しているので、これを辿ることは
+添え字の中点をとる二分探索を実行することに相当している。
+
+値を発見するだけでよければ `Data.Set`, `IntSet` も同様に使える。
+
+#### 関連問題
+
+- [ABC143 D Triangles](https://atcoder.jp/contests/abc143/tasks/abc143_d) - [ACコード](https://atcoder.jp/contests/abc143/submissions/28779419)  
+棒の長さが1000以下の整数なので配列の添字にした[別解](https://atcoder.jp/contests/abc143/submissions/14003171)  
+ここでさらに要素数が増えると線形に総和を取るのが難しいので、セグメント木のようなデータ構造を導入する必要が生じるか。
+- [ABC077 C Snuke Festival](https://atcoder.jp/contests/abc077/tasks/arc084_a) - [ACコード](https://atcoder.jp/contests/abc077/submissions/28791823)  
+問題に特化したアルゴリズムで、大きい方から順にmergesortのように比較して個数を数えることで、 $O(n)$ で計算する[別解](https://atcoder.jp/contests/abc077/submissions/28780649)
+- [ABC184 F Programming Contest](https://atcoder.jp/contests/abc184/tasks/abc184_f) - [ACコード](https://atcoder.jp/contests/abc184/submissions/28792499)
+
+前二つはより効率的な別解があり、関数型アプローチではこの計算をする機会が元々少ないのかもしれない。
+184FはF問題だけあり、二分探索が本質的で、さらにそれを本質的にする、計算量を意識したテクニック「半分全列挙」が必要だった。
+
+## 22.二分探索（その他）
+
+[二分探索](../../snippets/search/binary-search/)および
+[三分探索](../../snippets/search/ternary-search/)を参照。

@@ -7,28 +7,28 @@ https://atcoder.github.io/ac-library/production/document_ja/
 
 ## データ構造
 
-- Fenwick Tree
-- segtree
-- lazysegtree
-- string
-  - suffix array
+- Fenwick Tree フェネック木
+- segtree セグメント木
+- lazysegtree 遅延セグメント木
+- string 文字列アルゴリズム詰め合わせ
+  - suffix array 
   - lcp array
   - z algorithm
 
 ## 数学
 
-- math
-  - pow_mod
-  - inv_mod
-  - crt
-  - floor_sum
-- convolution
-- modint
+- math 数論的アルゴリズム詰め合わせ
+  - pow_mod $x^n \mod m$
+  - inv_mod mod逆元
+  - crt 中国剰余定理
+  - floor_sum $\sum_{i=0}^{n-1} \lfloor\frac{ai+b}{m}\rfloor$
+- convolution 畳み込み
+- modint 自動でmodを取る整数
 
 ## グラフ
 
-- dsu
-- maxflow
-- mincostflow
-- scc
-- twosat
+- dsu Union-Find?
+- maxflow 最大フロー問題
+- mincostflow Minimum-cost flow problem
+- scc 有向グラフを強連結成分分解
+- twosat 2-SATを解く

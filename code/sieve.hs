@@ -23,11 +23,11 @@ primes1 :: [Int]
 primes1 = 2 : sieve [] [3,5..]
   where
     sieve [] (x:xs) = x : sieve [(3 * x, x)] xs
-    sieve npnps@((np,p):nps) xxs@(x:xs) =
+    sieve npnps@((np,p2):nps) xxs@(x:xs) =
       case compare np x of
-        LT ->     sieve (insert (np + 2 * p, p) nps) xxs
-        EQ ->     sieve (insert (np + 2 * p, p) nps)  xs
-        GT -> x : sieve (insert (3 * x, x) npnps) xs
+        LT ->     sieve (insert (np + p, p2) nps) xxs
+        EQ ->     sieve (insert (np + p, p2) nps)  xs
+        GT -> x : sieve (insert (x * x, 2 * x) npnps) xs
 
 -- ヒープ版
 
@@ -44,7 +44,7 @@ primes2 = 2 : 3 : sieve q0 [5,7..]
       where
         H.Entry np p = H.minimum queue
         queue1 = H.insert (H.Entry (np+p) p) $ H.deleteMin queue
-        queue2 = H.insert (H.Entry (x * 3) (x * 2)) queue
+        queue2 = H.insert (H.Entry (x * x) (x * 2)) queue
 
 -- ベクタ版
 
@@ -54,7 +54,7 @@ primev = V.create (do
   v <- MV.replicate (ub+1) True
   forM_ (takeWhile ((ub >=).(^ 2)) [2..]) (\i -> do -- 上限が定数なら手計算で [2..√ub]
     f <- MV.read v i
-    when f (forM_ [i*2,i*3..ub] (\j -> MV.write v j False)))
+    when f (forM_ [i*i,i*succ i..ub] (\j -> MV.write v j False)))
   return v
   )
 
@@ -84,4 +84,11 @@ True ("take  2000 primes0",2312500000000,"filter mod")
 True ("take 10000 primes1",2671875000000,"List.insert")
 True ("take 10000 primes2", 484375000000,"Heap")
 True ("take 10000 primes3", 109375000000,"Vector")
+
+*3を*xに修正した後
+104729
+True ("take 2000 primes0",2421875000000,"filter mod")
+True ("take 10000 primes1",187500000000,"List.insert")
+True ("take 10000 primes2",328125000000,"Heap")
+True ("take 10000 primes3",125000000000,"Vector")
 -}
