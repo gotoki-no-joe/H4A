@@ -98,5 +98,5 @@ Mapは内部的に、二分検索木をキーに対して構築しているの�
 
 ## 22.二分探索（その他）
 
-[二分探索](../../snippets/search/binary-search/)および
-[三分探索](../../snippets/search/ternary-search/)を参照。
+[二分探索](/snippets/search/binary-search/)および
+[三分探索](/snippets/search/ternary-search/)を参照。

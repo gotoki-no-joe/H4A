@@ -8,4 +8,4 @@ order: -01000
 divrup x y = negate $ div (negate x) y
 ```
 
-[あのアルゴリズムはどこ？の2](/H4A/readings/whereis/02.divrup/)より。
+[あのアルゴリズムはどこ？の2](/readings/whereis/02.divrup/)より。

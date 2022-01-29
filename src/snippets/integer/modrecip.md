@@ -37,4 +37,4 @@ modRecip (ModInt a) =
     you (_,_,u,_) = u
 ```
 
-[あのアルゴリズムはどこ？の14](/H4A/readings/whereis/14.modrecip/)、およびアルゴリズムロジックより。
+[あのアルゴリズムはどこ？の14](/readings/whereis/14.modrecip/)、およびアルゴリズムロジックより。

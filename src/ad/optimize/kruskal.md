@@ -2,7 +2,7 @@
 
 ノードが0からn-1、i=0～について辺iがノードaiとbiを結び重みciという情報が与えられるとする。
 合計コストと、最小全域木に使った辺の番号のリスト（重い順）を返却する。
-内部的に[Union-Find](/H4A/ad/misc/unionfind/)の通常版を使用する。
+内部的に[Union-Find](/ad/misc/unionfind/)の通常版を使用する。
 
 ```haskell
 import Data.List
@@ -25,4 +25,4 @@ kruskal n abcs =
 
 n頂点を持つ木は辺をn-1本だけ持つので、それで終了にしている。
 
-[あのアルゴリズムはどこ？の8](/H4A/readings/whereis/08.kruskal/)より。
+[あのアルゴリズムはどこ？の8](/readings/whereis/08.kruskal/)より。

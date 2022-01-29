@@ -44,4 +44,4 @@ factorsR n = n : loop 2 [1]
         k2 = k * k
 ```
 
-[あのアルゴリズムはどこ？の3](/H4A/readings/whereis/03.factors/)より。
+[あのアルゴリズムはどこ？の3](/readings/whereis/03.factors/)より。

@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.696763009880" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.696764422854" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696763009880" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696764422854" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696763009880" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696764422854" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -170,7 +170,7 @@
 </doc-anchor-target>
 <p>ノードが0からn-1、i=0～について辺iがノードaiとbiを結び重みciという情報が与えられるとする。
 合計コストと、最小全域木に使った辺の番号のリスト（重い順）を返却する。
-内部的に<a href="/h4a/ad/misc/unionfind/">Union-Find</a>の通常版を使用する。</p>
+内部的に<a href="/H4A/ad/misc/unionfind/">Union-Find</a>の通常版を使用する。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">import Data.List
 
@@ -190,7 +190,7 @@ kruskal n abcs =
              else loop uf  cost       res        k  abis</code></pre>
 </doc-codeblock></div>
 <p>n頂点を持つ木は辺をn-1本だけ持つので、それで終了にしている。</p>
-<p><a href="/h4a/readings/whereis/08.kruskal/">あのアルゴリズムはどこ？の8</a>より。</p>
+<p><a href="/H4A/readings/whereis/08.kruskal/">あのアルゴリズムはどこ？の8</a>より。</p>
 
 
 

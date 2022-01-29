@@ -18,7 +18,7 @@ primeFactors n = loop n primes
         (q,r) = divMod n p
 ```
 
-素数リスト `primes` が[手元にある場合](../primes/)は、
+素数リスト `primes` が[手元にある場合](primes/)は、
 行5の疑似素数リストの定義をなくせばよい。
 
-[あのアルゴリズムはどこ？の4](/H4A/readings/whereis/04.primefactors/)より。
+[あのアルゴリズムはどこ？の4](/readings/whereis/04.primefactors/)より。

@@ -132,7 +132,7 @@ uniteUF f vec i j =
         return True
 ```
 
-[あのアルゴリズムはどこ？の7](/H4A/readings/whereis/07.unionfind/)より。
+[あのアルゴリズムはどこ？の7](/readings/whereis/07.unionfind/)より。
 
 AtCoder Class Library の
 [DSU](https://atcoder.github.io/ac-library/production/document_ja/dsu.html)
