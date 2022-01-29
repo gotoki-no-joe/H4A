@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.696151000409" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.696763009880" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696151000409" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696763009880" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696151000409" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696763009880" defer></script>
     <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
     <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
@@ -175,69 +175,30 @@
 また、おそらく他のモジュラ演算も同時に使うため、<code v-pre>mul</code>の定義はグローバルに置けるだろう。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
-inv p a = powerish mul 1 a (p-2)
+inv modBase a = powerish mul 1 a (modBase-2)
   where
-    mul x y = mod (x*y) p</code></pre>
+    mul x y = mod (x*y) modBase</code></pre>
+</doc-codeblock></div>
+<p>ようは <span class="math">a^{p-2} = 1/a \mod p</span> をしている。
+この逆数が何かを一度割る (b/a) ことにしか使われない場合、初期値の1をbで置き換えることで少し手間が減る。
+<span class="math">b/a = b * a^{p-2} \mod p</span></p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">div modBase b a = powerish mul b a (modBase-2)
+  where
+    mul x y = mod (x*y) modBase</code></pre>
 </doc-codeblock></div>
 <p>拡張ユークリッドの互除法を使う方法もある。</p>
-<p>(追記予定...)</p>
-<doc-anchor-target id="説明">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#説明">#</doc-anchor-trigger>
-        <span>説明</span>
-    </h2>
-</doc-anchor-target>
-<p>あのアルゴリズムはどこ？の14、およびアルゴリズムロジックより。</p>
-<p><a href="https://ja.wikipedia.org/wiki/%E3%83%A2%E3%82%B8%E3%83%A5%E3%83%A9%E9%80%86%E6%95%B0">Wikipedia</a></p>
-<p>難しい話は置いておいて、互いに素な <span class="math">a</span> と <span class="math">m</span> に対して、  <br />
-<span class="math">ax \equiv 1 \mod m</span>  <br />
-を満たすような  <br />
-<span class="math">x \equiv a^{-1} \mod m</span>  <br />
-を求める方法。</p>
-<p>(追記予定...)</p>
-<doc-anchor-target id="関連問題">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
-        <span>関連問題</span>
-    </h2>
-</doc-anchor-target>
-<ul>
-<li><a href="https://atcoder.jp/contests/abc177/tasks/abc177_c">ABC177 C Sum of product of pairs</a></li>
-</ul>
-<p>「紹介した問題は、別に逆元とる必要なかった問題でしたが一応記載します。」とは？</p>
-<p>ということで以下ネタバレ</p>
-<p>求める値を <span class="math">X</span> とおく。
-<span class="math">S = A_1 + A_2 + \dots + A_N</span> とおいて、  <br />
-<span class="math">S^2 = (A_1 + A_2 + \dots + A_N) \times S = A_1 \times S + A_2 \times S + \dots + A_N \times S</span> を展開すると</p>
-<div class="math"><pre>\begin{array}{cccccccc}
-A_1 \times A_1 &amp; + &amp; A_1 \times A_2 &amp; + &amp; \dots &amp; + &amp; A_1 \times A_N &amp; + \\
-A_2 \times A_1 &amp; + &amp; A_2 \times A_2 &amp; + &amp; \dots &amp; + &amp; A_2 \times A_N &amp; + \\
-\vdots \\
-A_N \times A_1 &amp; + &amp; A_N \times A_2 &amp; + &amp; \dots &amp; + &amp; A_N \times A_N \\
-\end{array}</pre></div>
-<p>これは、対角線に <span class="math">A_i \times A_i</span> が並び、その上と下に <span class="math">X</span> が2度現れている。
-つまり <span class="math">S^2 = \sum_{i=1}^N A_i^2 + 2X</span>
-変形すると <span class="math">X = (S^2 + \sum_{i=1}^N A_i^2) / 2</span> で、
-$A_i$の総和の2乗から$A_i$の2乗の総和を引き、さらに2で割れば答えが得られる。</p>
-<p>しかしそれをまともに計算すると桁あふれするので、合同算術で計算すると、普通に2で割ることができない。
-そこで2のモジュラ逆数を求めて乗じることで解決する、ということ。</p>
-<p>逆元を使わない答え <a href="https://atcoder.jp/contests/abc177/submissions/16440784">ACコード</a></p>
-<p><span class="math">X = A_1 \times (A_2 + A_3 + \dots + A_N) + A_2 \times (A_3 + \dots + A_N) + \dots + A_{N-1} \times A_N</span>  <br />
-とまとめると、乗算の左辺は <span class="math">A_i</span> が順に現れ、右辺は <span class="math">A_i</span> を後ろから足しこんでいった値になっている。
-つまり</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">compute as = sum $ zipWith (*) as $ tail $ scanr1 (+) as</code></pre>
-</doc-codeblock></div>
-<p>で求められる。除算は現れない。</p>
-<p>あるいは、前から  <br />
-<span class="math">X = A_1 \times A_2 + (A_1 + A_2) \times A_3 + \dots + (A_1 + \dots + A_{N-1}) \times A_N</span>  <br />
-の向きにまとめて、</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">compute as = snd $ foldl step (0, 0) as
+<pre class="language-haskell"><code v-pre class="language-haskell">modRecip (ModInt a) =
+   toEnum $ you $ head $ dropWhile cond $ iterate step (a, modBase, 1, 0)
   where
-    step (sum, acc) ai = (sum + ai, acc + sum * ai)</code></pre>
+    step (a,b,u,v) =
+      let t = a `div` b
+      in  (b, a - t * b, v, u - t * v)
+    cond (_,b,_,_) = b /= 0
+    you (_,_,u,_) = u</code></pre>
 </doc-codeblock></div>
-<p>としてもよい。こちらの方が命令型のループに直しやすそう。</p>
+<p><a href="/h4a/readings/whereis/14.modrecip/">あのアルゴリズムはどこ？の14</a>、およびアルゴリズムロジックより。</p>
 
 
 

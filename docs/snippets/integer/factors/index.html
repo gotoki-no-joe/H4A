@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.696151000409" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.696763009880" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696151000409" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696763009880" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696151000409" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696763009880" defer></script>
     <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
     <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
@@ -170,6 +170,8 @@
         <span>約数列挙</span>
     </h1>
 </doc-anchor-target>
+<p>正整数に対して、割り切ることのできる数を昇順のリストにする。  <br />
+与えられた数が平方数 <span class="math">n^2</span> のときに <span class="math">n</span> はひとつだけ出力する。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
 factors :: Int -&gt; [Int]
@@ -192,6 +194,7 @@ factors n = 1 : loop 2 [n]
         <span>逆順版</span>
     </h4>
 </doc-anchor-target>
+<p>降順に欲しい場合はこちら。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
 factorsR :: Int -&gt; [Int]
@@ -208,50 +211,7 @@ factorsR n = n : loop 2 [1]
         next = loop (succ k)
         k2 = k * k</code></pre>
 </doc-codeblock></div>
-<doc-anchor-target id="説明">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#説明">#</doc-anchor-trigger>
-        <span>説明</span>
-    </h2>
-</doc-anchor-target>
-<p>正整数に対して、割り切ることのできる数を昇順のリストにする。
-与えられた数が平方数 <span class="math">n^2</span> のときに <span class="math">n</span> はひとつだけ出力する。</p>
-<doc-anchor-target id="お話">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#お話">#</doc-anchor-trigger>
-        <span>お話</span>
-    </h2>
-</doc-anchor-target>
-<p>あのアルゴリズムはどこ？の3より。</p>
-<p>1から順に対象の数を割ってみて、割り切れれば約数である。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">factors n = [k | k &lt;- [1..n], mod n k == 0]</code></pre>
-</doc-codeblock></div>
-<p>ここで、</p>
-<ul>
-<li>あるkでnが割り切れたとき、kだけでなくn/kも（大きい方の）約数である。</li>
-<li><span class="math">\sqrt n &lt; k &lt; n</span> の範囲には、小さい方の約数は存在しない。</li>
-</ul>
-<p>を利用すると、上のように、<span class="math">\sqrt n</span> より大きい後半の約数を蓄積しながら、
-<span class="math">\sqrt n</span> 以下の約数を順に見つける、 <span class="math">O(\sqrt n)</span> のコードができる。
-これ以上の性能を求めるなら、フェルマーの小定理を使う方法というものがあるらしい。</p>
-<doc-anchor-target id="関連問題">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
-        <span>関連問題</span>
-    </h3>
-</doc-anchor-target>
-<ul>
-<li><a href="https://atcoder.jp/contests/abc180/tasks/abc180_c">ABC180 C Cream puff</a> <a href="https://atcoder.jp/contests/abc180/submissions/22727220">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc112/tasks/abc112_d">ABC112 D Partition</a> - <a href="https://atcoder.jp/contests/abc112/submissions/23709880">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc190/tasks/abc190_d">ABC190 D Staircase Sequences</a> - <a href="https://atcoder.jp/contests/abc190/submissions/23710955">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/diverta2019/tasks/diverta2019_d">diverta 2019 D - DivRem Number</a> - <a href="https://atcoder.jp/contests/diverta2019/submissions/27485495">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/arc108/tasks/arc108_a">ARC108 A Sum and Product</a> - <a href="https://atcoder.jp/contests/arc108/submissions/23711077">ACコード</a></li>
-</ul>
-<p>他サイトなので未解答</p>
-<ul>
-<li><a href="https://mojacoder.app/users/magurofly/problems/polygon-of-polygons">MojaCoder Polygon of Polygons</a></li>
-</ul>
+<p><a href="/h4a/readings/whereis/03.factors/">あのアルゴリズムはどこ？の3</a>より。</p>
 
 
 

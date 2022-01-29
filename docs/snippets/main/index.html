@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.696151000409" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.696763009880" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696151000409" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696763009880" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696151000409" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696763009880" defer></script>
     <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
     <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
@@ -183,8 +183,7 @@
     </h3>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">import Control.Applicative
-import Control.Monad
+<pre class="language-haskell"><code v-pre class="language-haskell">import Control.Monad
 
 main = do
 -- 読み込み
@@ -202,7 +201,7 @@ main = do
   mapM_ print ans
 
 getLnInts :: IO [Int]
-getLnInts = map read . words &lt;$&gt; getLine
+getLnInts = getLine &gt;&gt;= return . map read . words
 
 compute :: Int -&gt; [Int] -&gt; [[Int]] -&gt; [Int Bool]
 compute n a b c xys =</code></pre>
@@ -214,8 +213,7 @@ compute n a b c xys =</code></pre>
     </h3>
 </doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">import Control.Applicative
-import Control.Monad
+<pre class="language-haskell"><code v-pre class="language-haskell">import Control.Monad
 import qualified Data.ByteString.Char8 as BS
 import Data.Char
 import Data.List
@@ -235,7 +233,7 @@ main = do
   mapM_ print ans
 
 bsGetLnInts :: IO [Int]
-bsGetLnInts = unfoldr (BS.readInt . BS.dropWhile isSpace) &lt;$&gt; BS.getLine
+bsGetLnInts = BS.getLine &gt;&gt;= return . unfoldr (BS.readInt . BS.dropWhile isSpace)
 
 compute :: Int -&gt; [Int] -&gt; [[Int]] -&gt; [Int Bool]
 compute n a b c xys = ...</code></pre>

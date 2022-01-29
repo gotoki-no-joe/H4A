@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.696151000409" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.696763009880" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696151000409" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696763009880" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696151000409" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696763009880" defer></script>
     <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
     <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
@@ -222,63 +222,6 @@
 <p>ABC021Dについて  <br />
 1からnの中から、重複を許してk個選択して、それを小さい順にa1からakに割り当てると全ての場合を数え上げることになる。
 このような重複組み合わせの場合の数は高校数学の公式で <span class="math">{}_{n+k-1}C_k</span> と教わっている。</p>
-<doc-anchor-target id="以下残念な内容なのでなくす方向で">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#以下残念な内容なのでなくす方向で">#</doc-anchor-trigger>
-        <span>以下、残念な内容なのでなくす方向で</span>
-    </h2>
-</doc-anchor-target>
-<p>二項係数の性質、パスカルの三角形を使って、$$\displaystyle {}_{n+1}C_r = {}<em>nC</em>{r-1} + {}_nC_r$$でDPできる。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">comb n r = comblist !! n !! r
-  where
-    comblist = iterate combstep [1]
-    combstep cs = 1 : zipWith (+) cs (tail cs) ++ [1]</code></pre>
-</doc-codeblock></div>
-<p>もう少し工夫してメモリ消費を半分にしてみよう。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">comb n r = comblist !! n !! r'
-  where
-    r' = min r (n-r)
-    comblist = evnstep []
-    oddstep cs = let cs1 = 1 : zipWith (+) cs (tail cs) in cs1 : evnstep cs1
-    evnstep cs = let cs1 = 1 : zipWith (+) cs (tail cs ++ [last cs]) in cs1 : oddstep cs1</code></pre>
-</doc-codeblock></div>
-<p>n,rの範囲が限定できるならVectorを使うことができ、モジュロ整数なら加算にモジュロをかければよい。</p>
-<p>モジュロ整数で、n,rの範囲が制限できる場合に、異なるアプローチがある。  <br />
-必要な値は$$n!$$, $$r!<span class="math">の逆元、</span>(n-r)!$$の逆元なので、階乗とその逆元をあらかじめ計算しておくことができるというもの。これは様々なn,rについて求める場面で有効。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">num = 100 -- 上限
-
-comb n r :: Int -&gt; Int -&gt; ModInt
-comb n r = frac V.! n * recipfrac V.! r * recipfrac V.! (n-r)
-  where
-    frac = V.fromList $ take num $ scanl1 (*) $ map toEnum [1..]
-    recipfrac = V.map recip frac</code></pre>
-</doc-codeblock></div>
-<p>単独で運用するなら</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">import Data.List
-
-modBase = 1000000007
-
-combMod n r = mul (foldl' mul 1 [r+1..n])
-                  (recipMod (foldl' mul 1 [2..n-r]))
-
-re a = mod a modBase
-
-mul a b = re (a * b)
-
-recipMod :: Int -&gt; Int
-recipMod a = re $ you $ head $
-             dropWhile cond $ iterate step (a, modBase, 1, 0)
-  where
-    step (a,b,u,v) =
-      let t = a `div` b
-      in  (b, a - t * b, v, u - t * v)
-    cond (_,b,_,_) = b /= 0
-    you (_,_,u,_) = u</code></pre>
-</doc-codeblock></div>
 
 
 
@@ -290,11 +233,11 @@ recipMod a = re $ you $ head $
             
 <nav class="flex mt-14">
     <div class="w-1/2">
-        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/ad/optimize/kruskal/">
+        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/ad/math/crt/">
             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
             <span>
                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                <span class="block mt-1">クラスカル法</span>
+                <span class="block mt-1">中国剰余定理</span>
             </span>
         </a>
     </div>

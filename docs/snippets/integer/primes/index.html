@@ -9,27 +9,27 @@
     <!-- Primary Meta Tags -->
     <title>素数（エラトステネスの篩）</title>
     <meta name="title" content="素数（エラトステネスの篩）">
-    <meta name="description" content="Haskellらしい、無限リストとして昇順に素数が取り出せる版" />
+    <meta name="description" content="Haskellらしい、無限リストとして昇順に素数が取り出せる版（リストで優先度付きキューを模倣）" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/primes/">
     <meta property="og:title" content="素数（エラトステネスの篩）">
-    <meta property="og:description" content="Haskellらしい、無限リストとして昇順に素数が取り出せる版">
+    <meta property="og:description" content="Haskellらしい、無限リストとして昇順に素数が取り出せる版（リストで優先度付きキューを模倣）">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/primes/">
     <meta property="twitter:title" content="素数（エラトステネスの篩）">
-    <meta property="twitter:description" content="Haskellらしい、無限リストとして昇順に素数が取り出せる版">
+    <meta property="twitter:description" content="Haskellらしい、無限リストとして昇順に素数が取り出せる版（リストで優先度付きキューを模倣）">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.696151000409" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.696763009880" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696151000409" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696763009880" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696151000409" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696763009880" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -168,7 +168,17 @@
         <span>素数（エラトステネスの篩）</span>
     </h1>
 </doc-anchor-target>
-<p>Haskellらしい、無限リストとして昇順に素数が取り出せる版</p>
+<p>Haskellらしい、無限リストとして昇順に素数が取り出せる版（リストで優先度付きキューを模倣）</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
+primes :: [Int]
+primes = 2 : sieve [] [3,5..]
+  where
+    sieve ((np,p2):nps) (x:xs) | np &lt;  x =     sieve (insert (np+p2,p2) nps) (x:xs)
+                               | np == x =     sieve (insert (np+p2,p2) nps)    xs
+    sieve          nps  (x:xs)           = x : sieve (insert (x*x, x+x) nps)    xs</code></pre>
+</doc-codeblock></div>
+<p>優先度付きキューの Data.Heap をちゃんと使う版（ただし、上の実装の方がなぜか速い）</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">import qualified Data.Heap as H
 
@@ -183,12 +193,13 @@ primes = 2 : 3 : sieve q0 [5,7..]
         EQ -&gt;     sieve queue1  xs
         GT -&gt; x : sieve queue2  xs
       where
-        H.Entry np p = H.minimum queue
-        queue1 = H.insert (H.Entry (np+p) p) $ H.deleteMin queue
+        H.Entry np p2 = H.minimum queue
+        queue1 = H.insert (H.Entry (np+p2) p2) $ H.deleteMin queue
         queue2 = H.insert (H.Entry (x * x) (x * 2)) queue</code></pre>
 </doc-codeblock></div>
 <p>上限が設定できるとき、フラグの配列を舐めることで素数を見つける、
-命令型言語でおなじみのやり方をする版</p>
+命令型言語でおなじみのやり方をする版。
+残念ながらこれが最も速い。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">import qualified Data.Vector(.Unboxed) as V
 import qualified Data.Vector(.Unboxed).Mutable as MV
@@ -206,108 +217,10 @@ primev = V.create (do
 primes :: [Int]
 primes = [k | k &lt;- [2..ub], primev V.! k]</code></pre>
 </doc-codeblock></div>
-<doc-anchor-target id="お話">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#お話">#</doc-anchor-trigger>
-        <span>お話</span>
-    </h2>
-</doc-anchor-target>
-<p>あのアルゴリズムはどこ？の5 より。
+<p><a href="/h4a/readings/whereis/05.primes/">あのアルゴリズムはどこ？の5</a> より。
 必要なものはData.Numbers.Primesに全て揃っているので、
 Project Eulerをするなら<a href="../../../library/data.numbers.primes/">そちら</a>を使ったほうがよい。
 AtCoderにはこのライブラリがないので自作する必要がある。</p>
-<doc-anchor-target id="関連問題">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
-        <span>関連問題</span>
-    </h3>
-</doc-anchor-target>
-<ul>
-<li><a href="https://atcoder.jp/contests/tenka1-2012-qualC/tasks/tenka1_2012_9">天下一プログラマーコンテスト2012 予選C A</a> - <a href="https://atcoder.jp/contests/tenka1-2012-qualC/submissions/27486067">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc149/tasks/abc149_c">ABC149 C Next Prime</a> - <a href="https://atcoder.jp/contests/abc149/submissions/27486099">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc170/tasks/abc170_d">ABC170 D Not Divisible</a> - このコードを使う形では解けていない。別のページで解いているようだ。</li>
-</ul>
-<doc-anchor-target id="蛇足">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#蛇足">#</doc-anchor-trigger>
-        <span>蛇足</span>
-    </h2>
-</doc-anchor-target>
-<p>配列を用いた命令型の篩は、素数を見つけるたびにその整数倍を全て除去する。
-Haskellの教科書の前の方に書いてある典型的な篩は、素数を見つけるたびに、その素数で割り切れる値を除去するフィルタを追加する。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">primes0 :: [Int]
-primes0 = 2 : sieve [3,5..]
-  where
-    sieve (x:xs) = x : sieve (filter (nd x) xs)
-    nd x y = mod y x /= 0 -- &quot;Not Divisible&quot;</code></pre>
-</doc-codeblock></div>
-<p>これは、見つけた素数の数だけ <code v-pre>filter</code> が入れ子になり、また <code v-pre>mod</code> を使うため効率が悪い。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">primes0 = 2 : sieve [3,5..] =
-2 : 3 : sieve (filter (nd 3) [5,7..]) =
-2 : 3 : 5 : sieve (filter (nd 5) (filter (nd 3) [7,9..])) =
-2 : 3 : 5 : 7 : sieve (filter (nd 7) (filter (nd 5) (filter (nd 3) [9,11..]))) =
-2 : 3 : 5 : 7 : 11 : sieve (filter (nd 11) sieve (filter (nd 7) (filter (nd 5) (filter (nd 3) [13,15..])))) =
-...</code></pre>
-</doc-codeblock></div>
-<p>素数3が見つかった後、その3倍の9、その5倍の15、…は順に除去の対象となる。
-そこで、「素数pの奇数倍npが次に除去できる候補」という情報を、npの小さい順に優先度付きキューに保存する。
-無限に供給される奇数 <code v-pre>[3,5..]</code> 値 x に対して、このキューの先頭の np の値と比較し、</p>
-<ul>
-<li>np &lt; x の場合、np は既に他の素数の倍数として除去されたので、np は役目を終えていて、代わりに (n+2)p を除去候補に加える。
-xはまだ素数かどうか確定していないので保留する。</li>
-<li>np == x の場合、x はまさに p の倍数なので除去する。np と交代で (n+2)p を除去候補に加える。</li>
-<li>np &gt; x の場合、x は除去できない。これは新たな素数である。npは以降の数と比べるためにそのまま残す。
-x の倍数を今後は除去するためにキューに追加する。x未満の素数とxの倍数は既に除去されているので、np = x*x から始める。</li>
-</ul>
-<p>とすることで、サンクを肥大させずに、キューを管理する一つの関数で計算を続ける形にできる。
-このアルゴリズムを <code v-pre>Data.List.insert</code> で手抜き実装すると次のようになる。
-見つけた素数pに対して、タプルの左側は奇数倍np、右側は2pを格納している。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">primes1 :: [Int]
-primes1 = 2 : sieve [] [3,5..]
-  where
-    sieve [] (x:xs) = x : sieve [(3 * x, x)] xs
-    sieve npnps@((np,p):nps) xxs@(x:xs) =
-      case compare np x of
-        LT -&gt;     sieve (insert (np + 2 * p, p) nps) xxs
-        EQ -&gt;     sieve (insert (np + 2 * p, p) nps)  xs
-        GT -&gt; x : sieve (insert (x * x, x) npnps) xs</code></pre>
-</doc-codeblock></div>
-<p>リストへの <code v-pre>insert</code> は重いので、より効率的な Heap を用いて、
-また Heap が空であるのは 3 を処理する前だけの特別な場合なので、そこを少しほどくと冒頭のコードになる。</p>
-<p>これらの性能を計測すると次のような結果が得られた。(GHCiで実行)
-filter modだけ2,000個、他は10,000個の素数を求めている。</p>
-<table class="comfortable">
-<thead>
-<tr>
-<th>方式</th>
-<th style="text-align: right;">時間 (μ秒)</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>filter mod (2000個)</td>
-<td style="text-align: right;">2,421,875</td>
-</tr>
-<tr>
-<td>List.insert</td>
-<td style="text-align: right;">187,500</td>
-</tr>
-<tr>
-<td>Heap</td>
-<td style="text-align: right;">328,125</td>
-</tr>
-<tr>
-<td>Vector</td>
-<td style="text-align: right;">125,000</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>2021/12/28 除去候補の初期値は3xでなくx^2でよいことに気づいた。ら、List版がHeap版を追い抜いた。</li>
-</ul>
 
 
 
@@ -329,10 +242,10 @@ filter modだけ2,000個、他は10,000個の素数を求めている。</p>
     </div>
 
     <div class="w-1/2">
-        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/snippets/integer/counter/">
+        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/snippets/integer/modint/">
             <span>
                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                <span class="block mt-1">数える</span>
+                <span class="block mt-1">合同算術</span>
             </span>
             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
         </a>

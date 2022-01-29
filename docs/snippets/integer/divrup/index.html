@@ -9,29 +9,27 @@
     <!-- Primary Meta Tags -->
     <title>切り上げ除算</title>
     <meta name="title" content="切り上げ除算">
-    <meta name="description" content="あのアルゴリズムはどこ？の2より。" />
+    <meta name="description" content="あのアルゴリズムはどこ？の2 より。" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/divrup/">
     <meta property="og:title" content="切り上げ除算">
-    <meta property="og:description" content="あのアルゴリズムはどこ？の2より。">
+    <meta property="og:description" content="あのアルゴリズムはどこ？の2 より。">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/divrup/">
     <meta property="twitter:title" content="切り上げ除算">
-    <meta property="twitter:description" content="あのアルゴリズムはどこ？の2より。">
+    <meta property="twitter:description" content="あのアルゴリズムはどこ？の2 より。">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.696151000409" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.696763009880" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696151000409" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696763009880" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696151000409" defer></script>
-    <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
-    <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696763009880" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -174,39 +172,7 @@
 <pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
 divrup x y = negate $ div (negate x) y</code></pre>
 </doc-codeblock></div>
-<doc-anchor-target id="説明">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#説明">#</doc-anchor-trigger>
-        <span>説明</span>
-    </h2>
-</doc-anchor-target>
-<p>あのアルゴリズムはどこ？の2より。</p>
-<p>負の数に関して、 <code v-pre>quotRem</code> は商を0に寄せ、 <code v-pre>divMod</code> は商を負の無限大に寄せる。
-上のコードはこれを利用している。</p>
-<p>除数、被除数のどちらも正の範囲では、<code v-pre>divMod</code> と <code v-pre>quotRem</code> はどちらも切り捨てで除算を行う。
-剰余が0でないときに結果を1増やすことで、素直に切り上げ除算を実現できる。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">divrup x y =
-  case divMod x y of
-    (q, 0) -&gt; q
-    (q, _) -&gt; succ q</code></pre>
-</doc-codeblock></div>
-<p>被除数に除数を足してから除算すると、商は1増える。 <span class="math">(a+b) / b = a/b + 1</span>  <br />
-足し込む数を(除数-1)にしておくと、余りがある全ての場合の結果だけが1増えて、切り上げ除算になる。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">divrup x y = div (x+y-1) y</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="関連問題">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
-        <span>関連問題</span>
-    </h3>
-</doc-anchor-target>
-<ul>
-<li><a href="https://atcoder.jp/contests/abc176/tasks/abc176_a">ABC176 A Takoyaki</a> - <a href="https://atcoder.jp/contests/abc176/submissions/22555330">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc195/tasks/abc195_b">ABC195 B Many Oranges</a> - <a href="https://atcoder.jp/contests/abc195/submissions/22556731">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc046/tasks/arc062_a">ABC046 C AtCoDeerくんと選挙速報</a> - <a href="https://atcoder.jp/contests/abc046/submissions/23709081">ACコード</a></li>
-</ul>
+<p><a href="/h4a/readings/whereis/02.divrup/">あのアルゴリズムはどこ？の2</a>より。</p>
 
 
 
@@ -279,6 +245,6 @@ divrup x y = negate $ div (negate x) y</code></pre>
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "切り上げ除算", icon: "file", hasPrism: true, hasMermaid: false, hasMath: true }</script>
+        <script>window.__DOCS__ = { "title": "切り上げ除算", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
     </body>
 </html>

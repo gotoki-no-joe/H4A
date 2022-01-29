@@ -9,27 +9,27 @@
     <!-- Primary Meta Tags -->
     <title>素因数分解（試し割り法）</title>
     <meta name="title" content="素因数分解（試し割り法）">
-    <meta name="description" content="素数リスト primes が手元にある場合" />
+    <meta name="description" content="素数リスト primes が 手元にある場合 は、 行5の疑似素数リストの定義をなくせばよい。" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/primefactors/">
     <meta property="og:title" content="素因数分解（試し割り法）">
-    <meta property="og:description" content="素数リスト primes が手元にある場合">
+    <meta property="og:description" content="素数リスト primes が 手元にある場合 は、 行5の疑似素数リストの定義をなくせばよい。">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/primefactors/">
     <meta property="twitter:title" content="素因数分解（試し割り法）">
-    <meta property="twitter:description" content="素数リスト primes が手元にある場合">
+    <meta property="twitter:description" content="素数リスト primes が 手元にある場合 は、 行5の疑似素数リストの定義をなくせばよい。">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.696151000409" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.696763009880" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696151000409" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696763009880" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696151000409" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696763009880" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -168,65 +168,23 @@
         <span>素因数分解（試し割り法）</span>
     </h1>
 </doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
-primeFactors :: Int -&gt; [Int]
-primeFactors n = loop1 n
-  where
-    loop1 n
-      | even n = 2 : loop1 (div n 2)
-      | otherwise = loop2 n 3
-    loop2 n f
-      | n &lt; f * f = [n | n /= 1]
-      | otherwise =
-          case divMod n f of
-            (q, 0) -&gt; f : loop2 q f
-            _      -&gt;     loop2 n (f+2)</code></pre>
-</doc-codeblock></div>
-<p>素数リスト <code v-pre>primes</code> が手元にある場合</p>
-<div class="codeblock-wrapper"><doc-codeblock>
+<div class="codeblock-wrapper"><doc-codeblock line-numbers>
 <pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
 primeFactors :: Int -&gt; [Int]
 primeFactors n = loop n primes
   where
-    loop 1 _ = []
+    primes = 2 : 3 : [y | x &lt;- [6,12..], y &lt;- [pred x, succ x]]
     loop n pps@(p:ps)
+      | n == 1    = []
       | n &lt; p * p = [n]
-      | otherwise =
-          case divMod n p of
-            (q, 0) -&gt; p : loop q pps
-            _      -&gt;     loop n  ps</code></pre>
+      | r == 0    = p : loop q pps
+      | otherwise = loop n ps
+      where
+        (q,r) = divMod n p</code></pre>
 </doc-codeblock></div>
-<doc-anchor-target id="説明">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#説明">#</doc-anchor-trigger>
-        <span>説明</span>
-    </h2>
-</doc-anchor-target>
-<p>あのアルゴリズムはどこ？の4より。</p>
-<p>素朴には、対象nと素因数候補f=2から始めて、割りきれる限り、
-nを商に置き換え、fを素因数として記録することを繰り返す。
-割り切れなくなったらfを1増やして、n &gt; f となるまで続ける。</p>
-<p>2以外の素数は奇数なので、p=2の場合だけ特別扱いすることで、
-3以上についてfを1増やす代わりに2増やす、としている。</p>
-<p>素数リストが手元にある場合は、素因数の候補はそこから選択するだけで済む。
-<a href="/H4A/library/data.numbers.primes/"><code v-pre>Data.Numbers.Primes</code></a>モジュールが使えるなら、そちらを使えばよい。</p>
-<doc-anchor-target id="関連問題">
-    <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
-        <span>関連問題</span>
-    </h3>
-</doc-anchor-target>
-<ul>
-<li><a href="https://atcoder.jp/contests/abc169/tasks/abc169_d">ABC169 D Div Game</a> - <a href="https://atcoder.jp/contests/abc169/submissions/22775113">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc177/tasks/abc177_e">ABC177 E Coprime</a> - <a href="https://atcoder.jp/contests/abc177/submissions/22737449">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc152/tasks/abc152_e">ABC152 E Flatten</a> - <a href="https://atcoder.jp/contests/abc152/submissions/28668915">ACコード</a> mod逆元も参照  <br />
-ちなみにInteger使えば何の障害もなく<a href="https://atcoder.jp/contests/abc152/submissions/9830048">AC</a>できる。</li>
-</ul>
-<p>他サイト</p>
-<ul>
-<li><a href="https://mojacoder.app/users/H20/problems/sphenic-number">MojaCoder 楔数（くさびすう）</a></li>
-</ul>
+<p>素数リスト <code v-pre>primes</code> が<a href="../primes/">手元にある場合</a>は、
+行5の疑似素数リストの定義をなくせばよい。</p>
+<p><a href="/h4a/readings/whereis/04.primefactors/">あのアルゴリズムはどこ？の4</a>より。</p>
 
 
 

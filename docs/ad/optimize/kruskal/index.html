@@ -9,29 +9,27 @@
     <!-- Primary Meta Tags -->
     <title>クラスカル法</title>
     <meta name="title" content="クラスカル法">
-    <meta name="description" content="Wikipedia" />
+    <meta name="description" content="ノードが0からn-1、i=0～について辺iがノードaiとbiを結び重みciという情報が与えられるとする。 合計コストと、最小全域木に使った辺の番号のリスト（重い順）を返却する。 内部的に Union-Find" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/ad/optimize/kruskal/">
     <meta property="og:title" content="クラスカル法">
-    <meta property="og:description" content="Wikipedia">
+    <meta property="og:description" content="ノードが0からn-1、i=0～について辺iがノードaiとbiを結び重みciという情報が与えられるとする。 合計コストと、最小全域木に使った辺の番号のリスト（重い順）を返却する。 内部的に Union-Find">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/ad/optimize/kruskal/">
     <meta property="twitter:title" content="クラスカル法">
-    <meta property="twitter:description" content="Wikipedia">
+    <meta property="twitter:description" content="ノードが0からn-1、i=0～について辺iがノードaiとbiを結び重みciという情報が与えられるとする。 合計コストと、最小全域木に使った辺の番号のリスト（重い順）を返却する。 内部的に Union-Find">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.696151000409" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.696763009880" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696151000409" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696763009880" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696151000409" defer></script>
-    <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
-    <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696763009880" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -170,55 +168,29 @@
         <span>クラスカル法</span>
     </h1>
 </doc-anchor-target>
-<ul>
-<li><a href="https://ja.wikipedia.org/wiki/%E3%82%AF%E3%83%A9%E3%82%B9%E3%82%AB%E3%83%AB%E6%B3%95">Wikipedia</a></li>
-</ul>
-<p>連結な無向グラフの全域木で、辺の重み合計が最小の最小全域木を得るアルゴリズムのひとつ。もうひとつはPrim法。</p>
-<p>「無向グラフ、連結、辺に重みがある」という条件の元で、「グラフの全ての頂点を含む部分グラフで、木で、そのようなものの中で重みの合計が最小」である最小全域木を得る。</p>
-<p>Prim法は、任意の1頂点だけからなる木を初期値とし、まだ木に含まれない頂点と木を結ぶ辺で重みが最小のものを貪欲に追加する。</p>
-<p>Kruskal法は、重みの小さい順に辺を調べ、閉路や多重辺がなければ木の辺として採用することを繰り返す。
-つまり、Union-Findで、無駄足にならない辺だけを追加して全て連結になるまで繰り返す。
-計算量は <span class="math">O(|E|\log|V|)</span> となるらしい。</p>
 <p>ノードが0からn-1、i=0～について辺iがノードaiとbiを結び重みciという情報が与えられるとする。
 合計コストと、最小全域木に使った辺の番号のリスト（重い順）を返却する。
-内部的に<a href="../../misc/unionfind/">Union-Find</a>を使用する。</p>
+内部的に<a href="/h4a/ad/misc/unionfind/">Union-Find</a>の通常版を使用する。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
+<pre class="language-haskell"><code v-pre class="language-haskell">import Data.List
+
+-- @gotoki_no_joe
 kruskal :: Int -&gt; [(Int,Int,Int)] -&gt; IO (Int,[Int])
 kruskal n abcs =
   do
-    v &lt;- newUF n
-    loop 0 [] v (pred n) cabis
+    uf &lt;- newUF n
+    loop uf 0 [] (pred n) cabis
   where
     cabis = sort [(c,a,b,i) | (i,(a,b,c)) &lt;- zip [0..] abcs]
-    loop cost res _ 0 _ = return (cost, res)
-    loop cost res v k ((c,a,b,i):abis) =
+    loop _  cost res 0 _ = return (cost, res)
+    loop uf cost res k ((c,a,b,i):abis) =
       do
-        e &lt;- findUF v a b
-        if e then loop cost res v k abis
-             else do
-               uniteUF v a b
-               loop (cost+c) (i:res) v (pred k) abis</code></pre>
+        b &lt;- uniteUF uf a b
+        if b then loop uf (cost+c) (i:res) (pred k) abis
+             else loop uf  cost       res        k  abis</code></pre>
 </doc-codeblock></div>
 <p>n頂点を持つ木は辺をn-1本だけ持つので、それで終了にしている。</p>
-<doc-anchor-target id="関連問題">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
-        <span>関連問題</span>
-    </h2>
-</doc-anchor-target>
-<ul>
-<li><a href="https://atcoder.jp/contests/iroha2019-day2/tasks/iroha2019_day2_d">いろはちゃんコンテスト Day2 D</a> - <a href="https://atcoder.jp/contests/iroha2019-day2/submissions/22745993">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc218/tasks/abc218_e">ABC218 E Destruction</a> - <a href="https://atcoder.jp/contests/abc218/submissions/27503010">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc065/tasks/arc076_b">ABC065 D Built?</a> - <a href="https://atcoder.jp/contests/abc065/submissions/28647975">ACコード</a></li>
-</ul>
-<doc-anchor-target id="関連">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#関連">#</doc-anchor-trigger>
-        <span>関連</span>
-    </h2>
-</doc-anchor-target>
-<p>多次元配列のソート、も参照せよとのこと。</p>
+<p><a href="/h4a/readings/whereis/08.kruskal/">あのアルゴリズムはどこ？の8</a>より。</p>
 
 
 
@@ -230,20 +202,20 @@ kruskal n abcs =
             
 <nav class="flex mt-14">
     <div class="w-1/2">
-        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/snippets/search/exhaustive/">
+        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/snippets/search/ternary-search/">
             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
             <span>
                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                <span class="block mt-1">総当たり</span>
+                <span class="block mt-1">三分探索</span>
             </span>
         </a>
     </div>
 
     <div class="w-1/2">
-        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/ad/math/combination/">
+        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/ad/math/crt/">
             <span>
                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                <span class="block mt-1">二項係数</span>
+                <span class="block mt-1">中国剰余定理</span>
             </span>
             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
         </a>
@@ -291,6 +263,6 @@ kruskal n abcs =
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "クラスカル法", icon: "file", hasPrism: true, hasMermaid: false, hasMath: true }</script>
+        <script>window.__DOCS__ = { "title": "クラスカル法", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
     </body>
 </html>
