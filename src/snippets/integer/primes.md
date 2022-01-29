@@ -58,7 +58,7 @@ primes :: [Int]
 primes = [k | k <- [2..ub], primev V.! k]
 ```
 
-[あのアルゴリズムはどこ？の5](/H4A/readings/whereis/05.primes/) より。
+[あのアルゴリズムはどこ？の5](/readings/whereis/05.primes/) より。
 必要なものはData.Numbers.Primesに全て揃っているので、
 Project Eulerをするなら[そちら](../../library/data.numbers.primes/)を使ったほうがよい。
 AtCoderにはこのライブラリがないので自作する必要がある。
