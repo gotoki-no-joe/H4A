@@ -25,13 +25,10 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.696765585281" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.696895500328" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696765585281" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696895500328" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696765585281" defer></script>
-    <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
-    <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -180,72 +177,6 @@
     </h2>
 </doc-anchor-target>
 <p><a href="../../ad/math/combination/">二項係数</a> を参照。</p>
-<doc-anchor-target id="17-べき乗">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#17-べき乗">#</doc-anchor-trigger>
-        <span>17. べき乗</span>
-    </h2>
-</doc-anchor-target>
-<p>modで特定の値のいろいろなべき乗を、上限ありで求める場合、事前計算しておいてもお釣りが出るという話。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">import qualified Data.Vector as V
-
--- a^b を 0&lt;=b&lt;=num の範囲で先に求める
--- a^b = powerVec a V.! b
-
-num = 1000
-modBase = 1000000007
-
-powerVec a = V.iterateN num (mul base) 1
-
-mul a b = mod (a * b) modBase</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="関連問題">
-    <h4>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
-        <span>関連問題</span>
-    </h4>
-</doc-anchor-target>
-<p><a href="https://atcoder.jp/contests/hhkb2020/tasks/hhkb2020_e">HHKB プログラミングコンテスト 2020 E Lamps</a>  <br />
-この問題の事前問題  <br />
-<a href="https://atcoder.jp/contests/abc129/tasks/abc129_d">ABC129 D Lamp</a>は解けたが、想定解と違ったので上の問題に結びつかなかった。
-TODO: 想定解でやりなおし</p>
-<doc-anchor-target id="18最大公約数最小公倍数">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#18最大公約数最小公倍数">#</doc-anchor-trigger>
-        <span>18.最大公約数、最小公倍数</span>
-    </h2>
-</doc-anchor-target>
-<p>Haskellでは<code v-pre>Prelude</code>に<code v-pre>gcd</code>と<code v-pre>lcm</code>がある。</p>
-<p>3つ以上の値のそれも、繰り返し適用すれば求められる。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">gcdList, lcmList :: [Int] -&gt; Int
-gcdList = foldl1' gcd
-lcmList = foldl1' lcm</code></pre>
-</doc-codeblock></div>
-<doc-anchor-target id="関連問題-1">
-    <h4>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題-1">#</doc-anchor-trigger>
-        <span>関連問題</span>
-    </h4>
-</doc-anchor-target>
-<ul>
-<li><a href="https://atcoder.jp/contests/abc102/tasks/abc102_a">ABC102 A Multiple of 2 and N</a> - <a href="https://atcoder.jp/contests/abc102/submissions/22946229">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/arc105/tasks/arc105_b">ARC105 B MAX-=min</a> - <a href="https://atcoder.jp/contests/arc105/submissions/22946285">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc131/tasks/abc131_c">ABC131 C Anti-Division</a> - <a href="https://atcoder.jp/contests/abc131/submissions/22946480">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/arc110/tasks/arc110_a">ARC110 A Redundant Redundancy</a> - <a href="https://atcoder.jp/contests/arc110/submissions/22946589">ACコード</a></li>
-</ul>
-<p>他サイト</p>
-<ul>
-<li><a href="https://yukicoder.me/problems/no/1464">yukicoder No.1464 Number Conversion</a></li>
-</ul>
-<doc-anchor-target id="19中国剰余定理">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#19中国剰余定理">#</doc-anchor-trigger>
-        <span>19.中国剰余定理</span>
-    </h2>
-</doc-anchor-target>
-<p><a href="../../ad/math/crt/">中国剰余定理</a>を参照。</p>
 <doc-anchor-target id="20dfs">
     <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#20dfs">#</doc-anchor-trigger>
@@ -253,38 +184,6 @@ lcmList = foldl1' lcm</code></pre>
     </h2>
 </doc-anchor-target>
 <p><a href="../../snippets/search/search/">探索</a>および<a href="../../snippets/search/tree/">木を扱う</a>を参照。</p>
-<doc-anchor-target id="21二分探索-bisect">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#21二分探索-bisect">#</doc-anchor-trigger>
-        <span>21.二分探索 (bisect)</span>
-    </h2>
-</doc-anchor-target>
-<p>数値群の中で、ある値未満、以下、以上、より大きい、要素がいくつあるかを数える問題を考える。</p>
-<p>Pythonには、整列された配列に対して、整列を保って新たな値を挿入するときの挿入位置を得る<code v-pre>bisect</code>関数があるようだ。
-これは二分探索で効率的に挿入位置を求めるので、求められたその位置の添え字が、
-その値より小さい値の個数となり、上の問題を解くために利用できる。</p>
-<p>値に対して昇順に背番号を付け、値をキー、背番号を値とする <code v-pre>Data.Map</code> や <code v-pre>IntMap</code> を作る。
-このMapに対して <code v-pre>lookupLT/LE/GE/GT</code> 系でアクセスすると、
-問題の要素数を導く材料となる背番号が効率的に取り出せる。
-Mapは内部的に、二分検索木をキーに対して構築しているので、これを辿ることは
-添え字の中点をとる二分探索を実行することに相当している。</p>
-<p>値を発見するだけでよければ <code v-pre>Data.Set</code>, <code v-pre>IntSet</code> も同様に使える。</p>
-<doc-anchor-target id="関連問題-2">
-    <h4>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題-2">#</doc-anchor-trigger>
-        <span>関連問題</span>
-    </h4>
-</doc-anchor-target>
-<ul>
-<li><a href="https://atcoder.jp/contests/abc143/tasks/abc143_d">ABC143 D Triangles</a> - <a href="https://atcoder.jp/contests/abc143/submissions/28779419">ACコード</a>  <br />
-棒の長さが1000以下の整数なので配列の添字にした<a href="https://atcoder.jp/contests/abc143/submissions/14003171">別解</a>  <br />
-ここでさらに要素数が増えると線形に総和を取るのが難しいので、セグメント木のようなデータ構造を導入する必要が生じるか。</li>
-<li><a href="https://atcoder.jp/contests/abc077/tasks/arc084_a">ABC077 C Snuke Festival</a> - <a href="https://atcoder.jp/contests/abc077/submissions/28791823">ACコード</a>  <br />
-問題に特化したアルゴリズムで、大きい方から順にmergesortのように比較して個数を数えることで、 <span class="math">O(n)</span> で計算する<a href="https://atcoder.jp/contests/abc077/submissions/28780649">別解</a></li>
-<li><a href="https://atcoder.jp/contests/abc184/tasks/abc184_f">ABC184 F Programming Contest</a> - <a href="https://atcoder.jp/contests/abc184/submissions/28792499">ACコード</a></li>
-</ul>
-<p>前二つはより効率的な別解があり、関数型アプローチではこの計算をする機会が元々少ないのかもしれない。
-184FはF問題だけあり、二分探索が本質的で、さらにそれを本質的にする、計算量を意識したテクニック「半分全列挙」が必要だった。</p>
 <doc-anchor-target id="22二分探索その他">
     <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#22二分探索その他">#</doc-anchor-trigger>
@@ -365,6 +264,6 @@ Mapは内部的に、二分検索木をキーに対して構築しているの�
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "あのアルゴリズムはどこ？", icon: "file", hasPrism: true, hasMermaid: false, hasMath: true }</script>
+        <script>window.__DOCS__ = { "title": "あのアルゴリズムはどこ？", icon: "file", hasPrism: false, hasMermaid: false, hasMath: false }</script>
     </body>
 </html>

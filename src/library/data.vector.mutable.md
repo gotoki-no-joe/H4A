@@ -4,7 +4,8 @@
 
 同じインタフェースでUnboxedな（正格でより速い）ベクタを提供するData.Vector.Unboxed.Mutableもある。
 
-[hackage](https://hackage.haskell.org/package/vector-0.12.3.0/docs/Data-Vector-Mutable.html)
+[hackage](https://hackage.haskell.org/package/vector-0.12.3.0/docs/Data-Vector-Mutable.html) /
+[Unboxed](https://hackage.haskell.org/package/vector-0.12.3.0/docs/Data-Vector-Unboxed-Mutable.html)
 
 ```haskell
 import qualified Data.Vector.Mutable as MV

@@ -6,7 +6,8 @@
 モナド版の関数については省略。  
 `(//)` は $O(m (n+m))$ なので使うとがっかりする。あくまでimmutableなもの。
 
-[hackage](https://hackage.haskell.org/package/vector-0.12.2.0/docs/Data-Vector.html)
+[hackage](https://hackage.haskell.org/package/vector-0.12.2.0/docs/Data-Vector.html) /
+[Unboxed](https://hackage.haskell.org/package/vector-0.12.2.0/docs/Data-Vector-Unboxed.html)
 
 ```haskell
 import qualified Data.Vector as V

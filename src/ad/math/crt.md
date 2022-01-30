@@ -1,12 +1,5 @@
 # 中国剰余定理
 
-- [中国剰余定理 (CRT) の解説と、それを用いる問題のまとめ](https://qiita.com/drken/items/ae02240cd1f8edfc86fd)
-- [【math編】AtCoder Library 解読 〜Pythonでの実装まで〜](https://qiita.com/R_olldIce/items/3e2c80baa6d5e6f3abe9)
-
-使う分にはこれを移植すれば済むが、理解するのは大変そうだ...
-
-ACLにも含まれている。
-
 ## 問題
 
 $n$ 個の自然数 $m_i$ と整数 $r_i$ による
@@ -29,8 +22,8 @@ $x \equiv y \mod z$
 
 ## コード
 
-(r,m)の対のリストに対して(y,z)を返す。
-空リストに対しては (0,1) が確かに解である。
+$(r,m)$ の対のリストに対して `Just`で包んで $(y,z)$ を返す。
+空リストに対しては $(0,1)$ が確かに解である。
 解がないときは `Nothing` を返す。
 
 ```haskell
@@ -53,13 +46,12 @@ crt = foldM step1 (0,1)
 invGCD :: Int -> Int -> (Int, Int)
 invGCD a b
   | a1 == 0 = (b, 0)
-  | otherwise = loop b a1 0 1
+  | otherwise = post . head . until stop step (b, a1, 0, 1)
   where
     a1 = mod a b
-    loop s 0 m0 m1 = (s, if m0 < 0 then m0 + div b s else m0)
-    loop s t m0 m1 = loop t (s - t * u) m1 (m0 - m1 * u)
-      where
-        u = div s t
+    step (s, t, m0, m1) = (t, s - t * u, m1, m0 - m1 * u) where u = div s t
+    stop (_, t, _, _) = t == 0
+    post (s, _, m0, m1) = (s, if m0 < 0 then m0 + div b s else m0)
 ```
 
 それぞれ以下のページのPythonコードをHaskellに翻訳しただけ。理解はしていない。
@@ -67,23 +59,23 @@ invGCD a b
 - [【math編】AtCoder Library 解読 〜Pythonでの実装まで〜 3.7. 実装](https://qiita.com/R_olldIce/items/3e2c80baa6d5e6f3abe9#37-%E5%AE%9F%E8%A3%85)
 - [【internal_math編①】AtCoder Library 解読 〜Pythonでの実装まで〜 3.7. 実装](https://qiita.com/R_olldIce/items/cebb1f15bf482fddd85e#3-inv_gcd)
 
-### 関連問題
+[あのアルゴリズムはどこ？の18](/readings/whereis/19.crt)より。
+ACLにも含まれている。
 
-- [ABC186 E Throne](https://atcoder.jp/contests/abc186/tasks/abc186_e) - [ACコード](https://atcoder.jp/contests/abc186/submissions/28756587)
-- [ABC193 E Oversleeping](https://atcoder.jp/contests/abc193/tasks/abc193_e) - 【ACコード】
+## 余談：コーディングスタイル
 
-#### コーディングスタイル
-
-`invGCD`のループ部分を、反復の代わりに `until` を使って書くのがよいらしい。
+`invGCD`の繰り返し計算を `until` でコンパクトにしているが、
+反復関数に展開すると次のようになる。
 
 ```haskell
-invGCD1 :: Int -> Int -> (Int, Int)
-invGCD1 a b
+invGCD :: Int -> Int -> (Int, Int)
+invGCD a b
   | a1 == 0 = (b, 0)
-  | otherwise = post . head . until stop step (b, a1, 0, 1)
+  | otherwise = loop b a1 0 1
   where
     a1 = mod a b
-    step (s, t, m0, m1) = (t, s - t * u, m1, m0 - m1 * u) where u = div s t
-    stop (_, t, _, _) = t == 0
-    post (s, _, m0, m1) = (s, if m0 < 0 then m0 + div b s else m0)
+    loop s 0 m0 m1 = (s, if m0 < 0 then m0 + div b s else m0)
+    loop s t m0 m1 = loop t (s - t * u) m1 (m0 - m1 * u)
+      where
+        u = div s t
 ```
