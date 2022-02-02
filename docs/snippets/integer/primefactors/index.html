@@ -9,27 +9,27 @@
     <!-- Primary Meta Tags -->
     <title>素因数分解（試し割り法）</title>
     <meta name="title" content="素因数分解（試し割り法）">
-    <meta name="description" content="素数リスト primes が 手元にある場合 は、 行5の疑似素数リストの定義をなくせばよい。" />
+    <meta name="description" content="行5の疑似素数リストは、「3より大きい素数は6の倍数±1」に基づいているが、「2より大きい素数は奇数」に基づく2 : [3,5..] でも大差ないかもしれない。" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/primefactors/">
     <meta property="og:title" content="素因数分解（試し割り法）">
-    <meta property="og:description" content="素数リスト primes が 手元にある場合 は、 行5の疑似素数リストの定義をなくせばよい。">
+    <meta property="og:description" content="行5の疑似素数リストは、「3より大きい素数は6の倍数±1」に基づいているが、「2より大きい素数は奇数」に基づく2 : [3,5..] でも大差ないかもしれない。">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/primefactors/">
     <meta property="twitter:title" content="素因数分解（試し割り法）">
-    <meta property="twitter:description" content="素数リスト primes が 手元にある場合 は、 行5の疑似素数リストの定義をなくせばよい。">
+    <meta property="twitter:description" content="行5の疑似素数リストは、「3より大きい素数は6の倍数±1」に基づいているが、「2より大きい素数は奇数」に基づく2 : [3,5..] でも大差ないかもしれない。">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.696895500328" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.697085281480" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696895500328" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697085281480" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696895500328" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697085281480" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -173,7 +173,7 @@
 primeFactors :: Int -&gt; [Int]
 primeFactors n = loop n primes
   where
-    primes = 2 : 3 : [y | x &lt;- [6,12..], y &lt;- [pred x, succ x]]
+    primes = 2 : 3 : [y | x &lt;- [5,11..], y &lt;- [x, x + 2]]
     loop n pps@(p:ps)
       | n == 1    = []
       | n &lt; p * p = [n]
@@ -182,8 +182,9 @@ primeFactors n = loop n primes
       where
         (q,r) = divMod n p</code></pre>
 </doc-codeblock></div>
-<p>素数リスト <code v-pre>primes</code> が<a href="../primes/">手元にある場合</a>は、
-行5の疑似素数リストの定義をなくせばよい。</p>
+<p>行5の疑似素数リストは、「3より大きい素数は6の倍数±1」に基づいているが、
+「2より大きい素数は奇数」に基づく<code v-pre>2 : [3,5..]</code> でも大差ないかもしれない。</p>
+<p>本物の素数リスト <code v-pre>primes</code> が<a href="../primes/">手元にある場合</a>はこの定義をなくせばよい。</p>
 <p><a href="/H4A/readings/whereis/04.primefactors/">あのアルゴリズムはどこ？の4</a>より。</p>
 
 

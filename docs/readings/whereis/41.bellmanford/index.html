@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.696895500328" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.697085281480" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.696895500328" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697085281480" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.696895500328" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697085281480" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -275,6 +275,47 @@ bellmanFord n uvws s = V.create action
           )
         )
       if flag then loop vec f (pred cnt) else return False</code></pre>
+</doc-codeblock></div>
+<p>ちゃんと動いた版。ただし使ったところではTLEして役立たせられなかった。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import Control.Monad
+import Control.Monad.ST
+import qualified Data.Vector.Unboxed as UV
+import qualified Data.Vector.Unboxed.Mutable as MUV
+import Control.Applicative
+
+tooBig, tooSmall :: Int
+tooBig = div maxBound 2
+tooSmall = div minBound 2
+
+bellmanFord :: Int -&gt; [(Int,Int,Int)] -&gt; Int -&gt; (UV.Vector Int, UV.Vector Int)
+bellmanFord n uvws s = runST action
+  where
+    action :: ST s (UV.Vector Int, UV.Vector Int)
+    action = do
+      dist &lt;- MUV.replicate n tooBig
+      MUV.write dist s 0
+      prev &lt;- MUV.replicate n (-1)
+-- 本来はn-1回で終われるが、もう一度行い、そこで浸透が起きなければ負閉路はないとわかる
+      flag &lt;- loop dist prev id n
+-- 負閉路はいくらでも回せるのでコストを即座に無限小にする
+      when flag $ void $ loop dist prev (const tooSmall) (pred n)
+      imdist &lt;- UV.freeze dist
+      imprev &lt;- UV.freeze prev
+      return (imdist, imprev)
+-- 全ての辺について1ステップ浸透させ、浸透が起きたとき続ける、を指定回数だけ行う
+    loop _    _    f 0   = return True
+    loop dist prev f cnt = do
+      flag &lt;- or &lt;$&gt; forM uvws (\(u,v,w) -&gt; do
+        udist &lt;- MUV.read dist u
+        if udist &lt; tooBig then (do
+          let vdist1 = udist + w
+          vdist &lt;- MUV.read dist v
+          if vdist &gt; vdist1 then MUV.write dist v (f vdist1) &gt;&gt; MUV.write prev v u &gt;&gt; return True else return False
+          )
+        else return False
+        )
+      if flag then loop dist prev f (pred cnt) else return False</code></pre>
 </doc-codeblock></div>
 
 

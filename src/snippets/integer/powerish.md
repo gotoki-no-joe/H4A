@@ -18,3 +18,23 @@ powerish mul i a b =
     bs = takeWhile (0 /=) $ iterate (flip div 2) b
     ps = iterate (\x -> mul x x) a
 ```
+
+少し改善。
+
+```haskell
+import Data.Bits
+
+bitSeq n = map (flip testBit 0) $ takeWhile (0 /=) $ iterate (flip shiftR 1) n
+
+-- @gotoki_no_joe
+powerish mul a = \i b -> foldl' {-'-} mul i [p | (True, p) <- zip (bitSeq b) ps]
+  where
+    ps = iterate (\x -> mul x x) a
+```
+
+bitSeqは Data.Bits を使わない下の書き方でも、最適化でやることは同じになる気もする。
+
+```haskell
+bitSeq :: Int -> [Bool]
+bitSeq = map odd . takeWhile (0 /=) . iterate (flip div 2)
+```
