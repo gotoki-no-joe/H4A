@@ -8,6 +8,11 @@
 import Data.Array
 import Data.List
 
+import Control.Monad
+import Control.Monad.ST
+import qualified Data.Vector.Unboxed as UV
+import qualified Data.Vector.Unboxed.Mutable as MUV
+
 -- @gotoki_no_joe
 warshallFloyd :: (Ord a, Num a)
               => Int                         -- 頂点数
@@ -28,4 +33,27 @@ warshallFloyd n graph = result
       ]
     plus (Left a) (Left b) = Left (a+b)
     plus _ _ = Right ()
+
+warshallFloydV :: Int                         -- 頂点数
+              -> [(Int,Int,Int)]             -- グラフ
+              -> (Int -> Int -> Int)           -- 距離
+warshallFloydV n graph = reader n $ UV.create action
+  where
+    reader n v i j = v UV.! (i*n+j)
+    action :: ST s (MUV.MVector s Int)
+    action = do
+      vec <- MUV.replicate (n * n) maxBound
+      forM_ graph (\(i,j,w) -> MUV.write vec (i*n+j) w)
+      forM_ [0..n-1] (\k ->
+        forM_ [0..n-1] (\i -> do
+          dik <- MUV.read vec (i*n+k)
+          when (dik < maxBound) (
+            forM_ [0..n-1] (\j -> do
+              dkj <- MUV.read vec (k*n+j)
+              when (dkj < maxBound) (MUV.modify vec (min (dik + dkj)) (i*n+j))
+              )
+            )
+          )
+        )
+      return vec
 

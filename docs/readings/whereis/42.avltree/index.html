@@ -7,27 +7,27 @@
     <meta name="turbo-cache-control" content="no-cache">
 
     <!-- Primary Meta Tags -->
-    <title>42.平衡二分探索木 (途中)</title>
-    <meta name="title" content="42.平衡二分探索木 (途中)">
+    <title>42.平衡二分探索木</title>
+    <meta name="title" content="42.平衡二分探索木">
     <meta name="description" content="参考" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/readings/whereis/42.avltree/">
-    <meta property="og:title" content="42.平衡二分探索木 (途中)">
+    <meta property="og:title" content="42.平衡二分探索木">
     <meta property="og:description" content="参考">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/readings/whereis/42.avltree/">
-    <meta property="twitter:title" content="42.平衡二分探索木 (途中)">
+    <meta property="twitter:title" content="42.平衡二分探索木">
     <meta property="twitter:description" content="参考">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.697085281480" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.697190264730" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697085281480" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697190264730" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
     <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
     <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
@@ -163,29 +163,76 @@
                 <div id="docs-sidebar-right-toggle"></div>
                
                 <!-- Page content  -->
-<doc-anchor-target id="42平衡二分探索木-途中" class="break-words">
+<doc-anchor-target id="42平衡二分探索木" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#42平衡二分探索木-途中">#</doc-anchor-trigger>
-        <span>42.平衡二分探索木 (途中)</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#42平衡二分探索木">#</doc-anchor-trigger>
+        <span>42.平衡二分探索木</span>
     </h1>
 </doc-anchor-target>
 <p>参考</p>
-<p><a href="https://stnkien.hatenablog.com/entry/avl-tree">Pythonで非再帰AVL木</a></p>
-<p>「非再帰」というのはそういう特別なAVL木という意味ではなく、
+<p><a href="https://stnkien.hatenablog.com/entry/avl-tree">Pythonで非再帰AVL木</a>  <br />
+「非再帰」というのはそういう特別なAVL木という意味ではなく、
 再帰の深さ限界の浅いPythonのために、再帰を使わず反復で実装した、
 ということのようだ。</p>
-<p>必要な機能が、全て <span class="math">O(\log N)</span> で</p>
-<ul>
-<li>要素の挿入</li>
-<li>要素の削除</li>
-<li>要素xの検索</li>
-<li>x以上で最小の要素の検索</li>
-<li>x未満で最大の要素の検索</li>
-<li>k番目の要素の取得</li>
-</ul>
-<p>ということだが、
-最後のものを除いて <code v-pre>Data.Map</code>, <code v-pre>IntMap</code>, <code v-pre>Set</code>, <code v-pre>IntSet</code> に全部ある。  <br />
-関連問題でその機能が必要なものが現われたらまた考えるということで。</p>
+<p>次の表に示す計算が全て <span class="math">O(\log n)</span> でできる値の入れ物、というのが要求。</p>
+<table class="comfortable">
+<thead>
+<tr>
+<th>計算</th>
+<th>Data.Map</th>
+<th>Data.Set</th>
+<th>Data.IntMap</th>
+<th>Data.IntSet</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>要素の挿入</td>
+<td><code v-pre>insert</code> <span class="math">O(\log n)</span></td>
+<td><code v-pre>insert</code> <span class="math">O(\log n)</span></td>
+<td><code v-pre>insert</code> <span class="math">O(\min(n,W))</span></td>
+<td><code v-pre>insert</code> <span class="math">O(\min(n,W))</span></td>
+</tr>
+<tr>
+<td>要素の削除</td>
+<td><code v-pre>delete</code> <span class="math">O(\log n)</span></td>
+<td><code v-pre>delete</code> <span class="math">O(\log n)</span></td>
+<td><code v-pre>delete</code> <span class="math">O(\min(n,W))</span></td>
+<td><code v-pre>delete</code> <span class="math">O(\min(n,W))</span></td>
+</tr>
+<tr>
+<td>要素xの検索</td>
+<td><code v-pre>lookup</code> <span class="math">O(\log n)</span></td>
+<td><code v-pre>member</code> <span class="math">O(\log n)</span></td>
+<td><code v-pre>lookup</code> <span class="math">O(\min(n,W))</span></td>
+<td><code v-pre>lookup</code> <span class="math">O(\min(n,W))</span></td>
+</tr>
+<tr>
+<td>x以上で最小の要素の検索</td>
+<td><code v-pre>lookupGE</code> <span class="math">O(\log n)</span></td>
+<td><code v-pre>lookupGE</code> <span class="math">O(\log n)</span></td>
+<td><code v-pre>lookupGE</code> <span class="math">O(\log n)</span></td>
+<td><code v-pre>lookupGE</code> <span class="math">O(\log n)</span></td>
+</tr>
+<tr>
+<td>x未満で最大の要素の検索</td>
+<td><code v-pre>lookupLT</code> <span class="math">O(\log n)</span></td>
+<td><code v-pre>lookupLT</code> <span class="math">O(\log n)</span></td>
+<td><code v-pre>lookupLT</code> <span class="math">O(\log n)</span></td>
+<td><code v-pre>lookupLT</code> <span class="math">O(\log n)</span></td>
+</tr>
+<tr>
+<td>k番目の要素の取得</td>
+<td><code v-pre>elemAt</code> <span class="math">O(\log n)</span></td>
+<td><code v-pre>elemAt</code> <span class="math">O(\log n)</span></td>
+<td>（なし）</td>
+<td>（なし）</td>
+</tr>
+</tbody>
+</table>
+<p>MapとSetで用が足りるし、<code v-pre>elemAt</code>が不要なら<code v-pre>Int</code>付きも使える。
+<code v-pre>split</code>, <code v-pre>splitRoot</code> あたりを使えば補完できそうだが、
+<code v-pre>Map</code>, <code v-pre>Set</code>に<code v-pre>Int</code>を入れたっていいじゃない。</p>
 <doc-anchor-target id="関連問題">
     <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
@@ -193,11 +240,11 @@
     </h2>
 </doc-anchor-target>
 <ul>
-<li><a href="https://atcoder.jp/contests/abc217/tasks/abc217_d">ABC217 D Cutting Woods</a> - 【ACコード】</li>
-<li><a href="https://atcoder.jp/contests/abc228/tasks/abc228_d">ABC228 D Linear Probing</a> - 【ACコード】</li>
-<li><a href="https://atcoder.jp/contests/abc128/submissions/15993976">ABC128 E Roadwork</a> - <a href="https://atcoder.jp/contests/abc128/submissions/28876122">ACコード</a> IntMapで事足りた。</li>
-<li><a href="https://atcoder.jp/contests/arc033/submissions/15994424">ARC033 C データ構造</a> - 735 ms</li>
-<li><a href="https://atcoder.jp/contests/abc140/submissions/16001495">ABC140 E Second Sum</a> - 579 ms #set仕様(keyのみ)</li>
+<li><a href="https://atcoder.jp/contests/abc217/tasks/abc217_d">ABC217 D Cutting Woods</a> - <a href="https://atcoder.jp/contests/abc217/submissions/25643743">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/abc228/tasks/abc228_d">ABC228 D Linear Probing</a> - <a href="https://atcoder.jp/contests/abc228/submissions/29005587">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/abc128/tasks/abc128_e">ABC128 E Roadwork</a> - <a href="https://atcoder.jp/contests/abc128/submissions/28876122">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/arc033/tasks/arc033_3">ARC033 C データ構造</a> - <a href="https://atcoder.jp/contests/arc033/submissions/29004466">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/abc140/tasks/abc140_e">ABC140 E Second Sum</a></li>
 </ul>
 
 
@@ -271,6 +318,6 @@
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "42.平衡二分探索木 (途中)", icon: "file", hasPrism: false, hasMermaid: false, hasMath: true }</script>
+        <script>window.__DOCS__ = { "title": "42.平衡二分探索木", icon: "file", hasPrism: false, hasMermaid: false, hasMath: true }</script>
     </body>
 </html>

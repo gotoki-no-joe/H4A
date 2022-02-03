@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.697085281480" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.697190264730" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697085281480" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697190264730" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697085281480" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697190264730" defer></script>
     <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
     <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
@@ -239,6 +239,39 @@ warshallFloyd n edges = dn
       , let dikj = dik + dkj, d ! (i,j) &gt; dikj
       ]</code></pre>
 </doc-codeblock></div>
+<p>Vector版</p>
+<p>頂点数Nに対して頂点番号は0～N-1、
+グラフは(出頂点,入頂点,重み)のリストで与え、
+結果は「出発点、終点を与えるとコストを返す」関数で返される。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import Control.Monad
+import Control.Monad.ST
+import qualified Data.Vector.Unboxed as UV
+import qualified Data.Vector.Unboxed.Mutable as MUV
+
+warshallFloydV :: Int                         -- 頂点数
+               -&gt; [(Int,Int,Int)]             -- グラフ
+               -&gt; (Int -&gt; Int -&gt; Int)         -- 距離
+warshallFloydV n graph = reader n $ UV.create action
+  where
+    reader n v i j = v UV.! (i*n+j)
+    action :: ST s (MUV.MVector s Int)
+    action = do
+      vec &lt;- MUV.replicate (n * n) maxBound
+      forM_ graph (\(i,j,w) -&gt; MUV.write vec (i*n+j) w)
+      forM_ [0..n-1] (\k -&gt;
+        forM_ [0..n-1] (\i -&gt; do
+          dik &lt;- MUV.read vec (i*n+k)
+          when (dik &lt; maxBound) (
+            forM_ [0..n-1] (\j -&gt; do
+              dkj &lt;- MUV.read vec (k*n+j)
+              when (dkj &lt; maxBound) (MUV.modify vec (min (dik + dkj)) (i*n+j))
+              )
+            )
+          )
+        )
+      return vec</code></pre>
+</doc-codeblock></div>
 <doc-anchor-target id="関連問題">
     <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
@@ -270,7 +303,7 @@ warshallFloyd n edges = dn
             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
             <span>
                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                <span class="block mt-1">27.ダイクストラ法（途中）</span>
+                <span class="block mt-1">27.ダイクストラ法</span>
             </span>
         </a>
     </div>

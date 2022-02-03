@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.697085281480" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.697190264730" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697085281480" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697190264730" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697085281480" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697190264730" defer></script>
     <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
     <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
@@ -218,12 +218,13 @@ crt = foldM step1 (0,1)
 invGCD :: Int -&gt; Int -&gt; (Int, Int)
 invGCD a b
   | a1 == 0 = (b, 0)
-  | otherwise = post . head . until stop step (b, a1, 0, 1)
+  | otherwise = loop b a1 0 1
   where
     a1 = mod a b
-    step (s, t, m0, m1) = (t, s - t * u, m1, m0 - m1 * u) where u = div s t
-    stop (_, t, _, _) = t == 0
-    post (s, _, m0, m1) = (s, if m0 &lt; 0 then m0 + div b s else m0)</code></pre>
+    loop s 0 m0 m1 = (s, if m0 &lt; 0 then m0 + div b s else m0)
+    loop s t m0 m1 = loop t (s - t * u) m1 (m0 - m1 * u)
+      where
+        u = div s t</code></pre>
 </doc-codeblock></div>
 <p>それぞれ以下のページのPythonコードをHaskellに翻訳しただけ。理解はしていない。</p>
 <ul>
@@ -238,19 +239,18 @@ ACLにも含まれている。</p>
         <span>余談：コーディングスタイル</span>
     </h2>
 </doc-anchor-target>
-<p><code v-pre>invGCD</code>の繰り返し計算を <code v-pre>until</code> でコンパクトにしているが、
-反復関数に展開すると次のようになる。</p>
+<p><code v-pre>invGCD</code>の繰り返し計算を <code v-pre>until</code> でコンパクトにすると次のようにも書けるが、
+状態をひとつの値として受け渡すためにタプルを作るのが少しムズムズする。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">invGCD :: Int -&gt; Int -&gt; (Int, Int)
 invGCD a b
   | a1 == 0 = (b, 0)
-  | otherwise = loop b a1 0 1
+  | otherwise = post . head . until stop step (b, a1, 0, 1)
   where
     a1 = mod a b
-    loop s 0 m0 m1 = (s, if m0 &lt; 0 then m0 + div b s else m0)
-    loop s t m0 m1 = loop t (s - t * u) m1 (m0 - m1 * u)
-      where
-        u = div s t</code></pre>
+    step (s, t, m0, m1) = (t, s - t * u, m1, m0 - m1 * u) where u = div s t
+    stop (_, t, _, _) = t == 0
+    post (s, _, m0, m1) = (s, if m0 &lt; 0 then m0 + div b s else m0)</code></pre>
 </doc-codeblock></div>
 
 

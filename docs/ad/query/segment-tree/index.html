@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.697085281480" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.697190264730" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697085281480" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697190264730" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697085281480" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697190264730" defer></script>
     <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
     <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
@@ -172,6 +172,12 @@
 </doc-anchor-target>
 <p>一次元配列があり、その様々な区間に対して特定の演算を行った結果を何度も求めたり、
 配列の要素を更新したりする操作が <span class="math">O(\log n)</span> で行えるデータ構造。</p>
+<doc-anchor-target id="immutable-tree版">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#immutable-tree版">#</doc-anchor-trigger>
+        <span>Immutable Tree版</span>
+    </h2>
+</doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
 data SegmentTree a = SegmentTree Int (a-&gt;a-&gt;a) a (STree a)
@@ -179,15 +185,13 @@ data SegmentTree a = SegmentTree Int (a-&gt;a-&gt;a) a (STree a)
 data STree a = Leaf a | Node a (STree a) (STree a)
 
 -- セグメント木を作る
-makeSegTree :: [a]            -- データ列
-            -&gt; (a-&gt;a-&gt;a)      -- モノイド演算
-            -&gt; a              -- 単位元
-            -&gt; SegmentTree a
-makeSegTree xs op i = SegmentTree w op i t
+-- 引数：データ列, モノイド演算, 単位元
+makeSegTree :: [a] -&gt; (a-&gt;a-&gt;a) -&gt; a -&gt; SegmentTree a
+makeSegTree xs op u = SegmentTree w op u t
   where
     len = length xs
     w = head $ dropWhile (len &gt;) $ iterate (2 *) 1
-    t = loop w (xs ++ repeat i)
+    t = loop w (xs ++ repeat u)
     loop 1 (x:_) = Leaf x
     loop w xs = mkNode op lt rt
       where
@@ -201,12 +205,12 @@ getVal (Node x _ _) = x
 
 mkNode op lt rt = Node (getVal lt `op` getVal rt) lt rt
 
--- 木の第j要素(0始まり)をxに変更する
+-- 第j要素(0始まり)をxに変更する
 updateSegTree :: SegmentTree a -&gt; Int -&gt; a -&gt; SegmentTree a
-updateSegTree (SegmentTree w op i t) j x = SegmentTree w op i t1
+updateSegTree (SegmentTree w op u t) j x = SegmentTree w op u t1
   where
     t1 = loop w j x t
-    loop 1 _ x _ = Leaf x -- arg2 = 0, arg4 = Leaf oldval
+    loop 1 _ x _ = Leaf xoldval
     loop w j x (Node _ lt rt)
       | j &lt; w2 = mkNode op lt1 rt
       | True   = mkNode op lt rt1
@@ -215,20 +219,73 @@ updateSegTree (SegmentTree w op i t) j x = SegmentTree w op i t1
         lt1 = loop w2 j x lt
         rt1 = loop w2 (j-w2) x rt
 
--- 木の第i要素から連続するj要素に対する演算結果を求める
+-- 木の第a要素から第b要素の手前までを演算した結果を求める
 querySegTree :: SegmentTree a -&gt; Int -&gt; Int -&gt; a
-querySegTree (SegmentTree w op i t) p q
-  | q == 0 = i
-  | True   = loop w t p q
+querySegTree (SegmentTree w op u t) a b = loop 0 w w t
   where
-    loop w t 0 q | w == q = getVal t
-    loop w (Node _ lt rt) p q
-      | p+q &lt;= w2 = loop w2 lt p q
-      | w2  &lt;= p  = loop w2 rt (p-w2) q
-      | True = loop w2 lt p q1 `op` loop w2 rt 0 (q-q1)
+    loop p q _ t
+      | b &lt;= p || q &lt;= a = u
+      | a &lt;= p &amp;&amp; q &lt;= b = getVal t
+    loop l r w (Node _ lt rt)
+      | otherwise = loop p m w2 lt `op` loop m q w2 rt
       where
         w2 = div w 2
-        q1 = w2-p</code></pre>
+        m = p + w2</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="mutable-vector版">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#mutable-vector版">#</doc-anchor-trigger>
+        <span>Mutable Vector版</span>
+    </h2>
+</doc-anchor-target>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import Control.Monad
+import qualified Data.Vector.Unboxed.Mutable as MUV
+
+data SegmentTree a = SegmentTree Int (a-&gt;a-&gt;a) a (STree a)
+
+type STree a = MUV.IOVector a
+
+makeSegTree :: MUV.Unbox a =&gt; [a] -&gt; (a-&gt;a-&gt;a) -&gt; a -&gt; IO (SegmentTree a)
+makeSegTree xs op u = do
+  let len = length xs
+  let w = head $ dropWhile (len &gt;) $ iterate (2 *) 1
+  vec &lt;- MUV.new (w * 2 - 1)
+  forM_ (zip [0..pred w] (xs ++ repeat u))
+        (\(i,x) -&gt; MUV.write vec (i + w - 1) x)
+  forM_ [w-2,w-1..0] (\k -&gt; do
+    l &lt;- MUV.read vec (k*2+1)
+    r &lt;- MUV.read vec (k*2+2)
+    MUV.write vec k (op l r)
+    )
+  return $ SegmentTree w op e vec
+
+updateSegTree :: MUV.Unbox a =&gt; SegmentTree a -&gt; Int -&gt; a -&gt; IO ()
+updateSegTree (SegmentTree w op _ vec) j x =
+  do
+    MUV.write vec i0 x
+    forM_ upwards (\i -&gt; do
+      l &lt;- MUV.read vec (i*2+1)
+      r &lt;- MUV.read vec (i*2+2)
+      MUV.write vec i (op l r)
+      )
+  where
+    i0 = j + w - 1
+    upwards = tail $ takeWhile (0 &lt;=) $ iterate step i0
+    step i = div (pred i) 2
+
+querySegTree :: MUV.Unbox a =&gt; SegmentTree a -&gt; Int -&gt; Int -&gt; IO a -- [左,右)で範囲を指定
+querySegTree (SegmentTree w op u vec) a b = loop vec 0 w w 0
+  where
+    loop vec p q w i
+      | q &lt;= a || b &lt;= p = return u
+      | a &lt;= p &amp;&amp; q &lt;= b = MUV.read vec i
+      | otherwise = do
+        let w2 = div w 2
+        let m = p + w2
+        l &lt;- loop vec p m w2 (i*2+1)
+        r &lt;- loop vec m q w2 (i*2+2)
+        return (op l r)</code></pre>
 </doc-codeblock></div>
 <ul>
 <li><a href="/H4A/readings/whereis/29.segment-tree/">あのアルゴリズムはどこ？の29</a></li>

@@ -9,17 +9,17 @@ order: -01000
 <hr/>
 
 
-## 16.コンビネーション
-
+16.コンビネーション
 [二項係数](../ad/math/combination/) を参照。
+要書き戻し。
 
-
-## 20.DFS
-
+20.DFS
 [探索](../snippets/search/search/)および[木を扱う](../snippets/search/tree/)を参照。
+要書き戻し。
 
-
-## 22.二分探索（その他）
-
+22.二分探索（その他）
 [二分探索](/snippets/search/binary-search/)および
 [三分探索](/snippets/search/ternary-search/)を参照。
+
+34.BitDP
+未着手

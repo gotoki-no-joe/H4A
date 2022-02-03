@@ -46,12 +46,13 @@ crt = foldM step1 (0,1)
 invGCD :: Int -> Int -> (Int, Int)
 invGCD a b
   | a1 == 0 = (b, 0)
-  | otherwise = post . head . until stop step (b, a1, 0, 1)
+  | otherwise = loop b a1 0 1
   where
     a1 = mod a b
-    step (s, t, m0, m1) = (t, s - t * u, m1, m0 - m1 * u) where u = div s t
-    stop (_, t, _, _) = t == 0
-    post (s, _, m0, m1) = (s, if m0 < 0 then m0 + div b s else m0)
+    loop s 0 m0 m1 = (s, if m0 < 0 then m0 + div b s else m0)
+    loop s t m0 m1 = loop t (s - t * u) m1 (m0 - m1 * u)
+      where
+        u = div s t
 ```
 
 それぞれ以下のページのPythonコードをHaskellに翻訳しただけ。理解はしていない。
@@ -64,18 +65,17 @@ ACLにも含まれている。
 
 ## 余談：コーディングスタイル
 
-`invGCD`の繰り返し計算を `until` でコンパクトにしているが、
-反復関数に展開すると次のようになる。
+`invGCD`の繰り返し計算を `until` でコンパクトにすると次のようにも書けるが、
+状態をひとつの値として受け渡すためにタプルを作るのが少しムズムズする。
 
 ```haskell
 invGCD :: Int -> Int -> (Int, Int)
 invGCD a b
   | a1 == 0 = (b, 0)
-  | otherwise = loop b a1 0 1
+  | otherwise = post . head . until stop step (b, a1, 0, 1)
   where
     a1 = mod a b
-    loop s 0 m0 m1 = (s, if m0 < 0 then m0 + div b s else m0)
-    loop s t m0 m1 = loop t (s - t * u) m1 (m0 - m1 * u)
-      where
-        u = div s t
+    step (s, t, m0, m1) = (t, s - t * u, m1, m0 - m1 * u) where u = div s t
+    stop (_, t, _, _) = t == 0
+    post (s, _, m0, m1) = (s, if m0 < 0 then m0 + div b s else m0)
 ```

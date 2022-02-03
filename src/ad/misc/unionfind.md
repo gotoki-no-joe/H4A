@@ -136,5 +136,4 @@ uniteUF f vec i j =
 
 AtCoder Class Library の
 [DSU](https://atcoder.github.io/ac-library/production/document_ja/dsu.html)
-は同一の機能を提供する。
-裏にあるデータ構造が何かは不明。
+とは、Disjoint Set Union, 素集合データ構造のことで、つまり同じもの。

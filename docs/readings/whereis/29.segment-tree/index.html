@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.697085281480" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.697190264730" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697085281480" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697190264730" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697085281480" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697190264730" defer></script>
     <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
     <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
@@ -177,7 +177,6 @@
 <li><a href="https://github.com/shakayami/ACL-for-python/wiki/segtree">ACL for Pythonの説明</a></li>
 <li><a href="https://algo-logic.info/segment-tree/#:%7E:text=%E3%82%BB%E3%82%B0%E3%83%A1%E3%83%B3%E3%83%88%E6%9C%A8%E3%81%A8%E3%81%AF%E3%80%81%E5%AE%8C%E5%85%A8,%E9%A0%BB%E5%87%BA%E3%81%A8%E3%81%AA%E3%81%A3%E3%81%A6%E3%81%84%E3%81%BE%E3%81%99%E3%80%82">原理の説明</a></li>
 </ul>
-<p>原理の方では、要素一つの更新でなく区間に対する更新を効率的に行う「遅延評価セグメント木」も説明されているが、ACL for Pythonにはなさそうなのと、理解が追いつかないので今後の課題とする。</p>
 <doc-anchor-target id="解説">
     <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#解説">#</doc-anchor-trigger>
@@ -196,14 +195,18 @@
 
 data STree a = Leaf a | Node a (STree a) (STree a) -- private</code></pre>
 </doc-codeblock></div>
-<p>木の末端から順に、中間ノードの保持する値を求めることで木を構築する。</p>
+<p>木の末端から順に、中間ノードの保持する値を求めることで木を構築する。<br />
+（左側の子を作るときにリストを <code v-pre>lt = loop w2 (take w2 xs)</code> と切り取らずに渡しているのは、
+<code v-pre>drop</code>はリンクリストを辿るだけなのに対して、
+<code v-pre>take</code>は新しいセルの割り当てとコピーを伴うので遅いため、
+その必要がないところで<code v-pre>take</code>しない小技である。）</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">makeSegTree :: [a] -&gt; (a-&gt;a-&gt;a) -&gt; a -&gt; SegmentTree a
-makeSegTree xs op e = SegmentTree w op e t
+makeSegTree xs op u = SegmentTree w op u t
   where
     len = length xs
     w = head $ dropWhile (len &gt;) $ iterate (2 *) 1
-    t = loop w (xs ++ repeat e)
+    t = loop w (xs ++ repeat u)
     loop 1 (x:_) = Leaf x
     loop w xs = mkNode op lt rt
       where
@@ -222,7 +225,7 @@ mkNode op lt rt = Node (getVal lt `op` getVal rt) lt rt</code></pre>
 自分の管理する要素数の半分を超える位置の要素なら右、さもなくば左に更新を伝達し、結果を受けて自分も更新する。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">updateSegTree :: SegmentTree a -&gt; Int -&gt; a -&gt; SegmentTree a
-updateSegTree (SegmentTree w op i t) j x = SegmentTree w op i t1
+updateSegTree (SegmentTree w op u t) j x = SegmentTree w op u t1
   where
     t1 = loop w j x t
     loop 1 _ x _ = Leaf x -- arg2 = 0, arg4 = Leaf oldval
@@ -234,34 +237,116 @@ updateSegTree (SegmentTree w op i t) j x = SegmentTree w op i t1
         lt1 = loop w2 j x lt
         rt1 = loop w2 (j-w2) x rt</code></pre>
 </doc-codeblock></div>
-<p>区間に対する計算結果は、その区間を覆うノードの値を集めることで求められる。<br />
-区間は下限と要素数で指定する。<br />
-あるノードに対する問い合わせに対して、次のように振る舞うことになる。</p>
+<p>区間に対する計算結果は、その区間を覆うノードの値を集めることで求められる。
+区間はその要素を含む下限と、含まない上限の添え字で <span class="math">[a,b)</span> と指定する。
+現在のノードが受け持つ範囲を復元しながら、再帰的な呼び出しにより求められる値を次のように構成する。
+<span class="math">[a,b)</span> の側は固定し、加工しない。</p>
 <ul>
-<li>下限が0、要素数が自分の幅と等しければ、自身の値が結果である。</li>
-<li>上限が半分を超えなければ、左の子に丸投げする。</li>
-<li>下限が半分を超えるならば、右の子に丸投げする。このとき位置をずらす。</li>
-<li>さもなくば両方にまたがっているので、自身の半分の位置で問い合わせを左の子用と右の子用のふたつに分割して、両方に問い合わせて、結果を結合する。</li>
+<li>根ノードの受け持ち範囲は <span class="math">[0,w)</span> である。その幅は <span class="math">w</span> である。</li>
+<li>以降、<span class="math">w</span> を半分にしながら、左と右の受け持ち範囲は半々になっていく。<br />
+現在注目している頂点の受け持ち範囲を <span class="math">[p,q)</span> とする。</li>
+<li>要求範囲が受け持ち範囲を全く外れている場合、単位元を返す。</li>
+<li>さもなくば、部分的に重なりがあるので、左右の子両方に問い合わせ、結果を演算で結合する。</li>
 </ul>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">querySegTree :: SegmentTree a -&gt; Int -&gt; Int -&gt; a
-querySegTree (SegmentTree w op i t) p q
-  | q == 0 = i
-  | True   = loop w t p q
+querySegTree (SegmentTree w op u t) a b = loop 0 w w t
   where
-    loop w t 0 q | w == q = getVal t
-    loop w (Node _ lt rt) p q
-      | p+q &lt;= w2 = loop w2 lt p q
-      | w2  &lt;= p  = loop w2 rt (p-w2) q
-      | True = loop w2 lt p q1 `op` loop w2 rt 0 (q-q1)
+    loop p q _ t
+      | b &lt;= p || q &lt;= a = u
+      | a &lt;= p &amp;&amp; q &lt;= b = getVal t
+    loop l r w (Node _ lt rt)
+      | otherwise = loop p m w2 lt `op` loop m q w2 rt
       where
         w2 = div w 2
-        q1 = w2-p</code></pre>
+        m = p + w2</code></pre>
 </doc-codeblock></div>
-<p>区間に対する更新も、この関数の振る舞いを使えばできそうだ。遅延評価はHaskellが勝手にやってくれる。</p>
-<p>この木に対する二分探索をどう抽象化してよいかよくわからない。のでこれも保留。</p>
-<p><a href="/H4A/ad/query/segment-tree/">完成した実装まとめ</a></p>
-<p>使えるモノイド演算の例をまとめておく。丸パクリだが。</p>
+<!--
+区間に対する更新も、この関数の振る舞いを使えばできそうだ。遅延評価はHaskellが勝手にやってくれる。
+この木に対する二分探索をどう抽象化してよいかよくわからない。のでこれも保留。
+[完成した実装まとめ](/ad/query/segment-tree)
+-->
+<doc-anchor-target id="mutable-vectorによる実装">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#mutable-vectorによる実装">#</doc-anchor-trigger>
+        <span>Mutable Vectorによる実装</span>
+    </h2>
+</doc-anchor-target>
+<p>このアルゴリズムの本質は上で述べたような二分木の操作であるが、immutableなTreeでそのまま実現すると、ノードを辿ったり作ったりする計算コストの係数が大きい。</p>
+<p>ヒープソートにおいて二分木を一次元配列に押し込めたのと同じ方法で、セグメント木の各ノードを一次元配列に納める。すると木を辿ることは添え字の計算で、ノードの更新はmutable vectorの更新で行え、各操作が効率的に実装できる。</p>
+<p>根は添え字0に、添え字 <span class="math">k</span> のノードの二つの子は添え字 <span class="math">2k+1, 2k+2</span> になる。
+要素数nをちょうど2のべき乗として、葉をn持つ二分木のノードの総数は
+<span class="math">n + n/2 + n/4 + \dots + 1 = 2n-1</span> である。
+つまり、添え字が <span class="math">n-2</span> までが中間ノードで、<span class="math">n-1</span> ～ <span class="math">2n-2</span> までの <span class="math">n</span> 要素が葉である。</p>
+<p>データ構造は木の定義だけ変更する。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import Control.Monad
+import qualified Data.Vector.Unboxed.Mutable as MUV
+
+data SegmentTree a = SegmentTree Int (a-&gt;a-&gt;a) a (STree a)
+
+type STree a = MUV.IOVector a</code></pre>
+</doc-codeblock></div>
+<p>構築は、与えられた初期値を葉の位置に書き込んだあと、
+葉のすぐ下のノードから根の方へループで更新することで初期化できる。</p>
+<p>初期値と大きさをリストで与える代わりに、
+大きさだけを指定して単位元で埋める版や、指定した初期値で埋める版、
+などの異なる初期構築の方法が考えられるが、どれがよいのだろう。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">makeSegTree :: MUV.Unbox a =&gt; [a] -&gt; (a-&gt;a-&gt;a) -&gt; a -&gt; IO (SegmentTree a)
+makeSegTree xs op u = do
+  let len = length xs
+  let w = head $ dropWhile (len &gt;) $ iterate (2 *) 1
+  vec &lt;- MUV.new (w * 2 - 1)
+  forM_ (zip [0..pred w] (xs ++ repeat u))
+        (\(i,x) -&gt; MUV.write vec (i + w - 1) x)
+  forM_ [w-2,w-1..0] (\k -&gt; do
+    l &lt;- MUV.read vec (k*2+1)
+    r &lt;- MUV.read vec (k*2+2)
+    MUV.write vec k (op l r)
+    )
+  return $ SegmentTree w op e vec</code></pre>
+</doc-codeblock></div>
+<p>更新操作では、指定された一点を更新した後、親ノードをたどる添え字計算を、別のループを回して求めている形になった。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">updateSegTree :: MUV.Unbox a =&gt; SegmentTree a -&gt; Int -&gt; a -&gt; IO ()
+updateSegTree (SegmentTree w op _ vec) j x =
+  do
+    MUV.write vec i0 x
+    forM_ upwards (\i -&gt; do
+      l &lt;- MUV.read vec (i*2+1)
+      r &lt;- MUV.read vec (i*2+2)
+      MUV.write vec i (op l r)
+      )
+  where
+    i0 = j + w - 1
+    upwards = tail $ takeWhile (0 &lt;=) $ iterate step i0
+    step i = div (pred i) 2</code></pre>
+</doc-codeblock></div>
+<p>問い合わせ操作も特に難しいことはない。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">querySegTree :: MUV.Unbox a =&gt; SegmentTree a -&gt; Int -&gt; Int -&gt; IO a -- [左,右)で範囲を指定
+querySegTree (SegmentTree w op u vec) a b = loop vec 0 w w 0
+  where
+    loop vec p q w i
+      | q &lt;= a || b &lt;= p = return u
+      | a &lt;= p &amp;&amp; q &lt;= b = MUV.read vec i
+      | otherwise = do
+        let w2 = div w 2
+        let m = p + w2
+        l &lt;- loop vec p m w2 (i*2+1)
+        r &lt;- loop vec m q w2 (i*2+2)
+        return (op l r)</code></pre>
+</doc-codeblock></div>
+<p>querySegTreeのloopへ不自然にvecを渡しているのは、型のため。</p>
+<p>両方の版を<a href="/H4A/ad/query/segment-tree/">セグメント木</a>に置く。</p>
+<doc-anchor-target id="使えるモノイド演算の例">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#使えるモノイド演算の例">#</doc-anchor-trigger>
+        <span>使えるモノイド演算の例</span>
+    </h2>
+</doc-anchor-target>
+<p>丸パクリどころか一部は何かもよくわからないまま転載。</p>
 <table class="comfortable">
 <thead>
 <tr>
@@ -318,7 +403,7 @@ querySegTree (SegmentTree w op i t) p q
 </tr>
 </tbody>
 </table>
-<p>0は任意の数で「割り切れる」ため、0と任意の数xの最大公約数はxとなり、0はgcdの単位元といえる、という理屈のようだ。ただgcdを0まで拡張すると、0と0のgcdが「全ての素数の積」になってしまうような。</p>
+<p>0は任意の数で「割り切れる」ため、0と任意の数xの最大公約数はxとなり、0はgcdの単位元といえる、という理屈のようだ。</p>
 <p>ビット演算は Data.Bits モジュールにある。</p>
 <p>他に、多項式の積、単位元は定数式1、<code v-pre>\(a,b) (c,d) -&gt; (a*c, a*d+b)</code> 単位元は(1,0)、行列積で単位元は単位行列、というものもあるらしい。</p>
 <doc-anchor-target id="関連問題">
@@ -328,9 +413,9 @@ querySegTree (SegmentTree w op i t) p q
     </h2>
 </doc-anchor-target>
 <ul>
-<li><a href="https://atcoder.jp/contests/abc185/tasks/abc185_f">ABC185 F Range Xor Query</a> - <a href="https://atcoder.jp/contests/abc185/submissions/23133946">ACコード</a>　セグメント木の例題</li>
-<li><a href="https://atcoder.jp/contests/abc125/tasks/abc125_c">ABC123 C GCD on Blackboard</a> - <a href="https://atcoder.jp/contests/abc125/submissions/28989631">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abl/tasks/abl_d">ACL Beginner Contest D Flat Subsequence</a> - <a href="https://atcoder.jp/contests/abl/submissions/28994033">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/abc185/tasks/abc185_f">ABC185 F Range Xor Query</a> - <a href="https://atcoder.jp/contests/abc185/submissions/23133946">ACコード</a>　セグメント木の例題 immutable版</li>
+<li><a href="https://atcoder.jp/contests/abc125/tasks/abc125_c">ABC123 C GCD on Blackboard</a> - <a href="https://atcoder.jp/contests/abc125/submissions/28989631">ACコード</a> immutable版</li>
+<li><a href="https://atcoder.jp/contests/abl/tasks/abl_d">ACL Beginner Contest D Flat Subsequence</a> - <a href="https://atcoder.jp/contests/abl/submissions/28994033">ACコード</a> mutable版が必須</li>
 </ul>
 <p>他サイト</p>
 <ul>
@@ -338,77 +423,7 @@ querySegTree (SegmentTree w op i t) p q
 </ul>
 <p>ABC185Fについて、XORの性質から、書き換えのときに値を下から持ち上げる必要すらない。
 足し算に対して引き算のような、逆演算がある場合、その性質を活かした修正操作を準備するべきだろうか。</p>
-<p>ACL Dについて、pure functional な実装では<a href="https://atcoder.jp/contests/abl/submissions/28990296">TLEした</a>。
-mutable vectorで実装しないとダメなんか。→でした。</p>
-<doc-anchor-target id="mutable-vectorによる実装">
-    <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#mutable-vectorによる実装">#</doc-anchor-trigger>
-        <span>Mutable Vectorによる実装</span>
-    </h2>
-</doc-anchor-target>
-<p>性能を得るために、mutable vectorによる実装を試みる。
-ヒープソートにおいて二分木を一次元配列に押し込めたのと同じ方法で、セグメント木の各ノードを一次元配列に納める。
-根は添え字0に、添え字 <span class="math">k</span> のノードの二つの子は添え字 <span class="math">2k+1, 2k+2</span> になる。
-要素数nをちょうど2のべき乗として、葉をn持つ二分木のノードの総数は
-<span class="math">n + n/2 + n/4 + \dots + 1 = 2n-1</span> である。
-つまり、添え字が <span class="math">n-2</span> までが中間ノードで、<span class="math">n-1</span> ～ <span class="math">2n-2</span> までの <span class="math">n</span> 要素が葉である。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">import Control.Monad
-import qualified Data.Vector.Unboxed.Mutable as MUV
-
-data SegmentTree a = SegmentTree Int       -- 木の幅
-                                 (a-&gt;a-&gt;a) -- 演算
-                                 a         -- 単位元
-                                 (STree a) -- 二分木
-
-type STree a = MUV.IOVector a
-
-makeSegTree :: MUV.Unbox a =&gt; [a] -&gt; (a-&gt;a-&gt;a) -&gt; a -&gt; IO (SegmentTree a)
-makeSegTree xs op e = do
-  let len = length xs
-  let w = head $ dropWhile (len &gt;) $ iterate (2 *) 1
-  vec &lt;- MUV.new (w * 2 - 1)
-  forM_ (zip [0..pred w] (xs ++ repeat e))
-        (\(i,x) -&gt; MUV.write vec (i + w - 1) x)
-  forM_ [w-2,w-1..0] (\k -&gt; do
-    l &lt;- MUV.read vec (k*2+1)
-    r &lt;- MUV.read vec (k*2+2)
-    MUV.write vec k (op l r)
-    )
-  return $ SegmentTree w op e vec
-
-updateSegTree :: MUV.Unbox a =&gt; SegmentTree a -&gt; Int -&gt; a -&gt; IO ()
-updateSegTree (SegmentTree w op _ vec) j x =
-  do
-    MUV.write vec i0 x
-    forM_ upwards (\i -&gt; do
-      l &lt;- MUV.read vec (i*2+1)
-      r &lt;- MUV.read vec (i*2+2)
-      MUV.write vec i (op l r)
-      )
-  where
-    i0 = j + w - 1
-    upwards = tail $ takeWhile (0 &lt;=) $ iterate step i0
-    step i = div (pred i) 2
-
-querySegTree :: MUV.Unbox a =&gt; SegmentTree a -&gt; Int -&gt; Int -&gt; IO a -- [左,右)で範囲を指定
-querySegTree (SegmentTree w op u vec) a b = loop vec 0 0 w
-  where
-    loop vec i l r
-      | r &lt;= a || b &lt;= l = return u
-      | a &lt;= l &amp;&amp; r &lt;= b = MUV.read vec i
-      | otherwise = do
-        let m = div (l + r) 2 -- 何ビットめを1にするかを持ちまわす方が速いか？
-        x &lt;- loop vec (i*2+1) l m
-        y &lt;- loop vec (i*2+2) m r
-        return (op x y)</code></pre>
-</doc-codeblock></div>
-<p>querySegTreeでは、範囲の再計算を行う必要もなくなった。
-外れの範囲でも構わず再帰呼び出しをし、呼ばれた側でチェックする。
-ぴったりに範囲が重なっているか確認しなくても、おおわれているならそれでよい、という。
-これはすごい。
-呼ぶ側でも、範囲を踏み越えていても気にせず呼んでいいというのはすごい。</p>
-<p>querySegTreeのloopへ不自然にvecを渡しているのは、型のため。</p>
+<p>ACL Dについて、immutable treeな実装では<a href="https://atcoder.jp/contests/abl/submissions/28990296">TLE</a>だった。</p>
 
 
 
@@ -430,10 +445,10 @@ querySegTree (SegmentTree w op u vec) a b = loop vec 0 0 w
     </div>
 
     <div class="w-1/2">
-        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/readings/whereis/32.doubling/">
+        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/readings/whereis/30.num-inversions/">
             <span>
                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                <span class="block mt-1">32.ダブリング（途中）</span>
+                <span class="block mt-1">30.転倒数（あるいは反転数）（要書き直し）</span>
             </span>
             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
         </a>

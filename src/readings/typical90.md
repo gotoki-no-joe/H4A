@@ -35,4 +35,24 @@ https://atcoder.jp/contests/typical90
 　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/004.jpg?raw=true)
 　適切な前処理、包除原理  
 しかし素朴に`transpose`していては間に合わなかった
-
+5. [Restricted Digits](https://atcoder.jp/contests/typical90/tasks/typical90_e)  
+★7
+　[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/005.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/005.jpg?raw=true)
+　行列累乗・ダブリング　余りを持って桁 DP（小課題 1）　同じ遷移の DP は行列累乗（満点）
+6. [Smallest Subsequence](https://atcoder.jp/contests/typical90/tasks/typical90_f)  
+★5
+　[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/006.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/006.jpg?raw=true)
+7. [CP Classes](https://atcoder.jp/contests/typical90/tasks/typical90_g)  
+★3
+　[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/007.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/007.jpg?raw=true)
+　要素の検索はソートして二分探索  
+命令型の二分探索はHaskellのIntMapだという[別解](https://atcoder.jp/contests/typical90/submissions/21994000)で解いた。
+8. [AtCounter](https://atcoder.jp/contests/typical90/tasks/typical90_h)
+　[ACコード](https://atcoder.jp/contests/typical90/submissions/22045597) DPが後ろからで不明瞭か  
+★4
+　[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/008.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/008.jpg?raw=true)
+　状態 DP による高速化
