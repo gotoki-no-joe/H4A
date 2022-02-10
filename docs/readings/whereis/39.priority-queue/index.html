@@ -25,9 +25,9 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.697190264730" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.697851366268" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697190264730" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697851366268" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
 </head>
     <body>
@@ -182,13 +182,12 @@ AtCoderでは利用できる<a href="/H4A/library/data.heap/">Data.Heap</a>を�
     </h2>
 </doc-anchor-target>
 <ul>
-<li><a href="https://atcoder.jp/contests/abc137/tasks/abc137_d">ABC137 D Summer Vacation</a> - <a href="https://atcoder.jp/contests/abc137/submissions/23182200">ACコード</a><br />
-キューで小さい順に取り出すために符号反転している。キュー自体に持たせる値はなく優先度とした金額だけが重要なのでキューには<code v-pre>()</code>を入れている。</li>
+<li><a href="https://atcoder.jp/contests/abc137/tasks/abc137_d">ABC137 D Summer Vacation</a> - <a href="https://atcoder.jp/contests/abc137/submissions/29034560">ACコード</a> <a href="https://atcoder.jp/contests/abc137/submissions/23182200">IntMapによる自作キュー版</a>より遅くなっているのは、キーがIntかOrdかの差か。</li>
 <li><a href="https://atcoder.jp/contests/agc053/tasks/agc053_b">AGC053 B Taking the middle</a> - 【ACコード】</li>
 </ul>
 <p>他に</p>
 <ul>
-<li><a href="https://atcoder.jp/contests/abc141/tasks/abc141_d">ABC141 D - Powerful Discount Tickets</a> - <a href="https://atcoder.jp/contests/abc141/submissions/12918186">ACコード</a>はIntMapで代用している</li>
+<li><a href="https://atcoder.jp/contests/abc141/tasks/abc141_d">ABC141 D - Powerful Discount Tickets</a> - <a href="https://atcoder.jp/contests/abc141/submissions/12918186">ACコード</a>は優先度付きキューそのものではないが、IntMapのよく似た挙動を利用している</li>
 </ul>
 
 

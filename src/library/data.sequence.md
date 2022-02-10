@@ -113,4 +113,13 @@ insertAt :: Int -> a -> Seq a -> Seq a
 deleteAt :: Int -> Seq a -> Seq a
 ```
 
+## 変換
+
+```haskell
+import Foldable
+
+toList :: Seq a -> [a]
+```
+
+
 (in progress...)

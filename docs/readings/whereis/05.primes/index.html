@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.697190264730" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.697851366268" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697190264730" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697851366268" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697190264730" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697851366268" defer></script>
     <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
     <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
@@ -225,9 +225,10 @@ primes1 = 2 : sieve [] [3,5..]
 <p>しかしこれも、 <code v-pre>[p*2,p*3..]</code> の実体である <code v-pre>enumFromThen (p*2) (p*3)</code> と <code v-pre>merge</code> が
 発見済みの素数の数だけ並ぶ。
 この合成数リストと同じ結果をよりコンパクトに達成するために、
-素数 p ごとに、次に出現するその倍数 np だけを優先度付きキューに入れて、小さいものから取り出す。
-取り出した np を消費したら (n+1)p をキューに投入する。
-そのためには元の p も紐づけておく必要がある。</p>
+優先度付きキューを用いて各リストの先頭の数、
+つまり素数 p ごとに次に出現するその倍数 np だけを入れて、小さいものから取り出す。
+取り出した np を消費したら (n+1)p をキューに投入する、という方法をとる。
+（そのためには元の p も紐づけておく必要がある。）</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">primes2 :: [Int]
 primes2 = 2 : sieve [] [3,5..]
@@ -237,7 +238,7 @@ primes2 = 2 : sieve [] [3,5..]
     sieve         nps  (x:xs)           = x : sieve (insert (x +x,x) nps)    xs</code></pre>
 </doc-codeblock></div>
 <p>新たに見つかった素数 <span class="math">x</span> を合成数リストに登録するとき、<span class="math">x</span> より小さい素数 <span class="math">p</span> について <span class="math">px</span> は全て
-<span class="math">p</span> の倍数として除去済みと言える。なので初期値は <span class="math">2x</span> でなく <span class="math">x^2</span> でよい。
+<span class="math">p</span> の倍数として除去が確定している。なので初期値は <span class="math">2x</span> でなく <span class="math">x^2</span> でよい。
 また、それ以降の増加幅も（奇数だけを気にしているので）<span class="math">2x</span> ずつでよい。
 さらに優先度付きキューを <code v-pre>Data.List</code> による近似から <code v-pre>Data.Heap</code> にし、
 キューが空の場合をなくしたものを
@@ -251,7 +252,7 @@ primes2 = 2 : sieve [] [3,5..]
 <ul>
 <li><a href="https://atcoder.jp/contests/tenka1-2012-qualC/tasks/tenka1_2012_9">天下一プログラマーコンテスト2012 予選C A</a> - <a href="https://atcoder.jp/contests/tenka1-2012-qualC/submissions/27486067">ACコード</a></li>
 <li><a href="https://atcoder.jp/contests/abc149/tasks/abc149_c">ABC149 C Next Prime</a> - <a href="https://atcoder.jp/contests/abc149/submissions/27486099">ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/abc170/tasks/abc170_d">ABC170 D Not Divisible</a> - このコードを使う形では解けていない。別のページで解いているようだ。</li>
+<li><a href="https://atcoder.jp/contests/abc170/tasks/abc170_d">ABC170 D Not Divisible</a> - <a href="https://atcoder.jp/contests/abc170/submissions/26063071">ACコード</a></li>
 </ul>
 <doc-anchor-target id="性能測定">
     <h2>
@@ -295,6 +296,11 @@ filter modとmergeは2,000個、他は10,000個の素数を求めている。</p
 <li>2021/12/28 除去候補の初期値は3xでなくx^2でよいことに気づいた。ら、List版がHeap版を追い抜いた。</li>
 <li>2022/1/28 modを使わない篩を追加。modを使う版より遅い。</li>
 </ul>
+<p>ABC170Dについて、ACコードではMutable Vectorを使っている。
+同じことを<a href="https://atcoder.jp/contests/abc170/submissions/29031838">リスト篩ではTLE8</a>、
+<a href="https://atcoder.jp/contests/abc170/submissions/29031860">ヒープ篩ではTLE4</a>
+という結果を得たので、オーダーとしては（当然）ヒープ篩の方が性能がよい
+（ただしベクタにはかなわない）という観察が得られた。</p>
 
 
 

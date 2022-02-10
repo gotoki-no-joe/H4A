@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.697190264730" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.697851366268" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697190264730" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697851366268" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697190264730" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697851366268" defer></script>
     <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
     <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
@@ -297,6 +297,17 @@ drop :: Int -&gt; Seq a -&gt; Seq a
 splitAt :: Int -&gt; Seq a -&gt; (Seq a, Seq a)
 insertAt :: Int -&gt; a -&gt; Seq a -&gt; Seq a
 deleteAt :: Int -&gt; Seq a -&gt; Seq a</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="変換">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#変換">#</doc-anchor-trigger>
+        <span>変換</span>
+    </h2>
+</doc-anchor-target>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import Foldable
+
+toList :: Seq a -&gt; [a]</code></pre>
 </doc-codeblock></div>
 <p>(in progress...)</p>
 

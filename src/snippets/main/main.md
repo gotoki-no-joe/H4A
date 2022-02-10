@@ -1,69 +1,9 @@
 ---
-order: -10000
+order: -90000
 ---
-# メインルーチン
+# 説明
 
-## コード
-
-### String版
-
-```haskell
-import Control.Monad
-
-main = do
--- 読み込み
-  n <- readLn
-  [a,b,c] <- getLnInts
-  xys <- replicateM n getLnInts
--- 本体
-  let ans = compute n a b c xys
--- 出力
-  print ans
-  putStrLn $ if ans then "Yes" else "No"
-  putStrLn ans
-  putStrLn $ unwords $ map show ans
-  putStrLn $ foldr ($) "" $ intersperse (' ' :) $ map shows ans
-  mapM_ print ans
-
-getLnInts :: IO [Int]
-getLnInts = getLine >>= return . map read . words
-
-compute :: Int -> [Int] -> [[Int]] -> [Int Bool]
-compute n a b c xys =
-```
-
-### ByteString版
-
-```haskell
-import Control.Monad
-import qualified Data.ByteString.Char8 as BS
-import Data.Char
-import Data.List
-
-main = do
--- 読み込み
-  [n] <- bsGetLnInts
-  [a,b,c] <- bsGetLnInts
-  xys <- replicateM n bsGetLnInts
--- 本体
-  let ans = compute n a b c xys
--- 出力
-  print ans
-  putStrLn ans
-  putStrLn $ if ans then "Yes" else "No"
-  putStrLn $ foldr ($) "" $ intersperse (' ' :) $ map shows ans
-  mapM_ print ans
-
-bsGetLnInts :: IO [Int]
-bsGetLnInts = BS.getLine >>= return . unfoldr (BS.readInt . BS.dropWhile isSpace)
-
-compute :: Int -> [Int] -> [[Int]] -> [Int Bool]
-compute n a b c xys = ...
-```
-
-## 説明
-
-### 基本
+## 基本
 
 競技プログラミングでは、参加者がプログラミング言語を自由に選択できるようにするため、
 プログラムが処理するべき入力データはファイルまたは標準入力からテキストで読み込み、
@@ -106,7 +46,7 @@ compute n a b c xys =
 
 「二つの値が書かれた行がn行続く」のような場合、この二つの値をリストでなくタプルで扱いたくなるが、そこは割り切った方がよい。その変換は単純なタイムロスになる。
 
-### Applicative
+## Applicative
 
 ここで、Control.Applicativeの機能を使うと、モナドの結果にさらに純粋な関数を適用できる。これにより、上のコードの読み込み部分がコンパクトにできる。
 
@@ -136,7 +76,7 @@ compute :: Int -> [Int] -> [[Int]] -> [Int Bool]
 compute n a b c xys =
 ```
 
-### 個数をちゃんと数える
+## 個数をちゃんと数える
 
 「残り全部を読む」でAtCoderについてたいていの場合は用が足りるが、
 指定された行数をちゃんと読む方がいいような気がしてきたのでもう少し直すと次のようになる。
@@ -150,7 +90,7 @@ main = do
   ...
 ```
 
-### ByteString
+## ByteString
 
 Haskellのしている、文字列を文字のリストとして扱うやり方は、Preludeの関数で処理できるためとっつきやすいが、処理効率の観点からは絶望的である。
 $2 \times 10^5$ 個のデータの組を読み込む、というような場面でString版のテンプレートを用いると、読み込みでかなりの時間を消費する。

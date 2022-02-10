@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="turbo-root" content="/H4A">
+    <meta name="turbo-cache-control" content="no-cache">
+
+    <!-- Primary Meta Tags -->
+    <title>厳選！C++ アルゴリズム実装に使える 25 の STL 機能</title>
+    <meta name="title" content="厳選！C++ アルゴリズム実装に使える 25 の STL 機能">
+    <meta name="description" content="前編" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/readings/cpp25stl/">
+    <meta property="og:title" content="厳選！C++ アルゴリズム実装に使える 25 の STL 機能">
+    <meta property="og:description" content="前編">
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/readings/cpp25stl/">
+    <meta property="twitter:title" content="厳選！C++ アルゴリズム実装に使える 25 の STL 機能">
+    <meta property="twitter:description" content="前編">
+    
+    <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
+
+    <link href="/H4A/resources/css/retype.css?v=1.10.697851366268" rel="stylesheet" data-turbo-track="reload" />
+
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697851366268" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697851366268" defer></script>
+</head>
+    <body>
+        <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
+    <div class="absolute bottom-0 left-0 bg-gray-100 dark:bg-dark-800" style="top: 5rem; right: 50%"></div>
+
+    <header id="docs-site-header" class="sticky top-0 z-30 flex w-full h-16 bg-white border-b border-gray-200 md:h-20 dark:bg-dark-850 dark:border-dark-650">
+    <div class="container relative flex items-center justify-between flex-grow pr-6 md:justify-start">
+        <!-- Mobile menu button skeleton -->
+        <button v-cloak class="skeleton docs-mobile-menu-button flex items-center justify-center flex-shrink-0 overflow-hidden dark:text-white focus:outline-none rounded-full w-10 h-10 ml-3.5 md:hidden"><svg xmlns="http://www.w3.org/2000/svg" class="mb-px flex-shrink-0" width="24" height="24" viewBox="0 0 24 24" role="presentation" style="margin-bottom: 0px;"><g fill="currentColor"><path d="M2 4h20v2H2zM2 11h20v2H2zM2 18h20v2H2z"></path></g></svg></button>
+        <div v-cloak id="docs-sidebar-toggle"></div>
+
+        <!-- Logo -->
+        <div class="flex items-center justify-between h-full py-2 md:w-75">
+            <div class="flex items-center px-2 md:px-6">
+                <a id="docs-site-logo" href="/H4A/" class="flex items-center leading-snug text-xl">
+                    <span class="dark:text-white font-semibold line-clamp-1 md:line-clamp-2">Haskell for AtCoder</span>
+                </a><span class="hidden px-2 py-1 ml-4 text-sm font-semibold leading-none text-root-logo-label-text bg-root-logo-label-bg rounded-sm md:inline-block">(引っ越し作業中)</span>
+            </div>
+
+            <span class="hidden h-8 border-r md:inline-block dark:border-dark-650"></span>
+        </div>
+
+        <div class="flex justify-between md:flex-grow">
+            <!-- Top Nav -->
+            <nav class="hidden md:flex">
+    <ul class="flex flex-col mb-4 md:pl-16 md:mb-0 md:flex-row md:items-center">
+    </ul>
+</nav>
+
+            <!-- Header Right Skeleton -->
+            <div v-cloak class="flex justify-end flex-grow skeleton">
+
+                <!-- Search input mock -->
+                <div class="relative hidden w-40 lg:block lg:max-w-sm lg:ml-auto">
+                    <div class="absolute flex items-center justify-center h-full pl-3 dark:text-dark-300">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon-base" width="16" height="16" viewBox="0 0 24 24" aria-labelledby="icon" role="presentation"  style="margin-bottom: 1px;"><g fill="currentColor" ><path d="M21.71 20.29l-3.68-3.68A8.963 8.963 0 0020 11c0-4.96-4.04-9-9-9s-9 4.04-9 9 4.04 9 9 9c2.12 0 4.07-.74 5.61-1.97l3.68 3.68c.2.19.45.29.71.29s.51-.1.71-.29c.39-.39.39-1.03 0-1.42zM4 11c0-3.86 3.14-7 7-7s7 3.14 7 7c0 1.92-.78 3.66-2.04 4.93-.01.01-.02.01-.02.01-.01.01-.01.01-.01.02A6.98 6.98 0 0111 18c-3.86 0-7-3.14-7-7z" ></path></g></svg>
+                    </div>
+
+                    <input class="w-full h-10 transition-colors duration-200 ease-in bg-gray-200 border border-transparent rounded md:text-sm hover:bg-white hover:border-gray-300 focus:outline-none focus:bg-white focus:border-gray-500 dark:bg-dark-600 dark:border-dark-600 placeholder-gray-400 dark:placeholder-dark-400"
+                    style="padding: 0.625rem 0.75rem 0.625rem 2rem" type="text" placeholder="Search docs" />
+                </div>
+
+                <!-- Mobile search button mock -->
+                <div class="flex items-center justify-center w-10 h-10 lg:hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 icon-base" width="20" height="20" viewBox="0 0 24 24" aria-labelledby="icon" role="presentation"  style="margin-bottom: 0px;"><g fill="currentColor" ><path d="M21.71 20.29l-3.68-3.68A8.963 8.963 0 0020 11c0-4.96-4.04-9-9-9s-9 4.04-9 9 4.04 9 9 9c2.12 0 4.07-.74 5.61-1.97l3.68 3.68c.2.19.45.29.71.29s.51-.1.71-.29c.39-.39.39-1.03 0-1.42zM4 11c0-3.86 3.14-7 7-7s7 3.14 7 7c0 1.92-.78 3.66-2.04 4.93-.01.01-.02.01-.02.01-.01.01-.01.01-.01.02A6.98 6.98 0 0111 18c-3.86 0-7-3.14-7-7z" ></path></g></svg>
+                </div>
+
+                <!-- Dark mode switch placehokder -->
+                <div class="w-10 h-10 lg:ml-2"></div>
+
+                <!-- History button mock -->
+                <div class="flex items-center justify-center w-10 h-10" style="margin-right: -0.625rem;">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="flex-shrink-0 icon-base" width="22" height="22" viewBox="0 0 24 24" aria-labelledby="icon" role="presentation"  style="margin-bottom: 0px;"><g fill="currentColor" ><g ><path d="M12.01 6.01c-.55 0-1 .45-1 1V12a1 1 0 00.4.8l3 2.22a.985.985 0 001.39-.2.996.996 0 00-.21-1.4l-2.6-1.92V7.01c.02-.55-.43-1-.98-1z"></path><path d="M12.01 1.91c-5.33 0-9.69 4.16-10.05 9.4l-.29-.26a.997.997 0 10-1.34 1.48l1.97 1.79c.19.17.43.26.67.26s.48-.09.67-.26l1.97-1.79a.997.997 0 10-1.34-1.48l-.31.28c.34-4.14 3.82-7.41 8.05-7.41 4.46 0 8.08 3.63 8.08 8.09s-3.63 8.08-8.08 8.08c-2.18 0-4.22-.85-5.75-2.4a.996.996 0 10-1.42 1.4 10.02 10.02 0 007.17 2.99c5.56 0 10.08-4.52 10.08-10.08.01-5.56-4.52-10.09-10.08-10.09z"></path></g></g></svg>
+                </div>
+            </div>
+
+            <div v-cloak class="flex items-center justify-end flex-grow">
+                <div id="docs-mobile-search-button"></div>
+                <doc-search-desktop></doc-search-desktop>
+
+                <doc-theme-switch class="lg:ml-2"></doc-theme-switch>
+                <doc-history></doc-history>
+            </div>
+        </div>
+    </div>
+</header>
+
+
+    <div class="container relative flex bg-white">
+        <!-- Sidebar Skeleton -->
+<div v-cloak class="fixed flex flex-col flex-shrink-0 duration-300 ease-in-out bg-gray-100 border-gray-200 sidebar top-20 w-75 border-r h-screen md:sticky transition-transform skeleton dark:bg-dark-800 dark:border-dark-650">
+
+    <!-- Render this div, if config.showSidebarFilter is `true` -->
+    <div class="flex items-center h-16 px-6">
+        <input class="w-full h-8 px-3 py-2 transition-colors duration-200 ease-linear bg-white border border-gray-200 rounded shadow-none text-sm focus:outline-none focus:border-gray-600 dark:bg-dark-600 dark:border-dark-600" type="text" placeholder="Filter" />
+    </div>
+
+    <div class="pl-6 mb-4 mt-1">
+        <div class="w-32 h-3 mb-4 bg-gray-200 rounded-full loading dark:bg-dark-600"></div>
+        <div class="w-48 h-3 mb-4 bg-gray-200 rounded-full loading dark:bg-dark-600"></div>
+        <div class="w-40 h-3 mb-4 bg-gray-200 rounded-full loading dark:bg-dark-600"></div>
+        <div class="w-32 h-3 mb-4 bg-gray-200 rounded-full loading dark:bg-dark-600"></div>
+        <div class="w-48 h-3 mb-4 bg-gray-200 rounded-full loading dark:bg-dark-600"></div>
+        <div class="w-40 h-3 mb-4 bg-gray-200 rounded-full loading dark:bg-dark-600"></div>
+    </div>
+
+    <div class="flex-shrink-0 mt-auto bg-transparent dark:border-dark-650">
+        <a
+    class="flex items-center justify-center flex-nowrap h-16 text-gray-400 dark:text-dark-400 hover:text-gray-700 dark:hover:text-dark-300 transition-colors duration-150 ease-in"
+    target="_blank"
+    href="https://retype.com/"
+    rel="noopener"
+>
+    <span class="text-xs whitespace-nowrap">Powered by</span>
+    <svg xmlns="http://www.w3.org/2000/svg" class="ml-2" fill="currentColor" width="96" height="20" overflow="visible"><path d="M0 0v20h13.59V0H0zm11.15 17.54H2.44V2.46h8.71v15.08zM15.8 20h2.44V4.67L15.8 2.22zM20.45 6.89V20h2.44V9.34z"/><g><path d="M40.16 8.44c0 1.49-.59 2.45-1.75 2.88l2.34 3.32h-2.53l-2.04-2.96h-1.43v2.96h-2.06V5.36h3.5c1.43 0 2.46.24 3.07.73s.9 1.27.9 2.35zm-2.48 1.1c.26-.23.38-.59.38-1.09 0-.5-.13-.84-.4-1.03s-.73-.28-1.39-.28h-1.54v2.75h1.5c.72 0 1.2-.12 1.45-.35zM51.56 5.36V7.2h-4.59v1.91h4.13v1.76h-4.13v1.92h4.74v1.83h-6.79V5.36h6.64zM60.09 7.15v7.48h-2.06V7.15h-2.61V5.36h7.28v1.79h-2.61zM70.81 14.64h-2.06v-3.66l-3.19-5.61h2.23l1.99 3.45 1.99-3.45H74l-3.19 5.61v3.66zM83.99 6.19c.65.55.97 1.4.97 2.55s-.33 1.98-1 2.51-1.68.8-3.04.8h-1.23v2.59h-2.06V5.36h3.26c1.42 0 2.45.28 3.1.83zm-1.51 3.65c.25-.28.37-.69.37-1.22s-.16-.92-.48-1.14c-.32-.23-.82-.34-1.5-.34H79.7v3.12h1.38c.68 0 1.15-.14 1.4-.42zM95.85 5.36V7.2h-4.59v1.91h4.13v1.76h-4.13v1.92H96v1.83h-6.79V5.36h6.64z"/></g></svg>
+</a>
+
+    </div>
+</div>
+
+<!-- Sidebar component -->
+<doc-sidebar v-cloak>
+    <template #sidebar-footer>
+        <div
+            class="flex-shrink-0 mt-auto border-t md:bg-transparent md:border-none dark:border-dark-650"
+        >
+
+            <a
+    class="flex items-center justify-center flex-nowrap h-16 text-gray-400 dark:text-dark-400 hover:text-gray-700 dark:hover:text-dark-300 transition-colors duration-150 ease-in"
+    target="_blank"
+    href="https://retype.com/"
+    rel="noopener"
+>
+    <span class="text-xs whitespace-nowrap">Powered by</span>
+    <svg xmlns="http://www.w3.org/2000/svg" class="ml-2" fill="currentColor" width="96" height="20" overflow="visible"><path d="M0 0v20h13.59V0H0zm11.15 17.54H2.44V2.46h8.71v15.08zM15.8 20h2.44V4.67L15.8 2.22zM20.45 6.89V20h2.44V9.34z"/><g><path d="M40.16 8.44c0 1.49-.59 2.45-1.75 2.88l2.34 3.32h-2.53l-2.04-2.96h-1.43v2.96h-2.06V5.36h3.5c1.43 0 2.46.24 3.07.73s.9 1.27.9 2.35zm-2.48 1.1c.26-.23.38-.59.38-1.09 0-.5-.13-.84-.4-1.03s-.73-.28-1.39-.28h-1.54v2.75h1.5c.72 0 1.2-.12 1.45-.35zM51.56 5.36V7.2h-4.59v1.91h4.13v1.76h-4.13v1.92h4.74v1.83h-6.79V5.36h6.64zM60.09 7.15v7.48h-2.06V7.15h-2.61V5.36h7.28v1.79h-2.61zM70.81 14.64h-2.06v-3.66l-3.19-5.61h2.23l1.99 3.45 1.99-3.45H74l-3.19 5.61v3.66zM83.99 6.19c.65.55.97 1.4.97 2.55s-.33 1.98-1 2.51-1.68.8-3.04.8h-1.23v2.59h-2.06V5.36h3.26c1.42 0 2.45.28 3.1.83zm-1.51 3.65c.25-.28.37-.69.37-1.22s-.16-.92-.48-1.14c-.32-.23-.82-.34-1.5-.34H79.7v3.12h1.38c.68 0 1.15-.14 1.4-.42zM95.85 5.36V7.2h-4.59v1.91h4.13v1.76h-4.13v1.92H96v1.83h-6.79V5.36h6.64z"/></g></svg>
+</a>
+
+        </div>
+    </template>
+</doc-sidebar>
+
+
+        <div class="flex-grow min-w-0 dark:bg-dark-850">
+            <!-- Render "toolbar" template here on api pages --><!-- Render page content -->
+            <div class="flex">
+    <div class="flex-grow min-w-0 px-6 md:px-16">
+        <main class="relative pt-6 pb-16">
+            <div class="docs-markdown" id="docs-content">
+                <!-- Rendered if sidebar right is enabled -->
+                <div id="docs-sidebar-right-toggle"></div>
+               
+                <!-- Page content  -->
+<doc-anchor-target id="厳選c-アルゴリズム実装に使える-25-の-stl-機能" class="break-words">
+    <h1>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#厳選c-アルゴリズム実装に使える-25-の-stl-機能">#</doc-anchor-trigger>
+        <span>厳選！C++ アルゴリズム実装に使える 25 の STL 機能</span>
+    </h1>
+</doc-anchor-target>
+<ul>
+<li><a href="https://qiita.com/e869120/items/518297c6816adb67f9a5">前編</a></li>
+<li><a href="https://qiita.com/e869120/items/702ca1c1ed6ff6770257">後編</a></li>
+</ul>
+<p>競技プログラミングに使う機能A = STL機能の一部B + それ以外で提供されている機能C</p>
+<p>Cがあとどれだけあるかわからないが、BはAの一部をなしていることは確かなので、
+それがHaskellでどれにあたるかを確認することは、
+知っているべき機能の洗い出しに有効だろう。</p>
+<doc-anchor-target id="導入編">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#導入編">#</doc-anchor-trigger>
+        <span>導入編</span>
+    </h2>
+</doc-anchor-target>
+<blockquote>
+<p>理解するのが簡単なものが中心です。
+多くの人は知っていると思います。</p>
+</blockquote>
+<doc-anchor-target id="絶対値-abs">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#絶対値-abs">#</doc-anchor-trigger>
+        <span>絶対値 abs</span>
+    </h3>
+</doc-anchor-target>
+<p><code v-pre>Prelude</code> にあるから普通に使える。</p>
+<doc-anchor-target id="三角関数-sincostan">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#三角関数-sincostan">#</doc-anchor-trigger>
+        <span>三角関数 sin/cos/tan</span>
+    </h3>
+</doc-anchor-target>
+<p><code v-pre>Prelude</code> にあるから普通に使える。</p>
+<doc-anchor-target id="文字列-string">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#文字列-string">#</doc-anchor-trigger>
+        <span>文字列 string</span>
+    </h3>
+</doc-anchor-target>
+<p>Haskellの高速化で痛いところではあるが、大量のデータを読み込む場面でない、
+アルゴリズム本体に限っていえば、<code v-pre>[Char]</code> であってもそれほど困ることはないだろうか。
+長い文字列に <code v-pre>(!!)</code> を使うべきではないが、それは文字列に限らず全てのリストについて注意することがら。</p>
+<doc-anchor-target id="初級編">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#初級編">#</doc-anchor-trigger>
+        <span>初級編</span>
+    </h2>
+</doc-anchor-target>
+<blockquote>
+<p>基本的なアルゴリズムの実装に必要なライブラリです。（AtCoder の 100-300 点問題レベルでもよく使われます）
+アルゴリズム以外の場面でも使われることが多いかもしれません。</p>
+</blockquote>
+<doc-anchor-target id="最小値最大値-minmax">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#最小値最大値-minmax">#</doc-anchor-trigger>
+        <span>最小値・最大値 min/max</span>
+    </h3>
+</doc-anchor-target>
+<p><code v-pre>Prelude</code> にあるから普通に使える。
+対象が2つより多い場合、リストで与える <code v-pre>minimum</code>, <code v-pre>maximum</code> がある。これも <code v-pre>Prelude</code> にある。</p>
+<doc-anchor-target id="値の交換-swap">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#値の交換-swap">#</doc-anchor-trigger>
+        <span>値の交換 swap</span>
+    </h3>
+</doc-anchor-target>
+<p>変数の再代入がないのでそんな機能は必要ない。
+Vectorの2要素を交換する <code v-pre>exchange</code> という関数があったりもする。</p>
+<doc-anchor-target id="最大公約数-__gcd">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#最大公約数-__gcd">#</doc-anchor-trigger>
+        <span>最大公約数 __gcd</span>
+    </h3>
+</doc-anchor-target>
+<p><code v-pre>Prelude</code> に <code v-pre>gcd</code> も <code v-pre>lcm</code> もある。</p>
+<doc-anchor-target id="乱数-rand">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#乱数-rand">#</doc-anchor-trigger>
+        <span>乱数 rand</span>
+    </h3>
+</doc-anchor-target>
+<p>参照透明なので乱数はない。
+かなり上級の問題では、確率的アルゴリズムを揺らすために乱数を使うようだが…
+古いHaskellでは Random ライブラリがバンドルされていたが、
+今は System.Random は自分で入れる必要がある。</p>
+<doc-anchor-target id="時間計測-clock">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#時間計測-clock">#</doc-anchor-trigger>
+        <span>時間計測 clock</span>
+    </h3>
+</doc-anchor-target>
+<p>小さなライブラリを読み込む。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import System.CPUTime
+
+-- プログラム起動時からの経過時間（ピコ秒）10^-12
+getCPUTime :: IO Integer
+
+-- 最小精度
+cpuTimePrecision :: Integer</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="配列を逆順に並び替え-reverse">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#配列を逆順に並び替え-reverse">#</doc-anchor-trigger>
+        <span>配列を逆順に並び替え reverse</span>
+    </h3>
+</doc-anchor-target>
+<p>リストなら <code v-pre>reverse</code>, ArrayはないがVectorにはある。
+区間だけどうこうという便利機能はないが、それいる？</p>
+<doc-anchor-target id="ソート-sort">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#ソート-sort">#</doc-anchor-trigger>
+        <span>ソート sort</span>
+    </h3>
+</doc-anchor-target>
+<p>リストなら <code v-pre>Data.List.sort</code> その他がある。
+区間だけどうこうという便利機能はないが、それいる？</p>
+<doc-anchor-target id="中級編第一部">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#中級編第一部">#</doc-anchor-trigger>
+        <span>中級編第一部</span>
+    </h2>
+</doc-anchor-target>
+<blockquote>
+<p>基本的なアルゴリズムの実装に必要なライブラリです。（AtCoder の 200-400 点問題レベルでもよく使われます）</p>
+</blockquote>
+<doc-anchor-target id="vector">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#vector">#</doc-anchor-trigger>
+        <span>vector</span>
+    </h3>
+</doc-anchor-target>
+<p>HaskellのVectorとはかなり意味合いが違う。
+この辺りまでくると、計算をどう組み立てるかのパラダイムの差が大きくて、
+一言で対比することは難しい。</p>
+<doc-anchor-target id="stack">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#stack">#</doc-anchor-trigger>
+        <span>stack</span>
+    </h3>
+</doc-anchor-target>
+<p>pushとpopでデータを出し入れするスタックは、
+リストを使って自然に実現できる。</p>
+<doc-anchor-target id="queue">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#queue">#</doc-anchor-trigger>
+        <span>queue</span>
+    </h3>
+</doc-anchor-target>
+<p>FIFOキューは、
+リストの末尾に追加する <code v-pre>list ++ [item]</code> とか末尾を取りはずす <code v-pre>last</code>, <code v-pre>init</code> は重いので、
+そういうときは
+<a href="/H4A/library/data.sequence/">Data.Sequence</a>
+を用いる。</p>
+<doc-anchor-target id="priority_queue">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#priority_queue">#</doc-anchor-trigger>
+        <span>priority_queue</span>
+    </h3>
+</doc-anchor-target>
+<p>優先度付きキューは、
+<a href="/H4A/library/data.heap/">Data.Heap</a>がAtCoderでは使える。</p>
+<doc-anchor-target id="map">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#map">#</doc-anchor-trigger>
+        <span>map</span>
+    </h3>
+</doc-anchor-target>
+<p>ふつう「連想配列」と呼ぶもの。<a href="/H4A/library/data.map/">Data.Map</a>が対応する。</p>
+<doc-anchor-target id="lower_bound">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#lower_bound">#</doc-anchor-trigger>
+        <span>lower_bound</span>
+    </h3>
+</doc-anchor-target>
+<p>二分探索は、<a href="/H4A/snippets/search/binary-search/">用意した</a>。</p>
+<doc-anchor-target id="set">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#set">#</doc-anchor-trigger>
+        <span>set</span>
+    </h3>
+</doc-anchor-target>
+<p>集合は <a href="/H4A/library/data.set/">Data.Set</a> で提供されている。
+多重集合はないので、<a href="/H4A/library/data.map/">Data.Map</a> で要素数を管理するなどで対応する。</p>
+<doc-anchor-target id="pair">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#pair">#</doc-anchor-trigger>
+        <span>pair</span>
+    </h3>
+</doc-anchor-target>
+<p>2タプルですね。</p>
+<doc-anchor-target id="tuple">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#tuple">#</doc-anchor-trigger>
+        <span>tuple</span>
+    </h3>
+</doc-anchor-target>
+<p>タプルですね。</p>
+<doc-anchor-target id="中級編第二部">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#中級編第二部">#</doc-anchor-trigger>
+        <span>中級編第二部</span>
+    </h2>
+</doc-anchor-target>
+<blockquote>
+<p>第一部ほどではないですが使われるので、知っていて損はないでしょう。
+AtCoder 水色～黄色の上級者でも知らないものがあるかもしれません。</p>
+</blockquote>
+<doc-anchor-target id="assert">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#assert">#</doc-anchor-trigger>
+        <span>assert</span>
+    </h3>
+</doc-anchor-target>
+<p><a href="https://qiita.com/mod_poppo/items/b3b415ea72eee210d222">Control.Exception.assert</a>
+があるようだが、使う？</p>
+<doc-anchor-target id="count">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#count">#</doc-anchor-trigger>
+        <span>count</span>
+    </h3>
+</doc-anchor-target>
+<p>あのどこ、にカウンタの話題があった。</p>
+<doc-anchor-target id="find">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#find">#</doc-anchor-trigger>
+        <span>find</span>
+    </h3>
+</doc-anchor-target>
+<ul>
+<li>リストにあるかないかは <code v-pre>elem</code></li>
+<li>リストにある個数を数えるのはイディオム <code v-pre>length . filter (x ==)</code> <code v-pre>length . elemIndices</code> の方がよいのかも。</li>
+<li>どこにあるかは <code v-pre>elemIndex</code>, <code v-pre>elemIndices</code>, 対象を述語で指定する <code v-pre>findIndex</code>, <code v-pre>findIndices</code></li>
+</ul>
+<doc-anchor-target id="next_permutation">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#next_permutation">#</doc-anchor-trigger>
+        <span>next_permutation</span>
+    </h3>
+</doc-anchor-target>
+<p>順列を与えると、辞書順で次の順列を返すもの。</p>
+<p>Vector.Mutable には <code v-pre>nextPermutation</code> があるが、
+これを使うより、数え上げをする生成器を独立させる構造にするべきかと思う。
+ただし、<code v-pre>Data.List.permutations</code> は辞書順を考慮しないので、
+辞書順に得たい場合は次のようにする。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">perm [] = [ [] ]
+perm xs = [x:ps | x &lt;- xs, ps &lt;- perm (delete x xs)]
+
+main = mapM_ print (perm [1,2,3])</code></pre>
+</doc-codeblock></div>
+<p><code v-pre>next_permutation</code> の実現は、
+「なるべく下位桁で、自分より大きい要素がより右にある場所を見つけ、その中の最小の値と差し替え、
+残った桁と自分を整列する」とすればよいだろうか。
+これ以上大きなものがない状態のとき失敗する必要がある。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">nextPermutation :: Ord a =&gt; [a] -&gt; Maybe [a]
+nextPermutation [] = Nothing
+nextPermutation (x:xs) = maybe thispos (Just . (x :)) (nextPermutation xs)
+  where
+    thispos =
+      case filter (x &lt;) xs of
+        [] -&gt; Nothing
+        bs -&gt; let b = minimum bs in Just (b : sort (x : delete b xs))</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="__builtin_popcount">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#__builtin_popcount">#</doc-anchor-trigger>
+        <span>__builtin_popcount</span>
+    </h3>
+</doc-anchor-target>
+<p>2進数で表したときの1の個数。<a href="/H4A/library/data.bits/">Data.Bits.popCount</a>にある。</p>
+<doc-anchor-target id="bitset">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#bitset">#</doc-anchor-trigger>
+        <span>bitset</span>
+    </h3>
+</doc-anchor-target>
+<p>巨大なビットベクタが使えるらしい。ずるいや。
+<code v-pre>Data.IntSet</code> の中身はビットベクタの木らしいので、代用できないか。</p>
+<p>後編の使用例で、ブールのベクタ dp に対して、添え字を Ai だけずらしたものを論理和する</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">foreach j in dp
+  if dp[j] then dp[j+Ai] = True</code></pre>
+</doc-codeblock></div>
+<p>を、ビット位置を Ai だけずらした bitset の論理和で表せる</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">dp |= (dp &lt;&lt; Ai)</code></pre>
+</doc-codeblock></div>
+<p>としていて、確かに簡潔になってはいる。&#x60;Data.IntSet で同じような計算を表現するなら</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">IS.union dp (IS.map (ai +) dp)</code></pre>
+</doc-codeblock></div>
+<p>となるか。</p>
+
+
+
+
+                <!-- Required only on API pages -->
+                <doc-toolbar-member-filter-no-results />
+            </div>
+
+            
+<nav class="flex mt-14">
+    <div class="w-1/2">
+        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/readings/acl/fenwick-tree/">
+            <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
+            <span>
+                <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
+                <span class="block mt-1">フェニック木</span>
+            </span>
+        </a>
+    </div>
+
+    <div class="w-1/2">
+    </div>
+</nav>
+
+
+        </main>
+
+        <div class="border-t dark:border-dark-650 pt-6 mb-8">
+            <footer class="flex flex-wrap items-center justify-between">
+    <div>
+        <ul class="flex flex-wrap items-center text-sm">
+</ul>
+
+    </div>
+    <div class="docs-copyright py-2 text-gray-500 dark:text-dark-350 text-sm leading-relaxed"><p>© Copyright 2022. All rights reserved.</p>
+</div>
+</footer>
+
+        </div>
+    </div>
+    
+    <!-- Rendered if sidebar right is enabled -->
+    <!-- Sidebar right skeleton-->
+    <div v-cloak class="fixed top-0 bottom-0 right-0 transform translate-x-full bg-white border-gray-200 lg:sticky lg:border-l lg:flex-shrink-0 lg:pt-6 lg:transform-none lg:w-56 lg:z-0 md:w-72 sidebar-right skeleton dark:bg-dark-850 dark:border-dark-650">
+        <div class="pl-5">
+            <div class="w-32 h-3 mb-4 bg-gray-200 dark:bg-dark-600 rounded-full loading"></div>
+            <div class="w-48 h-3 mb-4 bg-gray-200 dark:bg-dark-600 rounded-full loading"></div>
+            <div class="w-40 h-3 mb-4 bg-gray-200 dark:bg-dark-600 rounded-full loading"></div>
+        </div>
+    </div>
+    
+    <!-- User should be able to hide sidebar right -->
+    <doc-sidebar-right v-cloak></doc-sidebar-right>
+</div>
+
+        </div>
+    </div>
+
+    <doc-search-mobile></doc-search-mobile>
+    <doc-back-to-top></doc-back-to-top>
+</div>
+
+
+        <div id="docs-overlay-target"></div>
+
+        <script>window.__DOCS__ = { "title": "厳選！C++ アルゴリズム実装に使える 25 の STL 機能", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
+    </body>
+</html>

@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.697190264730" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.697851366268" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697190264730" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697851366268" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697190264730" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.697851366268" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -258,17 +258,22 @@ getRoot :: UnionFind a -&gt; Int -&gt; IO (Int, a)
 findUF :: UnionFind a -&gt; Int -&gt; Int -&gt; IO Bool
 -- 分割を統合する。初めから同じ分割であったらFalseを返す
 -- 統合した場合に、両者の情報を統合する関数を第1引数に与える
-uniteUF :: (a -&gt; a -&gt; a) -&gt; UnionFind a -&gt; Int -&gt; Int -&gt; IO Bool</code></pre>
+uniteUF :: (a -&gt; a -&gt; a) -&gt; UnionFind a -&gt; Int -&gt; Int -&gt; IO Bool
+-- 代表元のペイロードを上書きする
+setUF :: UnionFind a -&gt; Int -&gt; a -&gt; IO ()</code></pre>
 </doc-codeblock></div>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">import qualified Data.Vector.Mutable as MV
-import qualified Data.Vector as V
+-- import qualified Data.Vector as V
 
 -- @gotoki_no_joe
 type UnionFind a = MV.IOVector (Either Int a)
 
 newUF :: [a] -&gt; IO (UnionFind a)
-newUF = V.thaw . V.fromList . map Right
+newUF xs = do
+  v &lt;- MV.new (length xs)
+  forM_ (zip [0..] xs) (\(i,x) -&gt; MV.write v i (Right x))
+  return v
 
 getRoot :: UnionFind a -&gt; Int -&gt; IO (Int, a)
 getRoot vec i = loop vec i []
@@ -298,7 +303,12 @@ uniteUF f vec i j =
       do
         MV.write vec a (Left b)
         MV.write vec b (Right $ f r s)
-        return True</code></pre>
+        return True
+
+setUF :: UnionFind a -&gt; Int -&gt; a -&gt; IO ()
+setUF vec i x = do
+  (a, _) &lt;- getRoot vec i
+  MV.write vec a (Right x)</code></pre>
 </doc-codeblock></div>
 <p><a href="/H4A/readings/whereis/07.unionfind/">あのアルゴリズムはどこ？の7</a>より。</p>
 <p>AtCoder Class Library の

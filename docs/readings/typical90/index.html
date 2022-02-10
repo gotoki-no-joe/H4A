@@ -9,26 +9,28 @@
     <!-- Primary Meta Tags -->
     <title>競プロ典型 90 問</title>
     <meta name="title" content="競プロ典型 90 問">
-    <meta name="description" content="https://atcoder.jp/contests/typical90" />
+    <meta name="description" content="競プロ典型 90 問" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/readings/typical90/">
     <meta property="og:title" content="競プロ典型 90 問">
-    <meta property="og:description" content="https://atcoder.jp/contests/typical90">
+    <meta property="og:description" content="競プロ典型 90 問">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/readings/typical90/">
     <meta property="twitter:title" content="競プロ典型 90 問">
-    <meta property="twitter:description" content="https://atcoder.jp/contests/typical90">
+    <meta property="twitter:description" content="競プロ典型 90 問">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.697190264730" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.697851366268" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697190264730" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.697851366268" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
+    <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
+    <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -167,58 +169,400 @@
         <span>競プロ典型 90 問</span>
     </h1>
 </doc-anchor-target>
-<p><a href="https://atcoder.jp/contests/typical90">https://atcoder.jp/contests/typical90</a></p>
+<p><a href="https://atcoder.jp/contests/typical90">競プロ典型 90 問</a></p>
 <p>問題を知らせるtweetについていた解説が簡潔で明解なのでそちらを参照</p>
 <p>一言ポイントは<a href="https://docs.google.com/spreadsheets/d/1GG4Higis4n4GJBViVltjcbuNfyr31PzUY_ZY1zh2GuI/view">『競プロ典型 90 問』非公式難易度表・ソースコード共有</a>などより。</p>
-<ol>
-<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_a">Yokan Party</a>
-　<a href="https://atcoder.jp/contests/typical90/submissions/25824596">ACコード</a>  <br />
-★4
-　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/001.jpg?raw=true">出題</a>
-　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/001.jpg?raw=true">解説</a>
-　貪欲法、二分探索</li>
-<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_b">Encyclopedia of Parentheses</a>
-　<a href="https://atcoder.jp/contests/typical90/submissions/28855241">ACコード</a>  <br />
-★3
-　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/002.jpg?raw=true">出題</a>
-　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/002.jpg?raw=true">解説</a>
-　bit全探索  <br />
-<a href="https://atcoder.jp/contests/typical90/submissions/21988452">丁寧に生成する別解</a> の方が好み。</li>
-<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_c">Longest Circular Road</a>
-　<a href="https://atcoder.jp/contests/typical90/submissions/25826842">ACコード</a>  <br />
-★4
-　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/003.jpg?raw=true">出題</a>
-　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/003.jpg?raw=true">解説</a>
-　DFS、木の直径</li>
-<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_d">Cross Sum</a>
+<doc-anchor-target id="2">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#2">#</doc-anchor-trigger>
+        <span>★2</span>
+    </h2>
+</doc-anchor-target>
+<ul>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_d">4. Cross Sum</a>
 　<a href="https://atcoder.jp/contests/typical90/submissions/23707569">ACコード</a>  <br />
-★2
-　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/004.jpg?raw=true">出題</a>
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/004.jpg?raw=true">出題</a>
 　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/004.jpg?raw=true">解説</a>
 　適切な前処理、包除原理  <br />
 しかし素朴に<code v-pre>transpose</code>していては間に合わなかった</li>
-<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_e">Restricted Digits</a>  <br />
-★7
-　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/005.jpg?raw=true">出題</a>
-　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/005.jpg?raw=true">解説</a>
-　行列累乗・ダブリング　余りを持って桁 DP（小課題 1）　同じ遷移の DP は行列累乗（満点）</li>
-<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_f">Smallest Subsequence</a>  <br />
-★5
-　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/006.jpg?raw=true">出題</a>
-　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/006.jpg?raw=true">解説</a></li>
-<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_g">CP Classes</a>  <br />
-★3
-　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/007.jpg?raw=true">出題</a>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_j">10. Score Sum Queries</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/22046151">ACコード</a> 累積和は <code v-pre>scanl (+) 0</code>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/010.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/010.jpg?raw=true">解説</a>
+　区間の総和は累積和</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_v">22. Cubic Cake</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/24767107">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/022.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/022.jpg?raw=true">解説</a>
+　最大公約数はユークリッドの互除法</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_x">24. Select +／- One</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/24767173">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/024.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/024.jpg?raw=true">解説</a>
+　パリティを考える</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_aa">27. Sign Up Requests</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29174645">ACコード</a> ひとつずつ処理してみた  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/027.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/027.jpg?raw=true">解説</a>
+　map を使いこなそう</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_ag">33. Not Too Bright</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/24793523">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/033.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/033.jpg?raw=true">解説</a>
+　コーナーケースに気を付けよう</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_bc">55. Select 5</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/25185328">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/055.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/055.jpg?raw=true">解説</a>
+　「定数倍」を見積もる</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_bi">61. Deck</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29176456">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/061.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/061.jpg?raw=true">解説</a>
+　deque を知っていますか？</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_bo">67. Base 8 to 9</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/25683734">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/067.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/067.jpg?raw=true">解説</a>
+　N 進法展開を理解しよう  <br />
+Numericモジュールに丸投げする<a href="https://atcoder.jp/contests/typical90/submissions/29176868">別解</a></li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_bz">78. Easy Graph Problem</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/078.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/078.jpg?raw=true">解説</a>
+　グラフの基本を知ろう  <br />
+真面目にグラフとして読み込まない<a href="https://atcoder.jp/contests/typical90/submissions/25720748">別解</a></li>
+</ul>
+<doc-anchor-target id="3">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#3">#</doc-anchor-trigger>
+        <span>★3</span>
+    </h2>
+</doc-anchor-target>
+<ul>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_b">2. Encyclopedia of Parentheses</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/28855241">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/002.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/002.jpg?raw=true">解説</a>
+　bit全探索  <br />
+<a href="https://atcoder.jp/contests/typical90/submissions/21988452">丁寧に生成する別解</a> の方が好み。</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_g">7. CP Classes</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/007.jpg?raw=true">出題</a>
 　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/007.jpg?raw=true">解説</a>
 　要素の検索はソートして二分探索  <br />
 命令型の二分探索はHaskellのIntMapだという<a href="https://atcoder.jp/contests/typical90/submissions/21994000">別解</a>で解いた。</li>
-<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_h">AtCounter</a>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_n">14. We Used to Sing a Song Together</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/22046359">ACコード</a> 本体一行  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/014.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/014.jpg?raw=true">解説</a>
+　ソートして貪欲法</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_p">16. Minimum Coins</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/25361109">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/016.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/016.jpg?raw=true">解説</a>
+　工夫した全探索</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_r">18. Statue of Chokudai</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/24756329">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/018.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/018.jpg?raw=true">解説</a>
+　三角関数を使いこなそう</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_t">20. Log Inequality</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/24766586">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/020.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/020.jpg?raw=true">解説</a>
+　整数で処理して誤差をなくそう</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_af">32. AtCoder Ekiden</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29178035">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/032.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/032.jpg?raw=true">解説</a>
+　小さい制約は順列全探索</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_al">38. Large LCM</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/038.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/038.jpg?raw=true">解説</a>
+　オーバーフローに注意  <br />
+Integerで押し切る<a href="https://atcoder.jp/contests/typical90/submissions/24802503">別解</a></li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_ar">44. Shift and Swapping</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29181077">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/044.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/044.jpg?raw=true">解説</a>
+　見かけ上の変化をメモ</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_at">46. I Love 46</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29181296">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/046.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/046.jpg?raw=true">解説</a>
+　同じ意味のものをまとめて考える</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_av">48. I will not drop out</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29181491">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/048.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/048.jpg?raw=true">解説</a>
+　上界と下界を見積もる  <br />
+部分点が満点の半分を超えているという設定から、降順にソートすると部分点が満点までの残りより先に来ることが保証される、というのがポイントだった。その条件に気づかず、部分点の優先度付きキューを作り、部分点を取得するたびに満点までの残りをキューに追加するというアプローチで<a href="https://atcoder.jp/contests/typical90/submissions/24804113">解いていた</a>が、もし前半1点後半一億点という問題があると、これでは見落とすので嘘解だ。</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_ax">50. Stair Jump</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/24805224">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/050.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/050.jpg?raw=true">解説</a>
+　漸化式を立ててDPをしよう</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_az">52. Dice Product</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/24808554">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/052.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/052.jpg?raw=true">解説</a>
+　因数分解をしよう  <br />
+因数分解の処理が解答プログラムに入るという意味ではない…</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_bl">64. Uplift</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29182431">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/064.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/064.jpg?raw=true">解説</a>
+　階差を考えよう</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_bq">69. Colorful Blocks 2</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/25184799">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/069.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/069.jpg?raw=true">解説</a>
+　a^b mod m は繰り返し二乗法</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_bw">75. Magic For Balls</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/24930672">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/075.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/075.jpg?raw=true">解説</a>
+　O(√N) での素因数分解・約数列挙</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_bx">76. Cake Cut</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/25718604">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/076.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/076.jpg?raw=true">解説</a>
+　円環を列にして二倍にする  <br />
+単純に2倍する代わりに1/10以上になる分だけにして節約し、尺取り法も使用</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_ca">79. Two by Two</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/25729799">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/079.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/079.jpg?raw=true">解説</a>
+　操作順序によらない</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_cd">82. Counting Numbers</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/25743266">ACコード</a> 割り切れる側を選んで割る別解  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/082.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/082.jpg?raw=true">解説</a>
+　部分問題に分解する 数列の和の公式</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_cf">84. There are two types of characters</a>
+　ACコード <a href="https://atcoder.jp/contests/typical90/submissions/29187614">解法1</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/25805705">解法2</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/084.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/084-01.jpg?raw=true">解説1</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/084-02.jpg?raw=true">解説2</a>
+　余事象+ランレングス圧縮 累積的に計算しよう</li>
+</ul>
+<doc-anchor-target id="4">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#4">#</doc-anchor-trigger>
+        <span>★4</span>
+    </h2>
+</doc-anchor-target>
+<ul>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_a">1. Yokan Party</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/25824596">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/001.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/001.jpg?raw=true">解説</a>
+　貪欲法、二分探索</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_c">3. Longest Circular Road</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/25826842">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/003.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/003.jpg?raw=true">解説</a>
+　DFS、木の直径</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_h">8. AtCounter</a>
 　<a href="https://atcoder.jp/contests/typical90/submissions/22045597">ACコード</a> DPが後ろからで不明瞭か  <br />
-★4
 　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/008.jpg?raw=true">出題</a>
 　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/008.jpg?raw=true">解説</a>
 　状態 DP による高速化</li>
-</ol>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_l">12. Red Painting</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29123081">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/012.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/012.jpg?raw=true">解説</a>
+　連結判定は Union-Find  <br />
+Unboxed版のUnionFindを改造すると<a href="https://atcoder.jp/contests/typical90/submissions/25359675">もっと速くできる</a></li>
+<li><a href="">26. Independent Set on a Tree</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29191166">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/026.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/026.jpg?raw=true">解説</a>
+　二部グラフの性質を使おう  <br />
+素朴に葉から塗り分けたノードを集めて<code v-pre>concat</code>すると<a href="https://atcoder.jp/contests/typical90/submissions/29190973">TLEした</a>。<code v-pre>concat</code>を避けるためだけに<a href="https://atcoder.jp/contests/typical90/submissions/25371867">RoseTreeを持ち出した大袈裟なACコード</a>。上のACコードは、情報を集約する計算をStateモナドに包んで、根からの深さ優先走査の間を持ちまわせるようにした。</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_ab">28. Cluttered Paper</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/25453499">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/028.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/028.jpg?raw=true">解説</a>
+　領域加算は二次元いもす法</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_ah">34. There are few types of elements</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/25837516">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/034.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/034.jpg?raw=true">解説</a>
+　単調性を利用した尺取り法  <br />
+数字ごとのカウンタとしてIntMapを直接使うと<a href="https://atcoder.jp/contests/typical90/submissions/25836511">TLE</a>する。
+同じロジックをTypeScriptで書いたら<a href="https://atcoder.jp/contests/typical90/submissions/25835948">AC</a>なのだが。
+カウンタとしてmutable vectorを用いて、添え字を圧縮する「座標変換」を行ったものが上のAC。</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_ap">42. Multiple of 9</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/25845587">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/042.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/042.jpg?raw=true">解説</a>
+　9 の倍数の性質</li>
+<li><a href="">43. Maze Challenge with Lack of Sleep</a>
+　[ACコード]  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/043.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/043.jpg?raw=true">解説</a>
+　拡張 BFS／拡張ダイクストラ</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_bf">58. Original Calculator</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29195349">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/058.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/058.jpg?raw=true">解説</a>
+　周期性を考える  <br />
+べき乗を使った<a href="https://atcoder.jp/contests/typical90/submissions/29194545">別解ACコード</a>  <br />
+解説のやり方はmutableなので抵抗あるが、時間計算量も空間計算量も圧倒的だ。</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_bk">63. Monochromatic Subgrid</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29197230">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/063.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/063.jpg?raw=true">解説</a>
+　変な制約に着目する 状態数が少ない変量を全探索</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_br">70. Plant Planning</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29197457">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/070.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/070.jpg?raw=true">解説</a>
+　x, y 独立に考える 中央値で絶対値の総和が最小に</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_bt">72. Loop Railway Plan</a>
+　[ACコード]  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/072.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/072.jpg?raw=true">解説</a>
+　&quot;何通りか&quot; の感覚 バックトラック</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_cg">85. Multiplication</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29208366">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/085.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/085-01.jpg?raw=true">解説1</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/085-02.jpg?raw=true">解説2</a>
+　約数の個数は少ない  <br />
+探索の範囲を別の方向で絞った<a href="https://atcoder.jp/contests/typical90/submissions/25806451">別解</a></li>
+</ul>
+<doc-anchor-target id="5">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#5">#</doc-anchor-trigger>
+        <span>★5</span>
+    </h2>
+</doc-anchor-target>
+<ul>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_f">6. Smallest Subsequence</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29049167">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/006.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/006.jpg?raw=true">解説</a>
+　辞書順最小は前から貪欲法  <br />
+<a href="https://atcoder.jp/contests/typical90/submissions/29041667">別解</a>
+実際は <span class="math">O(nk)</span> なので、テストケースの盲点を突いている気がする。最後の <code v-pre>take k</code> は <code v-pre>loop</code> のサンクを切り捨てる小技</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_m">13. Passing</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29123492">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/013.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/013.jpg?raw=true">解説</a>
+　各頂点への最短経路はダイクストラ</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_u">21. Come Back in One Piece</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29172961">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/021.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/021.jpg?raw=true">解説</a>
+　強連結成分分解（SCC）をしよう  <br />
+標準ライブラリData.GraphのSCC計算を利用しただけ。自前で用意するべきか？</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_ac">29. Long Bricks</a>
+　[ACコード]  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/029.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/029.jpg?raw=true">解説</a>
+　座標圧縮で効率化（小課題 2） 区間に対する処理はセグメント木（満点）</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_ad">30. K Factors</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/25455930">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/030.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/030.jpg?raw=true">解説</a>
+　素因数列挙の計算量は O(N log log N)</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_aj">36. Max Manhattan Distance</a>
+　[ACコード]  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/036.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/036.jpg?raw=true">解説</a>
+　マンハッタン距離は 45 度回転</li>
+</ul>
+<!--
+- [. ]()
+　[ACコード]()  
+[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/061.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/061.jpg?raw=true)
+　**
+-->
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">037	Don't Leave the Spice（★5）	2 sec	1024 MB	提出
+039	Tree Distance（★5）	2 sec	1024 MB	提出
+051	Typical Shop（★5）	3 sec	1024 MB	提出
+056	Lucky Bag（★5）	2 sec	1024 MB	提出
+060	Chimera（★5）	2 sec	1024 MB	提出
+066	Various Arrays（★5）	2 sec	1024 MB	提出
+068	Paired Information（★5）	2 sec	1024 MB	提出
+073	We Need Both a and b（★5）	2 sec	1024 MB	提出
+081	Friendly Group（★5）	2 sec	1024 MB	提出
+086	Snuke's Favorite Arrays（★5）	2 sec	1024 MB	提出
+087	Chokudai's Demand（★5）	2 sec	1024 MB	提出</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="6">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#6">#</doc-anchor-trigger>
+        <span>★6</span>
+    </h2>
+</doc-anchor-target>
+<ul>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_i">9. Three Point Angle</a>
+　<a href="https://atcoder.jp/contests/typical90/submissions/29052811">ACコード</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/009.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/009.jpg?raw=true">解説</a>
+　3つの真ん中を決め打ち全探索、偏角ソート</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_k">11. Gravy Jobs</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/011.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/011.jpg?raw=true">解説</a>
+　仕事は締切の早い順に（小課題 2）ソート順に DP（満点）</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_o">15. Don&#x27;t be too close</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/015.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/015.jpg?raw=true">解説</a>
+　調和級数は <span class="math">O(N \log N)</span></li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_s">19. Pick Two</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/019.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/019.jpg?raw=true">解説</a>
+　列の操作は区間DP</li>
+</ul>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">031	VS AtCoder（★6）	3 sec	1024 MB	提出
+045	Simple Grouping（★6）	2 sec	1024 MB	提出
+049	Flip Digits 2（★6）	2 sec	1024 MB	提出
+054	Takahashi Number（★6）	2 sec	1024 MB	提出
+057	Flip Flap（★6）	2 sec	1024 MB	提出
+062	Paint All（★6）	2 sec	1024 MB	提出
+074	ABC String 2（★6）	1 sec	1024 MB	提出
+080	Let's Share Bit（★6）	2 sec	1024 MB	提出
+083	Colorful Graph（★6）	3 sec	1024 MB	提出
+088	Similar but Different Ways（★6）	2 sec	1024 MB	提出</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="7">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#7">#</doc-anchor-trigger>
+        <span>★7</span>
+    </h2>
+</doc-anchor-target>
+<ul>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_e">5. Restricted Digits</a>  <br />
+<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/005.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/005.jpg?raw=true">解説</a>
+　行列累乗・ダブリング　余りを持って桁 DP（小課題 1）　同じ遷移の DP は行列累乗（満点）</li>
+<li><a href="https://atcoder.jp/contests/typical90/tasks/typical90_q">17. Crossing Segments</a>  <br />
+★7
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/problem/017.jpg?raw=true">出題</a>
+　<a href="https://github.com/E869120/kyopro_educational_90/blob/main/editorial/017.jpg?raw=true">解説</a>
+　余事象を考える（小課題 2）　BIT で高速化（満点）</li>
+</ul>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">023	Avoid War（★7）	8 sec	2048 MB	提出
+025	Digit Product Equation（★7）	2 sec	1024 MB	提出
+035	Preserve Connectivity（★7）	2 sec	1024 MB	提出
+040	Get More Money（★7）	2 sec	1024 MB	提出
+041	Piles in AtCoder Farm（★7）	2 sec	1024 MB	提出
+047	Monochromatic Diagonal（★7）	2 sec	1024 MB	提出
+053	Discrete Dowsing（★7）	2 sec	1024 MB	提出
+059	Many Graph Queries（★7）	3 sec	1024 MB	提出
+065	RGB Balls 2（★7）	3 sec	1024 MB	提出
+071	Fuzzy Priority（★7）	3 sec	1024 MB	提出
+077	Planes on a 2D Plane（★7）	1.5 sec	1024 MB	提出
+089	Partitions and Inversions（★7）	3 sec	1024 MB	提出
+090	Tenkei90's Last Problem（★7）</code></pre>
+</doc-codeblock></div>
 
 
 
@@ -291,6 +635,6 @@
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "競プロ典型 90 問", icon: "file", hasPrism: false, hasMermaid: false, hasMath: false }</script>
+        <script>window.__DOCS__ = { "title": "競プロ典型 90 問", icon: "file", hasPrism: false, hasMermaid: false, hasMath: true }</script>
     </body>
 </html>

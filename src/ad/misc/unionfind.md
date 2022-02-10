@@ -89,17 +89,22 @@ findUF :: UnionFind a -> Int -> Int -> IO Bool
 -- 分割を統合する。初めから同じ分割であったらFalseを返す
 -- 統合した場合に、両者の情報を統合する関数を第1引数に与える
 uniteUF :: (a -> a -> a) -> UnionFind a -> Int -> Int -> IO Bool
+-- 代表元のペイロードを上書きする
+setUF :: UnionFind a -> Int -> a -> IO ()
 ```
 
 ```haskell
 import qualified Data.Vector.Mutable as MV
-import qualified Data.Vector as V
+-- import qualified Data.Vector as V
 
 -- @gotoki_no_joe
 type UnionFind a = MV.IOVector (Either Int a)
 
 newUF :: [a] -> IO (UnionFind a)
-newUF = V.thaw . V.fromList . map Right
+newUF xs = do
+  v <- MV.new (length xs)
+  forM_ (zip [0..] xs) (\(i,x) -> MV.write v i (Right x))
+  return v
 
 getRoot :: UnionFind a -> Int -> IO (Int, a)
 getRoot vec i = loop vec i []
@@ -130,6 +135,11 @@ uniteUF f vec i j =
         MV.write vec a (Left b)
         MV.write vec b (Right $ f r s)
         return True
+
+setUF :: UnionFind a -> Int -> a -> IO ()
+setUF vec i x = do
+  (a, _) <- getRoot vec i
+  MV.write vec a (Right x)
 ```
 
 [あのアルゴリズムはどこ？の7](/readings/whereis/07.unionfind/)より。

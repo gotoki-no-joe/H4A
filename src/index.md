@@ -1,5 +1,6 @@
 ---
 order: 00000
+description: "Algorithm (for competitive programming) Design in Haskell"
 ---
 # はじめに
 
