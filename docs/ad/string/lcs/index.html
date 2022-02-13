@@ -7,21 +7,21 @@
     <meta name="turbo-cache-control" content="no-cache">
 
     <!-- Primary Meta Tags -->
-    <title>32.ダブリング（途中）</title>
-    <meta name="title" content="32.ダブリング（途中）">
-    <meta name="description" content="TODO: powerishの話と合わせて整理する" />
+    <title>最長共有部分列</title>
+    <meta name="title" content="最長共有部分列">
+    <meta name="description" content="二つの文字列が与えられたとき、一部の文字を取り除いて両者を等しくしたときの最長の文字列、またはその長さを見つける。 つまり、連続した要素でなくて構わないが、順序は変更できない。" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
-    <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/readings/whereis/32.doubling/">
-    <meta property="og:title" content="32.ダブリング（途中）">
-    <meta property="og:description" content="TODO: powerishの話と合わせて整理する">
+    <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/ad/string/lcs/">
+    <meta property="og:title" content="最長共有部分列">
+    <meta property="og:description" content="二つの文字列が与えられたとき、一部の文字を取り除いて両者を等しくしたときの最長の文字列、またはその長さを見つける。 つまり、連続した要素でなくて構わないが、順序は変更できない。">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/readings/whereis/32.doubling/">
-    <meta property="twitter:title" content="32.ダブリング（途中）">
-    <meta property="twitter:description" content="TODO: powerishの話と合わせて整理する">
+    <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/ad/string/lcs/">
+    <meta property="twitter:title" content="最長共有部分列">
+    <meta property="twitter:description" content="二つの文字列が与えられたとき、一部の文字を取り除いて両者を等しくしたときの最長の文字列、またはその長さを見つける。 つまり、連続した要素でなくて構わないが、順序は変更できない。">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
@@ -30,8 +30,6 @@
     <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.698058334636" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
     <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.698058334636" defer></script>
-    <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
-    <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -164,74 +162,158 @@
                 <div id="docs-sidebar-right-toggle"></div>
                
                 <!-- Page content  -->
-<doc-anchor-target id="32ダブリング途中" class="break-words">
+<doc-anchor-target id="最長共有部分列" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#32ダブリング途中">#</doc-anchor-trigger>
-        <span>32.ダブリング（途中）</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#最長共有部分列">#</doc-anchor-trigger>
+        <span>最長共有部分列</span>
     </h1>
 </doc-anchor-target>
-<p>TODO: powerishの話と合わせて整理する</p>
-<p>有限状態の状態遷移が定義され、その状態遷移をかなり多くの回数行った結果について問う問題の解法。</p>
-<p>状態 <span class="math">1 \sim N</span> があり、一度の状態遷移で遷移する先が関数 <span class="math">f</span> により定められているとする。
-ここで、状態 <span class="math">x</span> から <span class="math">A</span> ステップ遷移してからさらに <span class="math">B</span> ステップ遷移した先は
-<span class="math">f^B (f^A (x))</span> と表せるが、これはまず <span class="math">B</span> ステップ遷移してからさらに <span class="math">A</span> ステップ遷移した先
-<span class="math">f^A (f^B (x))</span> と等しいことを利用する。</p>
-<p><span class="math">k</span> から <span class="math">f(k)</span> の対応関係を配列 <code v-pre>A[0]</code> に保存する。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">arr0 = listArray (1,n) [f k | k &lt;- [1..n]]</code></pre>
-</doc-codeblock></div>
-<p><span class="math">k</span> とそこから2ステップの遷移で到達する状態 <span class="math">f^2(k)</span> との関係は、配列 <code v-pre>A[0]</code> を2度参照することで求められる。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">arr1 = listArray (1,n) [arr0 ! (arr0 ! k) | k &lt;- [1..n]]</code></pre>
-</doc-codeblock></div>
-<p>以降は同様に、 <span class="math">2^m</span> ステップの遷移で到達する先は
-<span class="math">2^{m-1}</span> ステップの遷移を2度行うことで、
-すなわち配列 <code v-pre>A[m-1]</code> を2度参照して求めることができる。
-その結果は配列 <code v-pre>A[m]</code> に保存しておく。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">arrs = iterate arr2arr arr0
-
-arr2arr arrm = listArray (1,n) [arrm ! (arrm ! k) | k &lt;- [1..n]]
-arr2arr arrm = listArray (1,n) $ map ((arrm !).(arrm !)) [1..n]
-arr2arr arrm = fmap (arrm !) arrm</code></pre>
-</doc-codeblock></div>
-<p>この最後の形式は、Data.Vectorの</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">V.backpermute :: Vector a -&gt; Vector Int -&gt; Vector a
-V.backpermute av iv = V.map (av V.!) iv</code></pre>
-</doc-codeblock></div>
-<p>に同じベクタを指定したものになっている。</p>
-<p>初期状態 <span class="math">x</span> から状態遷移を <span class="math">2^n</span> 回行ったときの遷移先は <code v-pre>A[n][x]</code> である。<br />
-遷移回数 <span class="math">k</span> が2のべき乗でない場合は、2のべき乗回の遷移を組み合わせて求める。
-すなわち、2進数表記で1のある桁の遷移を行う。
-例えば5回の遷移は <span class="math">2^2</span> 回の遷移と <span class="math">2^0</span> 回の遷移の合成で求められる。</p>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">import Data.Bits
-
-bitSeq n = map (flip testBit 0) $ takeWhile (0 /=) $ iterate (flip shiftR 1) n
-
-transition arr0 = \k x -&gt; foldl (flip (!)) x [arr | (True,arr) &lt;- zip (bitSeq k) arrs]
-  where
-    arrs = iterate arr2arr arr0
-    arr2arr arrm = fmap (arrm !) arrm</code></pre>
-</doc-codeblock></div>
-<p><a href="/H4A/snippets/integer/powerish/">べき乗</a>も同じ発想に基づいている。
-というか、べき乗の演算対象として写像を表す配列を当てはめたインスタンスがダブリングだ。</p>
-<doc-anchor-target id="関連問題">
+<p>二つの文字列が与えられたとき、一部の文字を取り除いて両者を等しくしたときの最長の文字列、またはその長さを見つける。
+つまり、連続した要素でなくて構わないが、順序は変更できない。</p>
+<doc-anchor-target id="長さだけ得る版">
     <h2>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
-        <span>関連問題</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#長さだけ得る版">#</doc-anchor-trigger>
+        <span>長さだけ得る版</span>
     </h2>
 </doc-anchor-target>
-<ul>
-<li><a href="https://atcoder.jp/contests/abc179/tasks/abc179_e">ABC179 E Sequence Sum</a> - 【ACコード】</li>
-<li><a href="https://atcoder.jp/contests/abc013/tasks/abc013_4">ABC013 D 阿弥陀</a> - <a href="https://atcoder.jp/contests/abc013/submissions/29000408">ACコード</a>　思いもよらないところで時間を消費していた。powerishとVector</li>
-</ul>
-<p>ほかに</p>
-<ul>
-<li><a href="https://atcoder.jp/contests/abc167/tasks/abc167_d">ABC167 D Teleporter</a> - <a href="https://atcoder.jp/contests/abc167/submissions/23150308">ACコード</a> UArrayにより遷移を毎回正格評価させ、遷移表の生成と消費を同時に行っている</li>
-</ul>
-<p>ABC136 D - Gathering Children</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import qualified Data.Vector.Unboxed.Mutable as MUV
+import Control.Monad
+import Control.Monad.ST
+
+-- @gotoki_no_joe
+lcsLen :: Eq t =&gt; [t] -&gt; [t] -&gt; Int
+lcsLen as bs = runST action
+  where
+    n = length as
+    n1 = succ n
+    action :: ST s Int
+    action = do
+      line0 &lt;- MUV.replicate n1 0
+      line1 &lt;- MUV.replicate n1 0
+      let step = \(line, line1) bi -&gt; do {
+        forM_ (zip [1..n] as) (\(i,ai) -&gt;
+          if ai == bi
+          then do
+            a00 &lt;- MUV.read line (pred i)
+            MUV.write line1 i (succ a00)
+          else do
+            a01 &lt;- MUV.read line i
+            a10 &lt;- MUV.read line1 (pred i)
+            MUV.write line1 i (max a10 a01)
+          );
+        return (line1, line)}
+      (linen,_) &lt;- foldM step (line0,line1) bs
+      MUV.read linen n</code></pre>
+</doc-codeblock></div>
+<p>計算の進行に必要な2行ぶんのメモリだけを Mutable Vector で確保して交互に使いまわしている。
+STモナドで計算しているのでIO汚染されていない。</p>
+<doc-anchor-target id="長さだけ得るlist版">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#長さだけ得るlist版">#</doc-anchor-trigger>
+        <span>長さだけ得るList版</span>
+    </h2>
+</doc-anchor-target>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import Data.List
+
+-- @gotoki_no_joe
+lcsLen as bs = last linen
+  where
+    line0 = 0 : replicate (length as) 0
+    linen = foldl' {-'-} step line0 bs
+    step line bi = last line1 `seq` line1
+      where
+        line1 = 0 : zipWith4 f as line (tail line) line1
+        f ai arr00 arr10 arr01
+          | ai == bi  = arr01 `seq` succ arr00
+          | otherwise = max arr10 arr01</code></pre>
+</doc-codeblock></div>
+<p>畳み込みを <code v-pre>foldl'</code> で正格評価し、さらに個々の要素をそうするために <code v-pre>seq</code> を仕込んでいる。</p>
+<doc-anchor-target id="列をひとつだけ取り出すlist版">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#列をひとつだけ取り出すlist版">#</doc-anchor-trigger>
+        <span>列をひとつだけ取り出すList版</span>
+    </h2>
+</doc-anchor-target>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import Data.List
+
+-- @gotoki_no_joe
+lcs :: Eq a =&gt; [a] -&gt; [a] -&gt; (Int,[a])
+lcs as bs = fmap reverse $ last linen
+  where
+    zero = (0,[])
+    maxx abs cds = if fst abs &gt;= fst cds then abs else cds
+    line0 = zero : replicate (length as) zero
+    linen = foldl' {-'-} step line0 bs
+    step line bi = last line1 `seq` line1
+      where
+        line1 = zero : zipWith4 f as line (tail line) line1
+        f ai (x,ys) c01 c10
+          | ai /= bi = c10 `maxx` c01
+          | ai == bi = c10 `maxx` c01 `maxx` (succ x, a : ys)</code></pre>
+</doc-codeblock></div>
+<p>aiとbiが等しいとき、確実に最後の項が選ばれ、上や左との比較は無駄なのだが、
+これを省略するとスペースリークしてフットプリントが大きくなりすぎる。
+（なぜそうなるのかまだよくわからない。）
+この式を
+<code v-pre>fst c10 `seq` fst c01 `seq` (succ x, a : ys)</code>
+としても挙動が変わる。</p>
+<p><code v-pre>maxx</code> を単純に <code v-pre>max</code> に置き換えると <code v-pre>a</code> に <code v-pre>Ord</code> が要求される。</p>
+<doc-anchor-target id="列をひとつだけ取り出すmutable-vector版">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#列をひとつだけ取り出すmutable-vector版">#</doc-anchor-trigger>
+        <span>列をひとつだけ取り出すMutable Vector版</span>
+    </h2>
+</doc-anchor-target>
+<div class="codeblock-wrapper"><doc-codeblock line-numbers>
+<pre class="language-haskell"><code v-pre class="language-haskell">lcs :: Eq t =&gt; [t] -&gt; [t] -&gt; (Int,[t])
+lcs as bs = runST action
+  where
+    n = length as
+    n1 = succ n
+    action = do
+      line0 &lt;- MUV.replicate n1 0
+      lines &lt;- foldM (step as) [line0] bs
+      x &lt;- MUV.read (head lines) n
+      ys &lt;- recover n [] (reverse as) (reverse bs) lines
+      return (x, ys)
+    step as lines bi = do
+        let line = head lines
+        line1 &lt;- MUV.new n1 ; MUV.write line1 0 0
+        forM_ (zip [1..n] as) (\(i,ai) -&gt;
+          if ai == bi
+          then do
+            a00 &lt;- MUV.read line (pred i)
+            MUV.write line1 i (succ a00)
+          else do
+            a01 &lt;- MUV.read line i
+            a10 &lt;- MUV.read line1 (pred i)
+            MUV.write line1 i (max a10 a01)
+          )
+        return (line1 : lines)
+    recover 0 ys _ _ _ = return ys
+    recover _ ys [] _ _ = return ys -- redundant?
+    recover _ ys _ [] _ = return ys
+    recover i ys aas@(a:as) bbs@(b:bs) lls@(line:lines)
+      | a == b = recover (pred i) (a:ys) as bs lines
+      | otherwise = do
+          a11 &lt;- MUV.read line i
+          a01 &lt;- MUV.read line (pred i)
+          if a01 == a11
+            then recover (pred i) ys as bbs lls
+            else recover i ys aas bs lines</code></pre>
+</doc-codeblock></div>
+<p>行8のループで長さを求める過程の表をmutable vectorのリストとして持っておき、
+行10で末尾から復元を行っている。</p>
+<doc-anchor-target id="お話">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#お話">#</doc-anchor-trigger>
+        <span>お話</span>
+    </h2>
+</doc-anchor-target>
+<p><a href="/H4A/readings/whereis/33.lcs/">あのアルゴリズムはどこ？の33</a>より。</p>
 
 
 
@@ -243,20 +325,20 @@ transition arr0 = \k x -&gt; foldl (flip (!)) x [arr | (True,arr) &lt;- zip (bit
             
 <nav class="flex mt-14">
     <div class="w-1/2">
-        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/readings/whereis/31.keta-dp/">
+        <a class="px-5 py-4 h-full flex items-center break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-l-lg transition-colors duration-150 relative hover:z-5" href="/H4A/ad/graph/kruskal/">
             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
             <span>
                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                <span class="block mt-1">31.桁DP（要書き直し）</span>
+                <span class="block mt-1">クラスカル法</span>
             </span>
         </a>
     </div>
 
     <div class="w-1/2">
-        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/readings/whereis/33.lcs/">
+        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/ad/query/segment-tree/">
             <span>
                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                <span class="block mt-1">33.最長共通部分列</span>
+                <span class="block mt-1">セグメント木</span>
             </span>
             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
         </a>
@@ -304,6 +386,6 @@ transition arr0 = \k x -&gt; foldl (flip (!)) x [arr | (True,arr) &lt;- zip (bit
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "32.ダブリング（途中）", icon: "file", hasPrism: true, hasMermaid: false, hasMath: true }</script>
+        <script>window.__DOCS__ = { "title": "最長共有部分列", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
     </body>
 </html>

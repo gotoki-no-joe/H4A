@@ -9,7 +9,7 @@ order: -02000
 
 一言ポイントは[『競プロ典型 90 問』非公式難易度表・ソースコード共有](https://docs.google.com/spreadsheets/d/1GG4Higis4n4GJBViVltjcbuNfyr31PzUY_ZY1zh2GuI/view)などより。
 
-## ★2
+## ★2 (10問)
 
 - [4. Cross Sum](https://atcoder.jp/contests/typical90/tasks/typical90_d)
 　[ACコード](https://atcoder.jp/contests/typical90/submissions/23707569)  
@@ -64,7 +64,7 @@ Numericモジュールに丸投げする[別解](https://atcoder.jp/contests/typ
 　グラフの基本を知ろう  
 真面目にグラフとして読み込まない[別解](https://atcoder.jp/contests/typical90/submissions/25720748)
 
-## ★3
+## ★3 (20問)
 
 - [2. Encyclopedia of Parentheses](https://atcoder.jp/contests/typical90/tasks/typical90_b)
 　[ACコード](https://atcoder.jp/contests/typical90/submissions/28855241)  
@@ -173,7 +173,7 @@ Integerで押し切る[別解](https://atcoder.jp/contests/typical90/submissions
 　[解説2](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/084-02.jpg?raw=true)
 　余事象+ランレングス圧縮 累積的に計算しよう
 
-## ★4
+## ★4 (14問 2残し)
 
 - [1. Yokan Party](https://atcoder.jp/contests/typical90/tasks/typical90_a)
 　[ACコード](https://atcoder.jp/contests/typical90/submissions/25824596)  
@@ -290,6 +290,37 @@ Unboxed版のUnionFindを改造すると[もっと速くできる](https://atcod
 [出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/036.jpg?raw=true)
 　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/036.jpg?raw=true)
 　マンハッタン距離は 45 度回転
+- [37. Don't Leave the Spice](https://atcoder.jp/contests/typical90/tasks/typical90_ak)
+　[ACコード]  
+[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/037.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/037.jpg?raw=true)
+　DP をセグメント木 (RMQ) で高速化
+- [39. Tree Distance](https://atcoder.jp/contests/typical90/tasks/typical90_am)
+　[ACコード]  
+[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/039.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/039.jpg?raw=true)
+　答えへの貢献度を考える：主客転倒
+- [51. Typical Shop](https://atcoder.jp/contests/typical90/tasks/typical90_ay)
+　[ACコード](https://atcoder.jp/contests/typical90/submissions/29213303)  
+[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/051.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/051.jpg?raw=true)
+　半分全列挙をしよう
+- [56. Lucky Bag](https://atcoder.jp/contests/typical90/tasks/typical90_bd)
+　[ACコード](https://atcoder.jp/contests/typical90/submissions/29217475)  
+[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/056.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/056.jpg?raw=true)
+　DP復元  
+DPが済んだ後で復元する代わりに、可能な手をひとつ記録しながら進行しながら進める亜種で解いた。
+最低価格+αのαだけをDPすることで幅を狭めると
+[ArrayでもACする](https://atcoder.jp/contests/typical90/submissions/29214453)が、
+素直にS円まで張ると[Mutable Vectorを用いないとTLE](https://atcoder.jp/contests/typical90/submissions/29216611)
+してしまう  
+復元を遅延評価で後回しにするのと、DPを遅らせずに進めるのをバランスさせるのが難しい。素直に実装したACコードは速いがHaskellらしくない。
+- [60. Chimera](https://atcoder.jp/contests/typical90/tasks/typical90_bh)
+　[ACコード]  
+[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/060.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/060.jpg?raw=true)
+　両側から考える 最長増加部分列（LIS）
 
 <!--
 - [. ]()
@@ -300,11 +331,6 @@ Unboxed版のUnionFindを改造すると[もっと速くできる](https://atcod
 -->
 
 ```
-037	Don't Leave the Spice（★5）	2 sec	1024 MB	提出
-039	Tree Distance（★5）	2 sec	1024 MB	提出
-051	Typical Shop（★5）	3 sec	1024 MB	提出
-056	Lucky Bag（★5）	2 sec	1024 MB	提出
-060	Chimera（★5）	2 sec	1024 MB	提出
 066	Various Arrays（★5）	2 sec	1024 MB	提出
 068	Paired Information（★5）	2 sec	1024 MB	提出
 073	We Need Both a and b（★5）	2 sec	1024 MB	提出
