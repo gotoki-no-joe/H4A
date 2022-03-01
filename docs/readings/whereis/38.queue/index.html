@@ -7,28 +7,29 @@
     <meta name="turbo-cache-control" content="no-cache">
 
     <!-- Primary Meta Tags -->
-    <title>38.キュー（途中）</title>
-    <meta name="title" content="38.キュー（途中）">
+    <title>38.キュー</title>
+    <meta name="title" content="38.キュー">
     <meta name="description" content="標準ライブラリ Data.Sequence を使えば 前後どちらからでも要素の追加、削除のできるキューがHaskellでも使える。" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/readings/whereis/38.queue/">
-    <meta property="og:title" content="38.キュー（途中）">
+    <meta property="og:title" content="38.キュー">
     <meta property="og:description" content="標準ライブラリ Data.Sequence を使えば 前後どちらからでも要素の追加、削除のできるキューがHaskellでも使える。">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/readings/whereis/38.queue/">
-    <meta property="twitter:title" content="38.キュー（途中）">
+    <meta property="twitter:title" content="38.キュー">
     <meta property="twitter:description" content="標準ライブラリ Data.Sequence を使えば 前後どちらからでも要素の追加、削除のできるキューがHaskellでも使える。">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.698058334636" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.699461153334" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.698058334636" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.699461153334" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.699461153334" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -161,15 +162,57 @@
                 <div id="docs-sidebar-right-toggle"></div>
                
                 <!-- Page content  -->
-<doc-anchor-target id="38キュー途中" class="break-words">
+<doc-anchor-target id="38キュー" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#38キュー途中">#</doc-anchor-trigger>
-        <span>38.キュー（途中）</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#38キュー">#</doc-anchor-trigger>
+        <span>38.キュー</span>
     </h1>
 </doc-anchor-target>
 <p>標準ライブラリ<a href="/H4A/library/data.sequence/">Data.Sequence</a>を使えば
 前後どちらからでも要素の追加、削除のできるキューがHaskellでも使える。</p>
-<p>ただ、関連問題は２つのリストをうまく使えばキューは特に必要ない印象？</p>
+<p>ただ、関連問題と <code v-pre>Data.Sequence</code> はあまり相性がよくない。
+前からと後ろからとの双方向で出し入れする、
+あるいは入れると出すが入り乱れるような用途なら <code v-pre>Data.Sequence</code> が適合するが、
+データの流れが一方項であれば、
+取り出す用のリストの内容を一斉に処理し、その結果次回に処理する値は繰り越し用のリストにため込み、
+取り出しリストが空になったら移し替える、という手順の方が効率が稼げる印象。</p>
+<p>Data.Sequenceで処理するパターン</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">compute xs = loop initial (Q.fromList xs)
+  where
+    loop acc Q.Empty   = acc           -- (5) キューが空なら処理完了
+    loop acc (x :&lt;| q) = loop acc1 q1  -- (1)キュー先頭のxを取り出し、(4)続きをする
+      where
+        acc1 = foo acc x                  -- (2)結果の候補を更新し
+        q1 = foldl (|&gt;) q (bar x)         -- (3)キュー末尾に処理対象を追加し</code></pre>
+</doc-codeblock></div>
+<p>二つのリストを用いる代替パターン</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">compute xs = loop initial [] xs
+  where
+    loop acc [] []     = acc               -- (6)繰り越すものもなくなったら処理完了
+    loop acc ys []     = loop acc  []  ys  -- (5)キューが空になったらysから繰り越し
+    loop acc ys (x:xs) = loop acc1 ys1 xs  -- (1)キュー先頭のxを取り出し、(4)続きをする
+      where
+        acc1 = foo acc x                      -- (2)結果の候補を更新し
+        ys1 = bar x ++ ys                     -- (3)次のキューに処理対象を追加し</code></pre>
+</doc-codeblock></div>
+<!--
+（蛇足）遅延評価を使ったリストによるキュー
+
+```haskell
+compute xs = ans
+  where
+    (ans, queue) = loop initial (length xs) (xs ++ queue)
+    loop acc 0 _  = (acc, [])             -- 処理完了
+    loop acc n xs = (ans, xs2 ++ xs1)
+      where
+        x = head xs                       -- キュー先頭のxを取り出し、
+        acc1 = foo acc x                  -- 結果の候補を更新
+        xs2 = bar x                       -- 追加の処理対象
+        (ans, xs1) = loop acc1 (pred n + length xs2) (tail xs) -- 続きを最後まで計算
+```
+-->
 <doc-anchor-target id="関連問題">
     <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
@@ -180,10 +223,9 @@
 <li><a href="https://atcoder.jp/contests/abc066/tasks/arc077_a">ABC066 C pushpush</a> - <a href="https://atcoder.jp/contests/abc066/submissions/23260041">別解ACコード</a> ようはOkasakiのキューの前半と後半にconsしているが、どうせ吐き出すのは一気にするのでキューである必然性がなかった。</li>
 <li><a href="https://atcoder.jp/contests/arc108/tasks/arc108_b">ARC108 B Abbreviate Fox</a> - <a href="https://atcoder.jp/contests/arc108/submissions/23262668">別解ACコード</a></li>
 <li><a href="https://atcoder.jp/contests/zone2021/tasks/zone2021_d">ZONeエナジー プログラミングコンテスト D 宇宙人からのメッセージ</a> - <a href="https://atcoder.jp/contests/zone2021/submissions/23263015">別解ACコード</a></li>
-<li><a href="https://atcoder.jp/contests/agc033/tasks/agc033_a">AGC033 A Darker and Darker</a> - 【ACコード】</li>
+<li><a href="https://atcoder.jp/contests/agc033/tasks/agc033_a">AGC033 A Darker and Darker</a> - <a href="https://atcoder.jp/contests/agc033/submissions/29792828">ACコード</a>  <br />
+素朴に <code v-pre>Data.Sequence</code> を使うと<a href="https://atcoder.jp/contests/agc033/submissions/29789855">遅すぎた</a>。</li>
 </ul>
-<p>最後のは両端キューとしても意味がわからない。  <br />
-それ以外は、リストを２つ使うと割となんとかなるよ、というパターンといえるか？</p>
 
 
 
@@ -256,6 +298,6 @@
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "38.キュー（途中）", icon: "file", hasPrism: false, hasMermaid: false, hasMath: false }</script>
+        <script>window.__DOCS__ = { "title": "38.キュー", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
     </body>
 </html>

@@ -25,11 +25,13 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.698058334636" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.699461153334" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.698058334636" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.699461153334" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.698058334636" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.699461153334" defer></script>
+    <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
+    <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -168,13 +170,19 @@
         <span>23.最長増加部分列（要書き直し）</span>
     </h1>
 </doc-anchor-target>
-<p><a href="https://tjkendev.github.io/procon-library/python/dp/lis.html">https://tjkendev.github.io/procon-library/python/dp/lis.html</a></p>
-<p>長さ$$N$$ の数列$$a_1, a_2, \dots, a_N$$に対して、<br />
-$$a_{i_1} &lt; a_{i_2} &lt; \dots &lt; a_{i_k}$$となる$$i_1 &lt; i_2 &lt; \dots &lt; i_k$$の中で最大の$$k$$を求める</p>
+<p><a href="https://tjkendev.github.io/procon-library/python/dp/lis.html">最長増加部分列</a></p>
+<p>長さ <span class="math">N</span> の数列 <span class="math">[a_1, a_2, \dots, a_N]</span> に対して、
+<span class="math">a_{i_1} &lt; a_{i_2} &lt; \dots &lt; a_{i_k}</span> となる <span class="math">i_1 &lt; i_2 &lt; \dots &lt; i_k</span> の中で
+最大の <span class="math">k</span> や、添え字列 <span class="math">[i_j]</span> や部分列 <span class="math">[a_{i_j}]</span> を求める</p>
 <p>つまり、飛び飛びにより大きい要素を拾って作れる最も長い部分列を作れということ。</p>
 <p>数列を前からスキャンして、そこまでの数列に関する増加部分列の末尾要素の候補を一つ持ってくるたびに、それを連結することで数列の長さと最後尾の要素がいくつになるかを追跡する。</p>
-<p>Haskellの都合で、後ろから考える。つまりロジックを逆にする。<br />
-$$a_{i+1}$$から$$a_N$$までの数列の増加部分列に、長さ$$k$$先頭の値$$x$$のものがあるとする。次に調べる値$$a_i$$に関して、$$a_i \geq x$$ならばこの列の前に$$a_i$$を繋げたものは増加列ではないのでお呼びでない。一方$$a_i &lt; x$$ならばこの列の前に$$a_i$$を繋げると、長さ$$k+1$$で先頭の値$$a_i$$の増加部分列が見つかる。また、$$x &gt; a_{i-1} &gt; a_i$$でこちらを選ぶ方が得策かもしれないので、両方の情報を残す。また、長さ0の部分列に$$a_i$$を繋げて長さ$$1$$先頭の値$$a_i$$という増加部分列は常に作れる。これで、列に対して全ての増加部分列を見つけ出すことができる。</p>
+<hr/>
+<p>Haskellの都合で、後ろから考える。つまりロジックを逆にする。</p>
+<p><span class="math">a_{i+1}</span> から <span class="math">a_N</span> までの数列の増加部分列に、長さ <span class="math">k</span> 先頭の値 <span class="math">x</span> のものがあるとする。<br />
+次に調べる値 <span class="math">a_i</span> に関して、 <span class="math">x &lt; a_i</span> ならばこの列の前に <span class="math">a_i</span> を繋げたものは増加列ではないのでお呼びでない。<br />
+一方 <span class="math">a_i &lt; x</span> ならば、この列の前に <span class="math">a_i</span> を繋げると、長さ <span class="math">k+1</span> で先頭の値 <span class="math">a_i</span> の増加部分列になる。<br />
+また、長さ0の部分列に <span class="math">a_i</span> を繋げて長さ <span class="math">1</span> 先頭の値 <span class="math">a_i</span> という増加部分列は常に作れる。<br />
+これを列の先頭に届くまで繰り返すことで、全ての増加部分列を見つけ出すことができる。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">import Data.List
 import Data.Function
@@ -182,8 +190,9 @@ import Data.Function
 increasing_subsequences :: Ord a =&gt; [a] -&gt; [[a]]
 increasing_subsequences = foldr step [ [] ]
   where
-    step a iss = [a] : iss ++
-                 [a:is | is &lt;- iss, less a is]
+    step a iss = [a] :
+                 [a:is | is &lt;- iss, less a is] ++
+                 iss
 
 less _ [] = True
 less x (y:_) = x &lt; y
@@ -192,8 +201,14 @@ longuest_increasing_subsequence :: Ord a =&gt; [a] -&gt; [a]
 longuest_increasing_subsequence =
   maximumBy (compare `on` length) . increasing_subsequence</code></pre>
 </doc-codeblock></div>
-<p>「最長のもの」だけを見つけることが目的なら、全てを持っておく必要はない。それぞれの長さごとに、その長さの部分列の中で、最大の先頭要素を持つものが、以降の成長が最も期待できる。そこで、長さごとに、最大の先頭要素だけを追跡する。</p>
-<p>末尾から要素$$a_{i+1}$$まで調べて長さ$$k$$の最大の先頭要素が$$x_k$$、長さ$$k+1$$の最大の先頭要素が$$x_{k+1}$$であるとき、$$a_i &lt; x_k$$ならば長さ$$k+1$$の部分列が作れるが、$$a_i \leq x_{k+1}$$ならば既知の長さ$$k+1$$の列の方がましである。一方$$a_i &gt; x_{k+1}$$のときは長さ$$k+1$$に関する情報を更新するべきである。長さ$$k+1$$の列がまだないときは追加して構わない。</p>
+<p>「最長のもの」だけを見つけることが目的なら、全ての候補を保持している必要はない。
+それぞれの長さごとに、その長さの部分列の中で、最大の先頭要素を持つものが、以降の成長が最も期待できる。
+そこで、長さごとに、最大の先頭要素だけを追跡する。</p>
+<p>末尾から要素 <span class="math">a_{i+1}</span> まで調べて、
+長さ <span class="math">k</span> の最大の先頭要素が <span class="math">x_k</span> 、長さ <span class="math">k+1</span> の最大の先頭要素が <span class="math">x_{k+1}</span> であるとき、
+<span class="math">a_i &lt; x_k</span> ならば長さ <span class="math">k+1</span> の部分列が作れるが、
+<span class="math">a_i \leq x_{k+1}</span> ならば既存のものの方が有利なので差し替えをしない。
+長さ <span class="math">k+1</span> の列がまだないときは初めての候補として追加する。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">import qualified Data.IntMap as IM
 
@@ -207,31 +222,56 @@ longuest_increasing_subsequence as = IM.findMax m
 less _ [] = True
 less x (y:_) = x &lt; y</code></pre>
 </doc-codeblock></div>
-<p>初期値にmaxBoundを入れたmutableな配列を利用する実装よりは遅いだろう。</p>
 <p>列そのものは不要なら、先頭の値だけを管理する。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">import qualified Data.IntMap as IM
 
-longuest_increasing_subsequence :: Ord a =&gt; [a] -&gt; Int -- 長さ
-longuest_increasing_subsequence [] = 0
-longuest_increasing_subsequence as = fst $ IM.findMax m
+longuest_increasing_subsequence :: (Ord a, Bounded a) =&gt; [a] -&gt; Int -- 長さ
+longuest_increasing_subsequence = fst . IM.findMax . foldr step (IM.singleton 0 maxBound)
   where
-    m = foldr step IM.empty as
---  step a m = IM.unionsWith max
---             [ m
---             , IM.singleton 1 a
---             , IM.mapKeys succ $ IM.map (const a) $ IM.filter (a &lt;) m ]
-   step a m = IM.unionWith max m $
-               IM.fromAscList $ (1,a) : [(succ k, a) | (k,x) &lt;- IM.assocs m, a &lt; x]</code></pre>
+    step a m = IM.unionWith max m $
+               IM.mapKeys succ $ IM.map (const a) $ IM.filter (a &lt;) m</code></pre>
 </doc-codeblock></div>
 <p>これではまだ考察がふたつ足らなかった。</p>
 <p>まず、mの要素は新たなaにより既存のものより1長くなるか、あるいは既にある長さのものが更新されるだけなので、不連続になることはない。つまり写像でなく配列で管理しても無駄は起きないこと。</p>
-<p>もうひとつ、mは真に単調減少すること。<br />
-- 空列は単調減少である。<br />
-- 長さ1の列は単調減少である。<br />
-- 単調増加列に対して、「aを超える要素の次の要素全てを、aと現在の値の大きい方で置き換える」という操作をする。$$x_k &gt; x_{k+1} &gt; a &gt; x_{k+2} &gt; x_{k+3}$$となっていたとき、<br />
-$$x&#x27;<em>{k+1} = \max a , x</em>{k+1} = x_{k+1}$$は変化しない。$$x&#x27;<em>{k+2} = \max a , x</em>{k+2} = a$$は更新される。これより左の部分も右の部分も変化せず、単調減少のままである。</p>
-<p>そして上の考察から、m全体を調べる必要はなく、aをまたぐ一箇所だけを調べて必要なら更新すればよいだけであることが導ける。これで、stepは$$O(n)$$かかる仕事ではなくなる。実際、二分探索で答えを導けるので$$O(\log n)$$となる。</p>
+<p>もうひとつ、mは真に単調減少すること。</p>
+<p>ある長さ <span class="math">k-1</span> の列の先頭 <span class="math">x_{k-1}</span> が次の文字 <span class="math">a_i</span> より大きいときのみ、延長の候補となる。 <span class="math">a_i &lt; x_{k-1}</span><br />
+これは長さ <span class="math">k</span> の列の新たな候補であるが、採用されるのは、
+現状の長さ <span class="math">k</span> の列の先頭 <span class="math">x_k</span> が <span class="math">a_i</span> より小さいときのみ。 <span class="math">x_k &lt; a_i</span><br />
+つまり合わせると、長さ <span class="math">k</span> の先頭の値が更新されるのは、 <span class="math">x_{k-1} &gt; a_i &gt; x_k</span> のところだけである。<br />
+そして <span class="math">x'_k = a_i</span> と更新されたとき、やはり <span class="math">x_{k-1} &gt; x'_k = a_i</span> である。<br />
+すなわち、更新の操作は m が単調減少であるという性質を保存する。</p>
+<p>初期状態である <span class="math">\{ 0 \mapsto \infty \}</span> は単調減少列である。</p>
+<p>よって、m は常に単調減少列である。</p>
+<p>そして上の考察から、候補列の更新は毎回、 <span class="math">a_i</span> をまたぐたかだか1箇所でしか発生しないことがわかる。
+そのような箇所を見つけるには二分探索を用いて <span class="math">O(\log n)</span> で行う。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import Data.Array
+
+longuest_increasing_subsequence :: (Ord a, Bounded a) =&gt; [a] -&gt; (Int,[a]) -- (長さ,lis)
+longuest_increasing_subsequence as = (len, arrN ! len)
+  where
+    n = length as
+    arr0 = listArray (0, n) $ [] : replicate n []
+    (len, arrN) = foldr step (0, arr0) as
+    step ai larr@(l,arr)
+      | gt ai (head $ arr ! k1) = (max l k1, arr // [(k1, ai : (arr ! k))])
+      | otherwise = larr
+      where
+        (_,k) = binarySearch ((ai &lt;) . head . (arr !)) (succ l) 0
+        k1 = succ k
+    gt _ [] = True
+    gt x (y:_) = x &gt; y</code></pre>
+</doc-codeblock></div>
+<p>foldrで持ちまわす状態の右 <code v-pre>arr</code> は長さごとに最長共有部分列の最もよい候補を持つ配列で、
+左 <code v-pre>l</code> は現在見つかっている最長のそれ、すなわち配列の使用済みの最大の添え字である。</p>
+<p>二分検索で <span class="math">x_k &gt; a_i</span> となる添え字 <span class="math">k</span> を探すとき、
+仮想的に常に先頭が <span class="math">a_i</span> より大きい添え字0と、
+常に先頭は <span class="math">a_i</span> より小さい添え字 <code v-pre>l+1</code> については対象とならないので、
+<code v-pre>less</code> の定義は不要となった。</p>
+<p>次にその添え字 <span class="math">k</span> が <span class="math">a_i &gt; x_{k+1}</span> であるか確認する際に、
+<span class="math">k+1</span> が未使用のときこの条件が成立するように <code v-pre>gt</code> を定義した。</p>
+<hr/>
 <p>部分列そのものをきれいに求めるためにfoldrを上では用いたのをあきらめ、前からリストをスキャンして最長増加部分列の長さだけを求めるようにした最終版を示す。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">import qualified Data.IntMap as IM
@@ -332,6 +372,6 @@ ABC134 E Sequence Decomposing - 【ACコード】
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "23.最長増加部分列（要書き直し）", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
+        <script>window.__DOCS__ = { "title": "23.最長増加部分列（要書き直し）", icon: "file", hasPrism: true, hasMermaid: false, hasMath: true }</script>
     </body>
 </html>

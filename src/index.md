@@ -2,7 +2,7 @@
 order: 00000
 description: "Algorithm (for competitive programming) Design in Haskell"
 ---
-# はじめに
+# Haskell for AtCoder
 
 副題: Algorithm (for competitive programming) Design in Haskell
 
@@ -18,6 +18,7 @@ description: "Algorithm (for competitive programming) Design in Haskell"
   - [ドキュメント](https://atcoder.github.io/ac-library/production/document_ja/)
 - [アルゴリズムロジック](https://algo-logic.info/)
 - [The Algorithms/Haskell](https://github.com/TheAlgorithms/Haskell)
+- [yaketake08 の競プロ テンプレート/ライブラリ、知識等の置き場](https://tjkendev.github.io/procon-library/)
 
 #### テストケース
 

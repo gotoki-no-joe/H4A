@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.698058334636" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.699461153334" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.698058334636" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.699461153334" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.698058334636" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.699461153334" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -314,6 +314,45 @@ lcs as bs = runST action
     </h2>
 </doc-anchor-target>
 <p><a href="/H4A/readings/whereis/33.lcs/">あのアルゴリズムはどこ？の33</a>より。</p>
+<doc-anchor-target id="おまけfoldr版">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#おまけfoldr版">#</doc-anchor-trigger>
+        <span>おまけ：foldr版</span>
+    </h2>
+</doc-anchor-target>
+<p>不自然なfoldl向きでなく、Haskell的に自然なfoldr向きでの版で、
+長さだけ求めるfoldr版と、その中間状態をscanrで保存して逆向きに辿ることで
+自然に列を復元する版が書けたので載せておく。
+性能評価をしていない。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">lcsLen as bs = head line0
+  where
+    lineN = replicate (succ $ length bs) 0
+    line0 = foldr step lineN as
+    step ai line1 = foldr (sstep ai) [0] (zip3 bs line1 (tail line1))
+    sstep ai (bi, c01, c11) cs@(c10:_)
+      | ai == bi  = succ c11    : cs
+      | otherwise = max c01 c10 : cs
+
+lcsStr as bs = (head $ head lines, recover 0 bs $ zip as lines)
+  where
+    lineN = replicate (succ $ length bs) 0
+    lines = scanr step lineN as
+    step ai line1 = foldr (sstep ai) [0] (zip3 bs line1 (tail line1))
+    sstep ai (bi, c01, c11) cs@(c10:_)
+      | ai == bi  = succ c11    : cs
+      | otherwise = max c01 c10 : cs
+    recover _ [] _ = []
+    recover _ _ [] = []
+    recover i bbs@(bi:bs) alalines@((aj, line):alines)
+      | bi == aj  = aj : recover (succ i) bs   alines
+      | left      =      recover (succ i) bs alalines
+      | otherwise =      recover i       bbs   alines
+      where
+        left = case drop i line of
+                 c:d:_ -&gt; c == d
+                 _     -&gt; False</code></pre>
+</doc-codeblock></div>
 
 
 
