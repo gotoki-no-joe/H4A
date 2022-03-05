@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.699461153334" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.699789449996" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.699461153334" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.699789449996" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.699461153334" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.699789449996" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -182,6 +182,47 @@
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">-- glue
 exchange v i x = do y &lt;- MUV.read v i; MUV.write v i x; return y</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="座標変換">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#座標変換">#</doc-anchor-trigger>
+        <span>座標変換</span>
+    </h2>
+</doc-anchor-target>
+<p>疎な集合の要素に番号を振るには、<code v-pre>Data.Set</code> だけあればできる。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import qualified Data.Set as S
+
+-- xs の要素を持つ集合
+s = S.fromList xs
+
+-- xsの要素xからその番号を得る O(log n)
+i = S.findIndex x s
+
+-- 番号iからその要素xを得る O(log n)
+x = S.elemAt i x</code></pre>
+</doc-codeblock></div>
+<p>この便利な機能は残念ながら <code v-pre>Data.IntSet</code> にはない。  <br />
+整数が相手の場合、自分で番号を振った <code v-pre>Data.IntMap</code> を作る方がよいか。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import qualified Data.IntMap as IM
+import qualified Data.IntSet as IS
+import Data.Array
+
+-- xs の要素に番号を付ける
+(x2i, i2x) =
+  let
+    uxs = IS.elems $ IS.fromList xs
+    x2i = IM.fromList $ zip uxs [0..]
+    i2x = listArray (0, pred $ length uxs) uxs
+  in
+    (x2i, i2x)
+
+-- xs の要素xからその番号を得る
+i = x2i IM.! x
+
+-- 番号iからその要素xをえる
+x = i2x ! i</code></pre>
 </doc-codeblock></div>
 
 

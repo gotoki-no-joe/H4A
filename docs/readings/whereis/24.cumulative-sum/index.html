@@ -7,29 +7,31 @@
     <meta name="turbo-cache-control" content="no-cache">
 
     <!-- Primary Meta Tags -->
-    <title>24.累積和（合わせて、いもす法）（途中）</title>
-    <meta name="title" content="24.累積和（合わせて、いもす法）（途中）">
-    <meta name="description" content="Pythonにitertoolsというものがあるらしい。\\ https://qiita.com/anmint/items/37ca0ded5e1d360b51f3 すこいぞitertoolsくん\\ https://docs.python.org/ja/3/library/itertools.html" />
+    <title>24.累積和（合わせて、いもす法）</title>
+    <meta name="title" content="24.累積和（合わせて、いもす法）">
+    <meta name="description" content="Pythonにitertoolsというものがあるらしい。" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/readings/whereis/24.cumulative-sum/">
-    <meta property="og:title" content="24.累積和（合わせて、いもす法）（途中）">
-    <meta property="og:description" content="Pythonにitertoolsというものがあるらしい。\\ https://qiita.com/anmint/items/37ca0ded5e1d360b51f3 すこいぞitertoolsくん\\ https://docs.python.org/ja/3/library/itertools.html">
+    <meta property="og:title" content="24.累積和（合わせて、いもす法）">
+    <meta property="og:description" content="Pythonにitertoolsというものがあるらしい。">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/readings/whereis/24.cumulative-sum/">
-    <meta property="twitter:title" content="24.累積和（合わせて、いもす法）（途中）">
-    <meta property="twitter:description" content="Pythonにitertoolsというものがあるらしい。\\ https://qiita.com/anmint/items/37ca0ded5e1d360b51f3 すこいぞitertoolsくん\\ https://docs.python.org/ja/3/library/itertools.html">
+    <meta property="twitter:title" content="24.累積和（合わせて、いもす法）">
+    <meta property="twitter:description" content="Pythonにitertoolsというものがあるらしい。">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.699461153334" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.699789449996" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.699461153334" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.699789449996" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.699461153334" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.699789449996" defer></script>
+    <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
+    <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -162,117 +164,136 @@
                 <div id="docs-sidebar-right-toggle"></div>
                
                 <!-- Page content  -->
-<doc-anchor-target id="24累積和合わせていもす法途中" class="break-words">
+<doc-anchor-target id="24累積和合わせていもす法" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#24累積和合わせていもす法途中">#</doc-anchor-trigger>
-        <span>24.累積和（合わせて、いもす法）（途中）</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#24累積和合わせていもす法">#</doc-anchor-trigger>
+        <span>24.累積和（合わせて、いもす法）</span>
     </h1>
 </doc-anchor-target>
-<p>Pythonにitertoolsというものがあるらしい。<br />
-<a href="https://qiita.com/anmint/items/37ca0ded5e1d360b51f3#%E7%B4%AF%E7%A9%8D%E5%92%8C">https://qiita.com/anmint/items/37ca0ded5e1d360b51f3</a> すこいぞitertoolsくん<br />
-<a href="https://docs.python.org/ja/3/library/itertools.html">https://docs.python.org/ja/3/library/itertools.html</a> 効率的なループ実行のためのイテレータ生成関数</p>
+<p>Pythonにitertoolsというものがあるらしい。</p>
+<ul>
+<li><a href="https://qiita.com/anmint/items/37ca0ded5e1d360b51f3">すごいぞitertoolsくん</a></li>
+<li><a href="https://docs.python.org/ja/3/library/itertools.html">効率的なループ実行のためのイテレータ生成関数</a></li>
+</ul>
 <blockquote>
 <p>このモジュールは イテレータ を構築する部品を実装しています。プログラム言語 APL, Haskell, SML からアイデアを得ていますが、 Python に適した形に修正されています。</p>
 </blockquote>
 <p>逆輸入する必要性はないと思うが、itertoolが競技プログラミングでどう利用できるか、という点は役に立つと思われる。</p>
 <doc-anchor-target id="累積和">
-    <h3>
+    <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#累積和">#</doc-anchor-trigger>
         <span>累積和</span>
-    </h3>
+    </h2>
 </doc-anchor-target>
-<p>数列$$a_n$$に対して、前から足し合わせた値の列$$S_n = \sum_{k=1}^n a_k$$を作る。<br />
-区間和が$$\sum_{k=i}^j a_k = S_j - S_{i-1}$$ということで$$O(1)$$で得られるようになる。</p>
+<p>数列 <span class="math">a_n</span> に対して、前から足し合わせた値の列 <span class="math">S_n = \sum_{k=1}^n a_k</span> を作る。<br />
+区間和が <span class="math">\sum_{k=i}^j a_k = S_j - S_{i-1}</span> ということで <span class="math">O(1)</span> で得られるようになる。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
 <pre class="language-haskell"><code v-pre class="language-haskell">ss = scanl1' (+) as</code></pre>
 </doc-codeblock></div>
-<doc-anchor-target id="ある値が何個あるか">
+<p>itertoolsのその他の機能については次の項目で。</p>
+<doc-anchor-target id="いもす法多次元累積和">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#いもす法多次元累積和">#</doc-anchor-trigger>
+        <span>いもす法（多次元累積和）</span>
+    </h2>
+</doc-anchor-target>
+<p>（トピックが大きく分かれるので、別でちゃんと説明するべきかと。）</p>
+<p><a href="https://imoz.jp/algorithms/imos_method.html">いもす法</a></p>
+<doc-anchor-target id="一次元">
     <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#ある値が何個あるか">#</doc-anchor-trigger>
-        <span>ある値が何個あるか</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#一次元">#</doc-anchor-trigger>
+        <span>一次元</span>
     </h3>
 </doc-anchor-target>
-<p>並びに対して、等しいものが連続しているところをまとめる。<br />
-それ<code v-pre>Data.List.group</code>と<code v-pre>Data.List.groupBy</code>そのもの。</p>
-<doc-anchor-target id="組み合わせ">
+<p>時間軸に対して、時刻と増減が与えられたとき、各時刻の絶対値を得たいとする。</p>
+<p>素朴な方法：</p>
+<ul>
+<li>時刻の範囲で配列を用意し、全てを初期値で初期化しておく。</li>
+<li>(時刻,増減) それぞれについて、時刻以降の配列の値全てに増減を足しこむ</li>
+</ul>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">cumulativeSum :: Num a =&gt; Int -&gt; a -&gt; [(Int,a)] -&gt; [a]
+cumulativeSum n i tds = elems arr
+  where
+    arr = accumArray (+) i (1,n)
+          [(t1,d) | (t,d) &lt;- tds, t1 &lt;- [t..n]]</code></pre>
+</doc-codeblock></div>
+<p>は、配列の大きさ <span class="math">N</span> と増減の情報の個数 <span class="math">M</span> について、 <span class="math">O(MN)</span> かかる。</p>
+<p>差分を記録し、それを累積すると、各時刻の値が得られる。
+（微分関数を積分することに似ている。）</p>
+<ul>
+<li>時刻の範囲で配列を用意し、全てを0で初期化しておく。（差分の配列）</li>
+<li>(時刻,増減) それぞれについて、配列のその時刻の値に増減を足しこむ</li>
+<li>先頭から増減値を累積すると、各時刻の絶対値が得られる。</li>
+</ul>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">cumulativeSum n i tds = tail $ scanl (+) i $ elems arr
+  where
+    arr = accumArray (+) 0 (1,n) tds</code></pre>
+</doc-codeblock></div>
+<p>こちらは <span class="math">O(M+N)</span> で済む。</p>
+<doc-anchor-target id="二次元">
     <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#組み合わせ">#</doc-anchor-trigger>
-        <span>組み合わせ</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#二次元">#</doc-anchor-trigger>
+        <span>二次元</span>
     </h3>
 </doc-anchor-target>
-<doc-anchor-target id="順列">
-    <h4>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#順列">#</doc-anchor-trigger>
-        <span>順列</span>
-    </h4>
-</doc-anchor-target>
-<p>順列組み合わせは<code v-pre>Data.List.permutations</code>でできる。ただし出現順が微妙に謎。</p>
-<p>与えられるリストを昇順として、辞書順に生成するには自作することになる。<br />
-全てを使い切るのではなく、指定個とする場合も対応できる。</p>
+<p>2次元格子の上で、いくつかの矩形領域に定数を足しこむことを考える。</p>
+<p>素朴な方法では <span class="math">O(MWH)</span> かかる。
+（<span class="math">M, W, H</span> はそれぞれ矩形領域の個数、格子の幅、高さ）</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
--- 順列を辞書順で
-perm [] = [[]]
-perm xs = [a : ys | (a,as) &lt;- one [] xs, ys &lt;- perm as]
--- 要素を一つ選び、残りの要素を付けて返す
-one bs [] = []
-one bs (a:as) = (a,rev bs as) : one (a:bs) as
--- reverse bs ++ as
-rev bs as = foldl' (flip (:)) as bs
-
--- 個数制限
-permofN 0 _ = [[]]
-permofN n xs = [a : ys | (a,as) &lt;- one [] xs, ys &lt;- permofN (pred n) as]</code></pre>
+<pre class="language-haskell"><code v-pre class="language-haskell">cumulativeSum2d :: Num a =&gt; Int -&gt; Int -&gt; a -&gt; [(Int,Int,Int,Int,a)] -&gt; Array (Int,Int) a
+cumulativeSum2d h w i rects =
+  accumArray (+) i ((1,1),(h,w))
+  [((y,x),d) | (t,b,l,r,d) &lt;- recs, x &lt;- [l..r], y &lt;- [t..b]] </code></pre>
 </doc-codeblock></div>
-<doc-anchor-target id="組み合わせ-1">
-    <h4>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#組み合わせ-1">#</doc-anchor-trigger>
-        <span>組み合わせ</span>
-    </h4>
-</doc-anchor-target>
+<p>格子のそれぞれの行を1次元の累積和（左から右）で考えると、
+矩形の左の辺のマスに増、右の辺のマスに減の差分を与えてやればよい。<br />
+そのような差分の格子を作るための、もう一段の累積和（上から下）を考えると、
+格子のそれぞれの列について、左上に増、左下に減、右上に減、右下に増、の差分を与えてやればよい。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
-combofN 0 _ = [[]]
-combofN _ [] = []
-combofN n (a:as) = [a:bs | bs &lt;- combofN (pred n) as] ++ combofN n as</code></pre>
+<pre class="language-haskell"><code v-pre class="language-haskell">cumulativeSum2d h w i rects = arr
+  where
+    d2a = accumArray (+) 0 ((1,1),(h,w)) $ concat
+          [ [((t,l),d), ((b1,l), nd), ((t,r1), nd), ((b1, r1), d)]
+          | (t,b,l,r,d) &lt;- rects, let b1 = succ b, let r1 = succ r, let nd = negate d]
+    d1a = array ((1,1),(h,w))
+          [ ((x,y),e)
+          | x &lt;- [1..w], let es = tail $ scanl (+) 0 [d2a ! (x,y) | y &lt;- [1..h]]
+          , (y,e) &lt;- zip [1..h] es]
+    arr = array ((1,1),(h,w))
+          [ ((x,y),e)
+          | y &lt;- [1..h], let es = tail $ scanl (+) i [d1a ! (x,y) | x &lt;- [1..w]]
+          , (x,e) &lt;- zip [1..w] es]</code></pre>
 </doc-codeblock></div>
-<doc-anchor-target id="直積">
-    <h4>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#直積">#</doc-anchor-trigger>
-        <span>直積</span>
-    </h4>
-</doc-anchor-target>
-<div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
-prodofN 0 _ = [[]]
-prodofN n as = [a:bs | a &lt;- as, bs &lt;- prodofN (pred n) as]</code></pre>
-</doc-codeblock></div>
-<p>リストのモナドだのApplicativeだのを駆使するとワンライナーで書けるみたいな話もあるけれど、自分は書けないのでこんな感じで。</p>
-<p>「いもす法」というものの話の方がメインなのかもしれないが、またこの手のあだ名かよ、という気持ち。</p>
+<p>こちらは <span class="math">O(M+WH)</span> で済む。</p>
 <doc-anchor-target id="関連問題">
-    <h3>
+    <h2>
         <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
         <span>関連問題</span>
-    </h3>
+    </h2>
 </doc-anchor-target>
-<p>AGC023 A Zero-Sum Ranges - 【ACコード】
-<br />
-ABC014C <a href="https://atcoder.jp/contests/abc014/submissions/23032199">ACコード</a> group, いもす法?
-<br />
-ABC183 D Water Heater - 【ACコード】
-<br />
-ABC035 D オセロ - 【ACコード】
-<br />
-ABC188 D Snuke Prime - 【ACコード】
-<br />
-東京海上日動 プログラミングコンテスト2020 C Lamps - 【ACコード】
-<br />
-ABC105 D Candy Distribution - 【ACコード】
-<br />
-ARC100 D Equal Cut - 【ACコード】<br />
-他に<br />
-ABC084D (累積和)<br />
-ABC122C ditto</p>
+<ul>
+<li><a href="https://atcoder.jp/contests/agc023/tasks/agc023_a">AGC023 A Zero-Sum Ranges</a> - 【ACコード】</li>
+<li><a href="https://atcoder.jp/contests/abc014/tasks/abc014_3">ABC014 C AtColor</a> - <a href="https://atcoder.jp/contests/abc014/submissions/29800693">ACコード</a> 累積和</li>
+<li><a href="https://atcoder.jp/contests/abc183/tasks/abc183_d">ABC183 D Water Heater</a> - <a href="https://atcoder.jp/contests/abc183/submissions/18170615">ACコード</a> 累積和</li>
+<li><a href="https://atcoder.jp/contests/abc035/tasks/abc035_c">ABC035 D オセロ</a> - <a href="https://atcoder.jp/contests/abc035/submissions/29800798">ACコード</a> 累積和</li>
+<li><a href="https://atcoder.jp/contests/abc188/tasks/abc188_d">ABC188 D Snuke Prime</a> - <a href="https://atcoder.jp/contests/abc188/submissions/29801315">ACコード</a> 座標圧縮して累積和<br />
+座標圧縮して配列を使うより、<a href="https://atcoder.jp/contests/abc188/submissions/28854361">Mapを直に使う方が速くて軽かった</a></li>
+<li><a href="https://atcoder.jp/contests/tokiomarine2020/tasks/tokiomarine2020_c">東京海上日動 プログラミングコンテスト2020 C Lamps</a> - <a href="https://atcoder.jp/contests/tokiomarine2020/submissions/15113919">ACコード</a> 累積和<br />
+解説によると <span class="math">\log N</span> 回で全てが上限の <span class="math">N</span> に達するらしい。<br />
+これを「前回と変化なし」あるいは「全て N」で検知する別解もありそう。</li>
+<li><a href="https://atcoder.jp/contests/abc105/tasks/abc105_d">ABC105 D Candy Distribution</a> - <a href="https://atcoder.jp/contests/abc105/submissions/29802462">ACコード</a> 累積和</li>
+<li><a href="https://atcoder.jp/contests/arc100/tasks/arc100_b">ARC100 D Equal Cut</a> - [ACコード]</li>
+</ul>
+<p>他に</p>
+<ul>
+<li><a href="https://atcoder.jp/contests/abc084/tasks/abc084_d">ABC084 D 2017-like Number</a> - <a href="https://atcoder.jp/contests/abc084/submissions/29808715">ACコード</a> 累積和</li>
+<li><a href="https://atcoder.jp/contests/abc122/tasks/abc122_c">ABC122 C GeT AC</a></li>
+</ul>
+<p>累積を行った後、差分配列は不要になるので、
+命令型言語なら書き換え可能配列を使って上書きしてしまえばよくて、
+累積を繰り返すような場合にはさらに有利になるようだ。</p>
 
 
 
@@ -297,7 +318,7 @@ ABC122C ditto</p>
         <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/readings/whereis/25.permutations/">
             <span>
                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
-                <span class="block mt-1">25.短めな順列の作成（途中）</span>
+                <span class="block mt-1">25.短めな順列の作成</span>
             </span>
             <svg xmlns="http://www.w3.org/2000/svg" class="ml-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19.92 12.38a1 1 0 00-.22-1.09l-7-7a.996.996 0 10-1.41 1.41l5.3 5.3H5c-.55 0-1 .45-1 1s.45 1 1 1h11.59l-5.29 5.29a.996.996 0 000 1.41c.19.2.44.3.7.3s.51-.1.71-.29l7-7c.09-.09.16-.21.21-.33z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
         </a>
@@ -345,6 +366,6 @@ ABC122C ditto</p>
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "24.累積和（合わせて、いもす法）（途中）", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
+        <script>window.__DOCS__ = { "title": "24.累積和（合わせて、いもす法）", icon: "file", hasPrism: true, hasMermaid: false, hasMath: true }</script>
     </body>
 </html>

@@ -7,28 +7,31 @@
     <meta name="turbo-cache-control" content="no-cache">
 
     <!-- Primary Meta Tags -->
-    <title>25.短めな順列の作成（途中）</title>
-    <meta name="title" content="25.短めな順列の作成（途中）">
-    <meta name="description" content="前の項の prod の話がはみ出している感じ。" />
+    <title>25.短めな順列の作成</title>
+    <meta name="title" content="25.短めな順列の作成">
+    <meta name="description" content="itertoolsの累積和以外の機能の紹介。" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/readings/whereis/25.permutations/">
-    <meta property="og:title" content="25.短めな順列の作成（途中）">
-    <meta property="og:description" content="前の項の prod の話がはみ出している感じ。">
+    <meta property="og:title" content="25.短めな順列の作成">
+    <meta property="og:description" content="itertoolsの累積和以外の機能の紹介。">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/readings/whereis/25.permutations/">
-    <meta property="twitter:title" content="25.短めな順列の作成（途中）">
-    <meta property="twitter:description" content="前の項の prod の話がはみ出している感じ。">
+    <meta property="twitter:title" content="25.短めな順列の作成">
+    <meta property="twitter:description" content="itertoolsの累積和以外の機能の紹介。">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.699461153334" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.699789449996" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.699461153334" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.699789449996" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.699789449996" defer></script>
+    <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
+    <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -161,23 +164,128 @@
                 <div id="docs-sidebar-right-toggle"></div>
                
                 <!-- Page content  -->
-<doc-anchor-target id="25短めな順列の作成途中" class="break-words">
+<doc-anchor-target id="25短めな順列の作成" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#25短めな順列の作成途中">#</doc-anchor-trigger>
-        <span>25.短めな順列の作成（途中）</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#25短めな順列の作成">#</doc-anchor-trigger>
+        <span>25.短めな順列の作成</span>
     </h1>
 </doc-anchor-target>
-<p>前の項の prod の話がはみ出している感じ。</p>
-<p>Vector.Mutableの関数の話も混ぜてよいか？</p>
-<doc-anchor-target id="関連問題">
+<p>itertoolsの累積和以外の機能の紹介。</p>
+<doc-anchor-target id="ある値が何個あるか">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#ある値が何個あるか">#</doc-anchor-trigger>
+        <span>ある値が何個あるか</span>
+    </h2>
+</doc-anchor-target>
+<p>並びに対して、等しいものが連続しているところをまとめる。<br />
+それ<code v-pre>Data.List.group</code>と<code v-pre>Data.List.groupBy</code>そのもの。</p>
+<doc-anchor-target id="組み合わせ">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#組み合わせ">#</doc-anchor-trigger>
+        <span>組み合わせ</span>
+    </h2>
+</doc-anchor-target>
+<doc-anchor-target id="順列">
     <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
-        <span>関連問題</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#順列">#</doc-anchor-trigger>
+        <span>順列</span>
     </h3>
 </doc-anchor-target>
-<p>ABC028C <a href="https://atcoder.jp/contests/abc028/submissions/23051091">ACコード</a> 組み合わせの場合を列挙
-<br />
-ABC183C <a href="https://atcoder.jp/contests/abc183/submissions/23056456">ACコード</a> 順列</p>
+<p>全て異なる要素のリストに対して、その並べ方を全て得る。<br />
+要素が <span class="math">n</span> 個のとき、場合の数は <span class="math">n!</span></p>
+<p>順列組み合わせは<code v-pre>Data.List.permutations</code>でできる。ただし出現順が謎。</p>
+<p>要素 <span class="math">n</span> 個から <span class="math">r</span> 個を取り出して並べる並べ方は <span class="math">_n \textrm{P}_r = \frac{n!}{(n-r)!}</span> とおり。<br />
+これを、リストで与えられた並び順を昇順として、順列を辞書順に生成する。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
+-- 順列を辞書順で
+perm xs = permOf (length xs) xs
+
+permOf 0 _ = [[]]
+permOf r xs = [a : ys | (a,as) &lt;- one [] xs, ys &lt;- permOf (pred r) as]
+  where
+    -- 要素を一つ選び、残りの要素を付けて返す
+    one bs [] = []
+    one bs (a:as) = (a, rev bs as) : one (a:bs) as
+    -- reverse bs ++ as
+    rev bs as = foldl' {-'-} (flip (:)) as bs</code></pre>
+</doc-codeblock></div>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">&gt; perm [1,2,3]
+[[1,2,3],[1,3,2],[2,1,3],[2,3,1],[3,1,2],[3,2,1]]
+&gt; permOfR 2 [1,2,3]
+[[1,2],[1,3],[2,1],[2,3],[3,1],[3,2]]
+&gt; Data.List.permutations [1,2,3]
+[[1,2,3],[2,1,3],[3,2,1],[2,3,1],[3,1,2],[1,3,2]]</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="組み合わせ-1">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#組み合わせ-1">#</doc-anchor-trigger>
+        <span>組み合わせ</span>
+    </h3>
+</doc-anchor-target>
+<p>全て異なる <span class="math">n</span> 要素のリストから <span class="math">r</span> 個選んで取り出す方法の
+場合の数は <span class="math">{}_n \textrm{C}_r = \frac{n!}{r! (n-r)!}</span> とおり。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
+combOf 0 _      = [[]]
+combOf _ []     = [  ]
+combOf n (a:as) = [a:bs | bs &lt;- combOf (pred n) as] ++ combOf n as</code></pre>
+</doc-codeblock></div>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">&gt; combOf 3 [1..5]
+[[1,2,3],[1,2,4],[1,2,5],[1,3,4],[1,3,5],[1,4,5],[2,3,4],[2,3,5],[2,4,5],[3,4,5]]</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="直積">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#直積">#</doc-anchor-trigger>
+        <span>直積</span>
+    </h3>
+</doc-anchor-target>
+<p>要素数 <span class="math">n</span> の集合から <span class="math">k</span> 回要素を選択する方法の場合の数は <span class="math">n^k</span> とおり。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">-- @gotoki_no_joe
+prodOf 0 _  = [[]]
+prodOf n as = [a:bs | a &lt;- as, bs &lt;- prodOf (pred n) as]</code></pre>
+</doc-codeblock></div>
+<p>リストはモナドで、リストのモナドはリスト内包表記の生成器と同じく、要素をひとつ選んで以降の計算を全ての場合で行う。<br />
+<code v-pre>sequence</code> は、モナドの計算のリストが与えられたとき、それを順に実行した結果をリストに集める。<br />
+つまり、 <code v-pre>replicate 3 as</code> は <code v-pre>[as,as,as]</code> というリストで、
+これをリストモナドとして <code v-pre>sequence</code> で評価すると、下の式は全て同じ意味になる。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">sequence (replicate 3 as)
+-- Do記法だと
+do
+  v1 &lt;- as
+  v2 &lt;- as
+  v3 &lt;- as
+  return [v1,v2,v3]
+-- 内包表記だと
+[[v1,v2,v3] | v1 &lt;- as, v2 &lt;- as, v3 &lt;- as]</code></pre>
+</doc-codeblock></div>
+<p>つまり</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">prodOf n as = sequence $ replicate n as</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="nextpermutation">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#nextpermutation">#</doc-anchor-trigger>
+        <span>nextPermutation</span>
+    </h2>
+</doc-anchor-target>
+<p><code v-pre>Data.Vector.Mutable.nextPermutation</code> は、順列の入ったベクタを書き変えて、辞書順で次の順列にする。
+末尾の場合にはFalseが返る。
+（どこかで再実装したと思う。）</p>
+<doc-anchor-target id="関連問題">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
+        <span>関連問題</span>
+    </h2>
+</doc-anchor-target>
+<ul>
+<li><a href="https://atcoder.jp/contests/abc028/tasks/abc028_c">ABC028 C 数を3つ選ぶマン</a> - <a href="https://atcoder.jp/contests/abc028/submissions/23051091">ACコード</a> 組み合わせの場合を列挙</li>
+<li><a href="https://atcoder.jp/contests/abc183/tasks/abc183_c">ABC183 C Travel</a> - <a href="https://atcoder.jp/contests/abc183/submissions/23056456">ACコード</a> 順列</li>
+</ul>
 
 
 
@@ -193,13 +301,13 @@ ABC183C <a href="https://atcoder.jp/contests/abc183/submissions/23056456">ACコ�
             <svg xmlns="http://www.w3.org/2000/svg" class="mr-3" width="24" height="24" viewBox="0 0 24 24" fill="currentColor" overflow="visible"><path d="M19 11H7.41l5.29-5.29a.996.996 0 10-1.41-1.41l-7 7a1 1 0 000 1.42l7 7a1.024 1.024 0 001.42-.01.996.996 0 000-1.41L7.41 13H19c.55 0 1-.45 1-1s-.45-1-1-1z" /><path fill="none" d="M0 0h24v24H0z" /></svg>
             <span>
                 <span class="block text-xs font-normal text-gray-400 dark:text-dark-400">Previous</span>
-                <span class="block mt-1">24.累積和（合わせて、いもす法）（途中）</span>
+                <span class="block mt-1">24.累積和（合わせて、いもす法）</span>
             </span>
         </a>
     </div>
 
     <div class="w-1/2">
-        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/readings/whereis/26.2d-cumlative-sum/">
+        <a class="px-5 py-4 -mx-px h-full flex items-center justify-end break-all md:break-normal font-medium text-blue-500 dark:text-blue-400 border border-gray-300 hover:border-gray-400 dark:border-dark-650 dark:hover:border-dark-450 rounded-r-lg transition-colors duration-150 relative hover:z-5" href="/H4A/readings/whereis/26.2d-cumulative-sum/">
             <span>
                 <span class="block text-xs font-normal text-right text-gray-400 dark:text-dark-400">Next</span>
                 <span class="block mt-1">26.二次元累積和（途中）</span>
@@ -250,6 +358,6 @@ ABC183C <a href="https://atcoder.jp/contests/abc183/submissions/23056456">ACコ�
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "25.短めな順列の作成（途中）", icon: "file", hasPrism: false, hasMermaid: false, hasMath: false }</script>
+        <script>window.__DOCS__ = { "title": "25.短めな順列の作成", icon: "file", hasPrism: true, hasMermaid: false, hasMath: true }</script>
     </body>
 </html>

@@ -7,28 +7,31 @@
     <meta name="turbo-cache-control" content="no-cache">
 
     <!-- Primary Meta Tags -->
-    <title>31.桁DP（要書き直し）</title>
-    <meta name="title" content="31.桁DP（要書き直し）">
-    <meta name="description" content="「$$1$$以上$$N$$以下の整数のうち○○であるものの個数を求めよ。$$1 \\leq N \\leq 10^{10000}$$である。」というタイプの問題のときの考え方、だそうですが。" />
+    <title>31.桁DP</title>
+    <meta name="title" content="31.桁DP">
+    <meta name="description" content="「" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/readings/whereis/31.keta-dp/">
-    <meta property="og:title" content="31.桁DP（要書き直し）">
-    <meta property="og:description" content="「$$1$$以上$$N$$以下の整数のうち○○であるものの個数を求めよ。$$1 \\leq N \\leq 10^{10000}$$である。」というタイプの問題のときの考え方、だそうですが。">
+    <meta property="og:title" content="31.桁DP">
+    <meta property="og:description" content="「">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/readings/whereis/31.keta-dp/">
-    <meta property="twitter:title" content="31.桁DP（要書き直し）">
-    <meta property="twitter:description" content="「$$1$$以上$$N$$以下の整数のうち○○であるものの個数を求めよ。$$1 \\leq N \\leq 10^{10000}$$である。」というタイプの問題のときの考え方、だそうですが。">
+    <meta property="twitter:title" content="31.桁DP">
+    <meta property="twitter:description" content="「">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.699461153334" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.699789449996" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.699461153334" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.699789449996" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.699789449996" defer></script>
+    <link href="/H4A/resources/css/katex.css?v=1.10" rel="stylesheet" />
+    <script id="katex-js" type="text/javascript" src="/H4A/resources/js/katex.js?v=1.10" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -161,27 +164,293 @@
                 <div id="docs-sidebar-right-toggle"></div>
                
                 <!-- Page content  -->
-<doc-anchor-target id="31桁dp要書き直し" class="break-words">
+<doc-anchor-target id="31桁dp" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#31桁dp要書き直し">#</doc-anchor-trigger>
-        <span>31.桁DP（要書き直し）</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#31桁dp">#</doc-anchor-trigger>
+        <span>31.桁DP</span>
     </h1>
 </doc-anchor-target>
-<p>「$$1$$以上$$N$$以下の整数のうち○○であるものの個数を求めよ。$$1 \leq N \leq 10^{10000}$$である。」というタイプの問題のときの考え方、だそうですが。</p>
-<doc-anchor-target id="関連問題">
+<p>「 <span class="math">1</span> 以上 <span class="math">N \leq 10^{10000}</span> 以下の整数のうち○○であるものの個数を求めよ。」
+というタイプの問題のときの考え方、という話。</p>
+<ul>
+<li><a href="https://zehnpaard.hatenablog.com/entry/2018/06/24/215607">桁DPに入門してみた</a></li>
+<li><a href="http://web.archive.org/web/20190103133620/https://pekempey.hatenablog.com/entry/2015/12/09/000603">桁DP入門</a></li>
+</ul>
+<p>前者は後者の写経のようなので、同じアプローチでやってみる。</p>
+<doc-anchor-target id="例題">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#例題">#</doc-anchor-trigger>
+        <span>例題</span>
+    </h2>
+</doc-anchor-target>
+<blockquote>
+<p>A以下の非負整数のうち「3の倍数または3の付く」かつ「8の倍数でない」数がいくつあるか。</p>
+</blockquote>
+<p>を次のように段階に分けて考えていく。</p>
+<ol>
+<li>A以下の非負整数の総数を求める</li>
+<li>A以下の非負整数のうち、3の付く数の総数を求める</li>
+<li>A以下の非負整数のうち、「3が付くまたは3の倍数」の数の総数を求める</li>
+<li>A以下の非負整数のうち、「3が付くまたは3の倍数」かつ「8の倍数でない」数の総数を求める</li>
+</ol>
+<doc-anchor-target id="ステップ1">
     <h3>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
-        <span>関連問題</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#ステップ1">#</doc-anchor-trigger>
+        <span>ステップ1</span>
     </h3>
 </doc-anchor-target>
-<p>ABC154 E Almost Everywhere Zero - 【ACコード】</p>
-<p>ABC135 D Digits Parade - 【ACコード】</p>
-<p>ABC029 D 1 - 【ACコード】</p>
-<p>yukicoder189 SUPER HAPPY DAY - 【ACコード】</p>
-<p>yukicoder1417 100の倍数かつ正整数(2) - 【ACコード】</p>
-<p>他に</p>
-<p>ABC101D</p>
-<p>関連問題もまるでわからないので、言わんとしていることがさっぱりわからない。どうDPを適用するのかさっぱり。</p>
+<p>A以下の非負整数の総数を求める。<br />
+（A以下の非負整数の総数、って0を含めてA+1以外の何物でもない、とか言わない。）</p>
+<p>例として A = 4275631 とする。</p>
+<p>最上位桁から順に、条件を満たす場合を作っていくことを考える。<br />
+最上位桁には何をいれてよいかというと、0～4の数字なら「A以下」に反さない。
+5以上の数字を入れてしまうと、A以下の数を作ることは不可能。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">A = 4 2 7 5 6 3 1
+    0 ? ? ? ? ? ? OK
+    1 ? ? ? ? ? ? OK
+    :
+    4 ? ? ? ? ? ? OK
+    5 ? ? ? ? ? ? XXX NG XXX
+    :
+    9 ? ? ? ? ? ? XXX NG XXX</code></pre>
+</doc-codeblock></div>
+<p>ここで最上位桁に4を選んだ場合について、次の桁をどうしていいか考える。<br />
+すると次に許されるのは0～2である。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">A = 4 2 7 5 6 3 1
+    4 0 ? ? ? ? ? OK
+    4 1 ? ? ? ? ? OK
+    4 2 ? ? ? ? ? OK
+    4 3 ? ? ? ? ? XXX NG XXX
+    4 :
+    4 9 ? ? ? ? ? XXX NG XXX</code></pre>
+</doc-codeblock></div>
+<p>一方、最上位桁に2を選んだ場合はどうだろうか。<br />
+このときは、何を選んでもAを超える心配はない。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">A = 4 2 7 5 6 3 1
+    2 0 ? ? ? ? ? OK
+    2 : ? ? ? ? ? OK
+    2 9 ? ? ? ? ? OK</code></pre>
+</doc-codeblock></div>
+<p>さらに下の桁まで確定させていった場合も同様で、</p>
+<ul>
+<li>それまでにどこか1箇所でも、Aよりも小さい数字を選んだ桁がある場合、A未満は確定しているので桁の選択は自由</li>
+<li>ずっとAとぴったり同じ数字を選び続けている場合、桁の選択はAと同じまで、またこの桁でAより小さい数字を選んだ場合も、A未満が今回で確定する</li>
+</ul>
+<p>となる。</p>
+<p>Aが上位から桁ごとの数のリストで与えられるとし、1桁ずつDPで場合の数を数えるプログラムを考える。<br />
+DP配列の添え字は、A未満が確定しているとき <code v-pre>True</code> な <code v-pre>Bool</code> とする。<br />
+確定済みならば、今回の桁に関して0から9のどの数字を選んでもよい。<br />
+未確定ならば、Aiまでの数字しか選べない。<br />
+しかし、再度Aiと同じ数字を選んだ場合のみが、新たな未確定の場合となり、
+この桁でAiより小さい数字を選んだ場合は全て、確定済みの方に足しこむ。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">import Data.Array
+
+step1 :: [Int] -&gt; Integer
+step1 as = ans
+  where
+    bnds :: (False,True)                   -- A未満が確定
+    initial :: Array Bool Integer
+    initial = listArray bnds [1,0]         -- 1桁も確定していない段階では、未確定の場合が1あるだけ
+    final = foldl step initial as          -- 桁ごとに配列を更新していく
+    step arr ai = accumArray (+) 0 bnds
+      [ ( less ||                          -- A未満が確定しているか、
+          d &lt; ai                           -- またはまさに今回確定したなら確定済み
+        , val)                             -- に足しこむ
+      | (less, val) &lt;- assocs arr          -- 全ての場合について考える
+      , val &gt; 0                            -- 足しこむ必要がない場合は飛ばす
+      , let ub = if less then 9 else ai    -- 使える数字の上限
+      , d &lt;- [0..ub]                       -- 次に使える全ての数字について考える
+      ]
+    ans = sum [val | (_,val) &lt;- assocs final] -- 全ての場合の総和</code></pre>
+</doc-codeblock></div>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">&gt; step1 [4,2,7,5,6,3,1]
+4275632</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="ステップ2">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#ステップ2">#</doc-anchor-trigger>
+        <span>ステップ2</span>
+    </h3>
+</doc-anchor-target>
+<p>A以下の非負整数のうち、3の付く数の総数を求める。</p>
+<p>DP配列の次元を追加し「数字の3を選んだことがあるとき <code v-pre>True</code>」かそうでないかで場合分けして数える。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">step2 :: [Int] -&gt; Integer
+step2 as = sum $ elems final
+  where
+    bnds = ((False,False),(True,True))     -- A未満が確定/3を含む
+    initial :: Array (Bool,Bool) Integer
+    initial = listArray bnds $ 1 : replicate 3 0
+    final = foldl step initial as
+    step arr ai = accumArray (+) 0 bnds
+      [ (( less || d &lt; ai
+         , has3 || d == 3)                -- 3を含むか、今回使ったならTrueに足しこむ
+        , val)
+      | ((less,has3),val) &lt;- assocs arr
+      , val &gt; 0
+      , d &lt;- [0..if less then 9 else ai]
+      ]
+    ans = sum [val | ((_,True),val) &lt;- assocs final] -- 3を含む場合の総和</code></pre>
+</doc-codeblock></div>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">&gt; step2 [4,2,7,5,6,3,1]
+2520497
+(0.00 secs)
+&gt; length [() | i &lt;- [0..4275631], elem '3' $ show i]
+2520497
+(3.47 secs)</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="ステップ3">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#ステップ3">#</doc-anchor-trigger>
+        <span>ステップ3</span>
+    </h3>
+</doc-anchor-target>
+<p>A以下の非負整数のうち、「3が付くまたは3の倍数」の数の総数を求める</p>
+<p>3の倍数は、桁ごとの数字の和が3の倍数という性質を使う。<br />
+DPの次元をさらに追加し、桁ごとの数字の和を3で割った余りごとに分けて数える。</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">step3 :: [Int] -&gt; Integer
+step3 as = ans
+  where
+    bnds = ((False,False,0),(True,True,2))     -- A未満/3を含む/桁ごとの和 mod 3
+    initial :: Array (Bool,Bool,Int) Integer
+    initial = accumArray (+) 0 bnds [((False,False,0),1)]
+    final = foldl step initial as
+    step arr ai = accumArray (+) 0 bnds
+      [ (( less || d &lt; ai
+         , has3 || d == 3
+         , mod (r + d) 3)                      -- 今回の数字を加えて3で割った余りの位置に足しこむ
+        , val)
+      | ((less,has3,r),val) &lt;- assocs arr
+      , val &gt; 0
+      , d &lt;- [0..if less then 9 else ai]
+      ]
+    ans = sum [val | ((_, b, r),val) &lt;- assocs final, b || r == 0] -- 3がある or mod 3 == 0</code></pre>
+</doc-codeblock></div>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">&gt; step3 [4,2,7,5,6,3,1]
+3105542
+(0.01 secs)
+&gt; length [() | i &lt;- [0..4275631], elem '3' (show i) || mod i 3 == 0]
+3105542
+(4.21 secs)</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="ステップ4">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#ステップ4">#</doc-anchor-trigger>
+        <span>ステップ4</span>
+    </h3>
+</doc-anchor-target>
+<p>A以下の非負整数のうち、「3が付くまたは3の倍数」かつ「8の倍数でない」数の総数を求める</p>
+<p>8の倍数に関して区別して数えるために、 DPの次元をさらに追加する。</p>
+<p>ここで、8の倍数かどうかを判定するのには、
+最後の3桁の1000とおりで分類する必要がある？と思ってしまうが、
+実は8とおりの分類だけでいけるらしい。<br />
+ある数の最後の1桁が <span class="math">d</span> 、それより上の桁が <span class="math">X</span> というその数は <span class="math">10X+d</span> である。
+これを 8 で割った余りは</p>
+<div class="math"><pre>\begin{array}{ll}
+(10X+d) \bmod 8 &amp; = (10 \bmod 8 \cdot X \bmod 8 + d \bmod 8) \bmod 8 \\
+&amp; = (2 \, (X \bmod 8) + d) \bmod 8
+\end{array}</pre></div>
+<p>となるので、 <span class="math">X</span> そのもの（または1000で割った余り）を保持する必要はなく、
+8の剰余 <span class="math">X \bmod 8</span> だけで次の桁まで含めた8の剰余が得られる。
+（倍数は2でなく10のままでもよいだろう。）</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">step4 :: [Int] -&gt; Integer
+step4 as = ans
+  where
+    bnds = ((False,False,0,0),(True,True,2,7))     -- …/mod 8
+    initial :: Array (Bool,Bool,Int,Int) Integer
+    initial = accumArray (+) 0 bnds [((False,False,0,0),1)]
+    final = foldl step initial as
+    step arr ai = accumArray (+) 0 bnds
+      [ (( less || d &lt; ai
+         , has3 || d == 3
+         , mod (r + d) 3
+         , mod (2 * x + d) 8) -- 8で割った余り
+        , val)
+      | ((less,has3,r,x),val) &lt;- assocs arr
+      , val &gt; 0
+      , d &lt;- [0..ub = if less then 9 else ai]
+      ]
+    ans = sum [val | ((_, b, r, x),val) &lt;- assocs final, b || r == 0, x /= 0] -- … かつ mod 8 ≠ 0</code></pre>
+</doc-codeblock></div>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-none"><code v-pre class="language-none">&gt; step4 [4,2,7,5,6,3,1]
+2738015
+(0.04 secs)
+&gt; length [() | i &lt;- [0..4275631], elem '3' (show i) || mod i 3 == 0, mod i 8 /= 0]
+2738015
+(5.31 secs)</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="結局">
+    <h3>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#結局">#</doc-anchor-trigger>
+        <span>結局</span>
+    </h3>
+</doc-anchor-target>
+<ul>
+<li>条件の数だけDP配列の次元を増やして、</li>
+<li>次の桁に進むごとに、その桁の数字を続けた数がどの場合に計上されるかを考えてそれに足しこむ</li>
+<li>最後に、条件にあう分割について足し合わせる</li>
+</ul>
+<p>としている。
+珍しく「配る」DPになっているのは、
+配る範囲と配られる範囲が明確に定まるから実現できている感じ。</p>
+<doc-anchor-target id="その他">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#その他">#</doc-anchor-trigger>
+        <span>その他</span>
+    </h2>
+</doc-anchor-target>
+<p>「B以上A以下」という条件のときは、「A以下」の個数－「B未満」の個数、で求めるか、
+ステップ1での「A以下」と同様に「B以上」という条件を加えて求めるか、
+どちらも計算量は同じで、前者の方がコードは単純で済む感じ。</p>
+<p>場合の数が膨大になる問題では、<span class="math">\bmod (10^9+7)</span> で答える場合がある。
+このとき、<code v-pre>step</code> 関数の <code v-pre>accumArray</code> の引数には剰余付き加算を指定しても、
+<code v-pre>ans</code> で答えを寄せる場所の <code v-pre>sum</code> を忘れる場合があるので<a href="https://atcoder.jp/contests/abc129/submissions/29854113">注意</a></p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">  where
+     :
+    step arr li = accumArray add 0 bnds ...
+     :
+    ans = foldl add 0 [...
+
+modBase = 10^9 + 7
+add x y = mod (x + y) modBase</code></pre>
+</doc-codeblock></div>
+<doc-anchor-target id="関連問題">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#関連問題">#</doc-anchor-trigger>
+        <span>関連問題</span>
+    </h2>
+</doc-anchor-target>
+<ul>
+<li><a href="https://atcoder.jp/contests/abc154/tasks/abc154_e">ABC154 E Almost Everywhere Zero</a> - <a href="https://atcoder.jp/contests/abc154/submissions/29845180">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/abc135/tasks/abc135_d">ABC135 D Digits Parade</a> - <a href="https://atcoder.jp/contests/abc135/submissions/29845638">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/abc029/tasks/abc029_d">ABC029 D 1</a> - <a href="https://atcoder.jp/contests/abc029/submissions/29847040">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/abc101/tasks/arc099_b">ABC101 D Snuke Numbers</a></li>
+</ul>
+<p>他サイト</p>
+<ul>
+<li><a href="https://yukicoder.me/problems/no/189">yukicoder189 SUPER HAPPY DAY</a></li>
+<li><a href="https://yukicoder.me/problems/no/1417">yukicoder1417 100の倍数かつ正整数(2)</a></li>
+</ul>
+<p>十進法以外の桁DP</p>
+<ul>
+<li><a href="https://atcoder.jp/contests/abc129/tasks/abc129_e">ABC129 E Sum Equals Xor</a> - <a href="https://atcoder.jp/contests/abc129/submissions/29859485">ACコード</a></li>
+<li><a href="https://atcoder.jp/contests/arc129/tasks/arc129_a">ARC129 A Smaller XOR</a> - <a href="https://atcoder.jp/contests/arc129/submissions/29849751">ACコード</a></li>
+</ul>
+<p>他サイト</p>
+<ul>
+<li><a href="https://yukicoder.me/problems/no/1740">yukicoder1740 Alone &#x27;a&#x27;</a></li>
+</ul>
 
 
 
@@ -254,6 +523,6 @@
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "31.桁DP（要書き直し）", icon: "file", hasPrism: false, hasMermaid: false, hasMath: false }</script>
+        <script>window.__DOCS__ = { "title": "31.桁DP", icon: "file", hasPrism: true, hasMermaid: false, hasMath: true }</script>
     </body>
 </html>
