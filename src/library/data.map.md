@@ -36,9 +36,9 @@ M.fromListWithKey :: Ord k => (k -> a -> a -> a) -> [(k,a)] -> Map k a
 IM.fromListWithKey :: (Int -> a -> a -> a) -> [(Int,a)] -> IntMap a
 ```
 
-対応づく要素全てをリストで持つとき：
+対応づく要素全てをリストで持つときは、単独の要素もリストにする必要がある。このとき素直な向きでよい。
 
-```haskell
+```haskell fromListWithの例
 -- 正しい
 M.fromListWith (++) [(key,[val]) | (key,val) <- kvs]
 -- まちがい（とても遅くなる）

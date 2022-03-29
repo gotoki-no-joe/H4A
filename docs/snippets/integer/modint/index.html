@@ -7,29 +7,29 @@
     <meta name="turbo-cache-control" content="no-cache">
 
     <!-- Primary Meta Tags -->
-    <title>合同算術</title>
-    <meta name="title" content="合同算術">
-    <meta name="description" content="(追記予定...)" />
+    <title>合同算術 (ModInt) (*)</title>
+    <meta name="title" content="合同算術 (ModInt) (*)">
+    <meta name="description" content="何度もやらかしているので、Num 型クラスにこだわらずに作る方法を考える。" />
 
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/modint/">
-    <meta property="og:title" content="合同算術">
-    <meta property="og:description" content="(追記予定...)">
+    <meta property="og:title" content="合同算術 (ModInt) (*)">
+    <meta property="og:description" content="何度もやらかしているので、Num 型クラスにこだわらずに作る方法を考える。">
 
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://gotoki-no-joe.github.io/H4A/snippets/integer/modint/">
-    <meta property="twitter:title" content="合同算術">
-    <meta property="twitter:description" content="(追記予定...)">
+    <meta property="twitter:title" content="合同算術 (ModInt) (*)">
+    <meta property="twitter:description" content="何度もやらかしているので、Num 型クラスにこだわらずに作る方法を考える。">
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.699789449996" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.701856838661" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.699789449996" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.701856838661" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.699789449996" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.701856838661" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -162,20 +162,73 @@
                 <div id="docs-sidebar-right-toggle"></div>
                
                 <!-- Page content  -->
-<doc-anchor-target id="合同算術" class="break-words">
+<doc-anchor-target id="合同算術-modint-" class="break-words">
     <h1>
-        <doc-anchor-trigger class="header-anchor-trigger" to="#合同算術">#</doc-anchor-trigger>
-        <span>合同算術</span>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#合同算術-modint-">#</doc-anchor-trigger>
+        <span>合同算術 (ModInt) (*)</span>
     </h1>
 </doc-anchor-target>
+<p>何度もやらかしているので、<code v-pre>Num</code> 型クラスにこだわらずに作る方法を考える。</p>
+<p>newtypeでもコンストラクタがかかっているために、Unboxedに入れることができないのは、
+何か解決策があったような？</p>
+<doc-anchor-target id="base固定版">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#base固定版">#</doc-anchor-trigger>
+        <span>base固定版</span>
+    </h2>
+</doc-anchor-target>
 <div class="codeblock-wrapper"><doc-codeblock>
-<pre class="language-haskell"><code v-pre class="language-haskell">modBase = 1000000007 -- 10^9+7
+<pre class="language-haskell"><code v-pre class="language-haskell">modBase = 1000000007
+modBase =  998244353
 
-r x = mod x modBase
-add x y = r (x + y)
-mul x y = r (x * y)</code></pre>
+-- @gotoki_no_joe
+newtype MI = MI Int
+toInt (MI x) = x
+miAdd  = miOp (+)
+miMul  = miOp (*)
+miPred = miUna pred
+miNeg  = miUna negate
+miRecip (MI a) = MI u
+  where
+    (_,_,u,_) = until stop step (a, modBase, 1, 0)
+    step (a,b,u,v) = let t = div a b in (b, a - t * b, v, u - t * v)
+    stop (_,b,_,_) = b == 0
+
+miSum, miProd :: Foldable f =&gt; f MI -&gt; MI
+miSum  = foldl' {-'-} miAdd (MI 0)
+miProd = foldl' {-'-} miMul (MI 1)
+
+miReg x = MI (mod x modBase)
+miOp op (MI x1) (MI x2) = miReg (op x1 x2)
+miUna op (MI x) = miReg (op x)</code></pre>
 </doc-codeblock></div>
-<p>(追記予定...)</p>
+<doc-anchor-target id="base複数版">
+    <h2>
+        <doc-anchor-trigger class="header-anchor-trigger" to="#base複数版">#</doc-anchor-trigger>
+        <span>base複数版</span>
+    </h2>
+</doc-anchor-target>
+<p>baseが入り乱れる場合用、あまり必要性を感じない</p>
+<div class="codeblock-wrapper"><doc-codeblock>
+<pre class="language-haskell"><code v-pre class="language-haskell">-- for your convenient
+p1097 = 1000000007
+
+newtype MI = MI Int Int
+
+-- mkMI = MI p1097 としてファクトリを作っておくべき
+
+miReg b x = MI b (mod x b)
+
+miOp op (MI b1 v1) (MI b2 v2)
+  | b1 /= b2 = error &quot;base inconsistent&quot;
+  | otherwise = miReg b1 (op v1 v2)
+
+miAdd = miOp (+)
+miMul = miOp (*)
+miPred = ...
+miRecip = ...
+</code></pre>
+</doc-codeblock></div>
 
 
 
@@ -248,6 +301,6 @@ mul x y = r (x * y)</code></pre>
 
         <div id="docs-overlay-target"></div>
 
-        <script>window.__DOCS__ = { "title": "合同算術", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
+        <script>window.__DOCS__ = { "title": "合同算術 (ModInt) (*)", icon: "file", hasPrism: true, hasMermaid: false, hasMath: false }</script>
     </body>
 </html>

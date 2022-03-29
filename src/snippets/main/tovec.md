@@ -6,21 +6,24 @@ order: -04000
 
 たいていの場合は入力データをリストに読み込んで問題ないが、後でvectorに入れるなら初めからそうしてしまえばよい。
 
-BSgetLineも内蔵させたい。
-
-1行のByteStringにN個の整数が並んでいるときに、それらをN+1要素のimmutable vectorの1からNに入れる
-
 ```haskell
+import qualified Data.ByteString.Char8 as BS
+import Data.Char
+
+import qualified Data.Vector.Unboxed as UV
+import qualified Data.Vector.Unboxed.Mutable as MUV
+
 -- ByteStringを読んで1からNに収めた長さN+1のVectorを作る
-readIntV1N :: Int -> BS.ByteString -> IO (V.Vector Int)
-readIntV1N n bs = do
-    v <- MV.new (succ n)
+readIntV1N :: Int -> IO (UV.Vector Int)
+readIntV1N n = do
+    bs <- BS.getLine
+    v <- MUV.new (succ n)
     loop v 1 bs
-    V.freeze(v) -- これをなくせばmutableのまま得られる
+    UV.freeze v
   where
     loop v i bs =
       case BS.readInt (BS.dropWhile isSpace bs) of
-        Just (x,bs1) -> do { MV.write v i x; loop v (succ i) bs1 }
+        Just (x, bs1) -> do { MUV.write v i x; loop v (succ i) bs1 }
         Nothing -> return ()
 ```
 

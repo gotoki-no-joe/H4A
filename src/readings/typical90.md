@@ -9,94 +9,11 @@ order: -02000
 
 一言ポイントは[『競プロ典型 90 問』非公式難易度表・ソースコード共有](https://docs.google.com/spreadsheets/d/1GG4Higis4n4GJBViVltjcbuNfyr31PzUY_ZY1zh2GuI/view)などより。
 
-## ★2 (10問)
-
-- [4. Cross Sum](https://atcoder.jp/contests/typical90/tasks/typical90_d)
-　[ACコード](https://atcoder.jp/contests/typical90/submissions/23707569)  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/004.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/004.jpg?raw=true)
-　適切な前処理、包除原理  
-しかし素朴に`transpose`していては間に合わなかった
-- [10. Score Sum Queries](https://atcoder.jp/contests/typical90/tasks/typical90_j)
-　[ACコード](https://atcoder.jp/contests/typical90/submissions/22046151) 累積和は `scanl (+) 0`  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/010.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/010.jpg?raw=true)
-　区間の総和は累積和
-- [22. Cubic Cake](https://atcoder.jp/contests/typical90/tasks/typical90_v)
-　[ACコード](https://atcoder.jp/contests/typical90/submissions/24767107)  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/022.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/022.jpg?raw=true)
-　最大公約数はユークリッドの互除法
-- [24. Select +／- One](https://atcoder.jp/contests/typical90/tasks/typical90_x)
-　[ACコード](https://atcoder.jp/contests/typical90/submissions/24767173)  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/024.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/024.jpg?raw=true)
-　パリティを考える
-- [27. Sign Up Requests](https://atcoder.jp/contests/typical90/tasks/typical90_aa)
-　[ACコード](https://atcoder.jp/contests/typical90/submissions/29174645) ひとつずつ処理してみた  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/027.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/027.jpg?raw=true)
-　map を使いこなそう
-- [33. Not Too Bright](https://atcoder.jp/contests/typical90/tasks/typical90_ag)
-　[ACコード](https://atcoder.jp/contests/typical90/submissions/24793523)  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/033.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/033.jpg?raw=true)
-　コーナーケースに気を付けよう
-- [55. Select 5](https://atcoder.jp/contests/typical90/tasks/typical90_bc)
-　[ACコード](https://atcoder.jp/contests/typical90/submissions/25185328)  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/055.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/055.jpg?raw=true)
-　「定数倍」を見積もる
-- [61. Deck](https://atcoder.jp/contests/typical90/tasks/typical90_bi)
-　[ACコード](https://atcoder.jp/contests/typical90/submissions/29176456)  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/061.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/061.jpg?raw=true)
-　deque を知っていますか？
-- [67. Base 8 to 9](https://atcoder.jp/contests/typical90/tasks/typical90_bo)
-　[ACコード](https://atcoder.jp/contests/typical90/submissions/25683734)  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/067.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/067.jpg?raw=true)
-　N 進法展開を理解しよう  
-Numericモジュールに丸投げする[別解](https://atcoder.jp/contests/typical90/submissions/29176868)
-- [78. Easy Graph Problem](https://atcoder.jp/contests/typical90/tasks/typical90_bz)  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/078.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/078.jpg?raw=true)
-　グラフの基本を知ろう  
-真面目にグラフとして読み込まない[別解](https://atcoder.jp/contests/typical90/submissions/25720748)
 
 ## ★3 (20問)
 
-- [2. Encyclopedia of Parentheses](https://atcoder.jp/contests/typical90/tasks/typical90_b)
-　[ACコード](https://atcoder.jp/contests/typical90/submissions/28855241)  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/002.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/002.jpg?raw=true)
-　bit全探索  
-[丁寧に生成する別解](https://atcoder.jp/contests/typical90/submissions/21988452) の方が好み。
-- [7. CP Classes](https://atcoder.jp/contests/typical90/tasks/typical90_g)  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/007.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/007.jpg?raw=true)
-　要素の検索はソートして二分探索  
-命令型の二分探索はHaskellのIntMapだという[別解](https://atcoder.jp/contests/typical90/submissions/21994000)で解いた。
-- [14. We Used to Sing a Song Together](https://atcoder.jp/contests/typical90/tasks/typical90_n)
-　[ACコード](https://atcoder.jp/contests/typical90/submissions/22046359) 本体一行  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/014.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/014.jpg?raw=true)
-　ソートして貪欲法
-- [16. Minimum Coins](https://atcoder.jp/contests/typical90/tasks/typical90_p)
-　[ACコード](https://atcoder.jp/contests/typical90/submissions/25361109)  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/016.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/016.jpg?raw=true)
-　工夫した全探索
-- [18. Statue of Chokudai](https://atcoder.jp/contests/typical90/tasks/typical90_r)
-　[ACコード](https://atcoder.jp/contests/typical90/submissions/24756329)  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/018.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/018.jpg?raw=true)
-　三角関数を使いこなそう
-- [20. Log Inequality](https://atcoder.jp/contests/typical90/tasks/typical90_t)
-　[ACコード](https://atcoder.jp/contests/typical90/submissions/24766586)  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/020.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/020.jpg?raw=true)
-　整数で処理して誤差をなくそう
+
+
 - [32. AtCoder Ekiden](https://atcoder.jp/contests/typical90/tasks/typical90_af)
 　[ACコード](https://atcoder.jp/contests/typical90/submissions/29178035)  
 [出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/032.jpg?raw=true)
@@ -317,27 +234,42 @@ DPが済んだ後で復元する代わりに、可能な手をひとつ記録し
 してしまう  
 復元を遅延評価で後回しにするのと、DPを遅らせずに進めるのをバランスさせるのが難しい。素直に実装したACコードは速いがHaskellらしくない。
 - [60. Chimera](https://atcoder.jp/contests/typical90/tasks/typical90_bh)
-　[ACコード]  
+　[ACコード](https://atcoder.jp/contests/typical90/submissions/29971580)  
 [出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/060.jpg?raw=true)
 　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/060.jpg?raw=true)
-　両側から考える 最長増加部分列（LIS）
-
-<!--
-- [. ]()
+　両側から考える 最長増加部分列（LIS）  
+ACにはランダムアクセスな配列が必要だった。  
+IntMapなどを使ってpureに書くと[どうしても間に合わない](https://atcoder.jp/contests/typical90/submissions/29966985)
+- [66. Various Arrays](https://atcoder.jp/contests/typical90/tasks/typical90_bn)
+　[ACコード]  
+[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/066.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/066.jpg?raw=true)
+　期待値の線形性
+- [68. Paired Information](https://atcoder.jp/contests/typical90/tasks/typical90_bp)
+　[ACコード]  
+[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/068.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/068.jpg?raw=true)
+　クエリ先読み
+- [73. We Need Both a and b](https://atcoder.jp/contests/typical90/tasks/typical90_bu)
 　[ACコード]()  
-[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/061.jpg?raw=true)
-　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/061.jpg?raw=true)
-　**
--->
-
-```
-066	Various Arrays（★5）	2 sec	1024 MB	提出
-068	Paired Information（★5）	2 sec	1024 MB	提出
-073	We Need Both a and b（★5）	2 sec	1024 MB	提出
-081	Friendly Group（★5）	2 sec	1024 MB	提出
-086	Snuke's Favorite Arrays（★5）	2 sec	1024 MB	提出
-087	Chokudai's Demand（★5）	2 sec	1024 MB	提出
-```
+[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/073.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/073.jpg?raw=true)
+　木 DP に慣れる
+- [81. Friendly Group]()
+　[ACコード]()  
+[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/081.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/081.jpg?raw=true)
+　データを二次元にプロットする 二次元累積和
+- [86. Snuke's Favorite Arrays]()
+　[ACコード]()  
+[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/086.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/086.jpg?raw=true)
+　bit ごとに独立に考える
+- [87. Chokudai's Demand]()
+　[ACコード]()  
+[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/087.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/087.jpg?raw=true)
+　ワーシャルフロイド法 明らかに一定以上で満たす→答えで二分探索
 
 ## ★6
 
@@ -358,10 +290,27 @@ DPが済んだ後で復元する代わりに、可能な手をひとつ記録し
 [出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/019.jpg?raw=true)
 　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/019.jpg?raw=true)
 　列の操作は区間DP
+- [31. VS AtCoder]()
+　[ACコード]  
+[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/031.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/031.jpg?raw=true)
+　Grundy 数を知っていますか？
+- [45. Simple Grouping]()
+　[ACコード]  
+[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/045.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/045.jpg?raw=true)
+　ビットDP	部分集合の部分集合は $3^N$ 通り
+
+<!--
+- [. ]()
+　[ACコード]()  
+[出題](https://github.com/E869120/kyopro_educational_90/blob/main/problem/061.jpg?raw=true)
+　[解説](https://github.com/E869120/kyopro_educational_90/blob/main/editorial/061.jpg?raw=true)
+　**
+-->
+
 
 ```
-031	VS AtCoder（★6）	3 sec	1024 MB	提出
-045	Simple Grouping（★6）	2 sec	1024 MB	提出
 049	Flip Digits 2（★6）	2 sec	1024 MB	提出
 054	Takahashi Number（★6）	2 sec	1024 MB	提出
 057	Flip Flap（★6）	2 sec	1024 MB	提出

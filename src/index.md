@@ -19,6 +19,7 @@ description: "Algorithm (for competitive programming) Design in Haskell"
 - [アルゴリズムロジック](https://algo-logic.info/)
 - [The Algorithms/Haskell](https://github.com/TheAlgorithms/Haskell)
 - [yaketake08 の競プロ テンプレート/ライブラリ、知識等の置き場](https://tjkendev.github.io/procon-library/)
+- [競技プログラミング練習問題集 - はまやんはまやんはまやん](https://blog.hamayanhamayan.com/entry/2100/01/01/000000)
 
 #### テストケース
 

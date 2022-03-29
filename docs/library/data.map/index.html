@@ -25,11 +25,11 @@
     
     <script>(function () { var el = document.documentElement, m = localStorage.getItem("/H4A/doc_theme"), wm = window.matchMedia; if (m === "dark" || (!m && wm && wm("(prefers-color-scheme: dark)").matches)) { el.classList.add("dark") } else { el.classList.remove("dark") } })();</script>
 
-    <link href="/H4A/resources/css/retype.css?v=1.10.699789449996" rel="stylesheet" data-turbo-track="reload" />
+    <link href="/H4A/resources/css/retype.css?v=1.10.701856838661" rel="stylesheet" data-turbo-track="reload" />
 
-    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.699789449996" defer data-turbo-track="reload"></script>
+    <script type="text/javascript" src="/H4A/resources/js/config.js?v=1.10.701856838661" defer data-turbo-track="reload"></script>
     <script type="text/javascript" src="/H4A/resources/js/retype.js?v=1.10" defer data-turbo-track="reload"></script>
-    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.699789449996" defer></script>
+    <script id="prism-js" type="text/javascript" src="/H4A/resources/js/prism.js?v=1.10.701856838661" defer></script>
 </head>
     <body>
         <div id="docs-app" class="relative text-base antialiased text-gray-700 bg-white font-body dark:bg-dark-850 dark:text-dark-300">
@@ -204,8 +204,9 @@ IM.fromListWith :: (a -&gt; a -&gt; a) -&gt; [(Int,a)] -&gt; IntMap a
 M.fromListWithKey :: Ord k =&gt; (k -&gt; a -&gt; a -&gt; a) -&gt; [(k,a)] -&gt; Map k a
 IM.fromListWithKey :: (Int -&gt; a -&gt; a -&gt; a) -&gt; [(Int,a)] -&gt; IntMap a</code></pre>
 </doc-codeblock></div>
-<p>対応づく要素全てをリストで持つとき：</p>
+<p>対応づく要素全てをリストで持つときは、単独の要素もリストにする必要がある。このとき素直な向きでよい。</p>
 <div class="codeblock-wrapper"><doc-codeblock>
+<div class="codeblock-title">fromListWithの例</div>
 <pre class="language-haskell"><code v-pre class="language-haskell">-- 正しい
 M.fromListWith (++) [(key,[val]) | (key,val) &lt;- kvs]
 -- まちがい（とても遅くなる）
